@@ -1,6 +1,6 @@
-package com.zerobase.reserve.domain.converter;
+package com.zerobase.reserve.domain.member.converter;
 
-import com.zerobase.reserve.domain.type.Role;
+import com.zerobase.reserve.domain.member.entity.Role;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

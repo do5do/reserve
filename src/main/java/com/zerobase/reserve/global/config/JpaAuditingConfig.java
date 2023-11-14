@@ -1,4 +1,4 @@
-package com.zerobase.reserve.config;
+package com.zerobase.reserve.global.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

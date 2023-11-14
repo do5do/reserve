@@ -1,30 +1,26 @@
-package com.zerobase.reserve.domain.entity;
+package com.zerobase.reserve.domain.review.entity;
 
-import com.zerobase.reserve.domain.type.ApprovalType;
+import com.zerobase.reserve.domain.member.entity.Member;
+import com.zerobase.reserve.domain.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Reservation extends BaseTimeEntity {
+public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private LocalDateTime reservedDate;
+    @Column(nullable = false, length = 1000)
+    private String contents;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private ApprovalType approvalType;
-
-    @Column(nullable = false)
-    private boolean arrival = false; // 매장 도착 확인 여부
+    @ColumnDefault("0")
+    private Integer score;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

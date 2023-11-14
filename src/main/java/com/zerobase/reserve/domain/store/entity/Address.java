@@ -1,4 +1,4 @@
-package com.zerobase.reserve.domain.entity;
+package com.zerobase.reserve.domain.store.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

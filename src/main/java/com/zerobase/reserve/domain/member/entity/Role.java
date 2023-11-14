@@ -1,4 +1,4 @@
-package com.zerobase.reserve.domain.type;
+package com.zerobase.reserve.domain.member.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
