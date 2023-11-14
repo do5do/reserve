@@ -1,6 +1,5 @@
 package com.zerobase.reserve.domain.member.service;
 
-import com.zerobase.reserve.domain.member.exception.MemberException;
 import com.zerobase.reserve.domain.member.repository.MemberRepository;
 import com.zerobase.reserve.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +16,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return memberRepository.findByEmail(username)
-                .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        ErrorCode.MEMBER_NOT_FOUND.getMessage()));
     }
 }
