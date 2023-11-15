@@ -1,7 +1,9 @@
 package com.zerobase.reserve.domain.member.exception;
 
 import com.zerobase.reserve.global.exception.ErrorCode;
+import lombok.Getter;
 
+@Getter
 public class MemberException extends RuntimeException {
     private final ErrorCode errorCode;
 
