@@ -26,7 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class AuthServiceTest {
+class MemberServiceTest {
     @Mock
     MemberRepository memberRepository;
 
@@ -34,7 +34,7 @@ class AuthServiceTest {
     AuthenticationManager authenticationManager;
 
     @InjectMocks
-    AuthService authService;
+    MemberService memberService;
 
     private final static String NAME = "name";
     private final static String EMAIL = "do@gmail.com";
@@ -49,7 +49,7 @@ class AuthServiceTest {
                 .willReturn(member());
 
         // when
-        MemberDto memberDto = authService.signup(Signup.builder().build());
+        MemberDto memberDto = memberService.signup(Signup.builder().build());
 
         // then
         assertEquals(NAME, memberDto.name());
@@ -66,7 +66,7 @@ class AuthServiceTest {
 
         // when
         MemberException exception = assertThrows(MemberException.class, () ->
-                authService.signup(Signup.builder().build()));
+                memberService.signup(Signup.builder().build()));
 
         // then
         assertEquals(ErrorCode.MEMBER_ALREADY_EXISTS, exception.getErrorCode());
@@ -86,7 +86,7 @@ class AuthServiceTest {
                 .willReturn(authentication);
 
         // when
-        MemberDto memberDto = authService.signin(new Signin(EMAIL, PASSWORD));
+        MemberDto memberDto = memberService.signin(new Signin(EMAIL, PASSWORD));
 
         // then
         assertEquals(NAME, memberDto.name());
