@@ -25,9 +25,9 @@ public class AuthService {
 
     @Transactional
     public MemberDto signup(Signup request) {
-        validateMemberExists(request.email());
+        validateMemberExists(request.getEmail());
         Member savedMember = memberRepository.save(request.toEntity(
-                passwordEncoder.encode(request.password())));
+                passwordEncoder.encode(request.getPassword())));
         return MemberDto.fromEntity(savedMember);
     }
 
