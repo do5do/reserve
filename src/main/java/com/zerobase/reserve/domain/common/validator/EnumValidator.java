@@ -8,7 +8,7 @@ public class EnumValidator implements ConstraintValidator<ValidEnum, Enum<?>> {
 
     @Override
     public void initialize(ValidEnum constraintAnnotation) {
-        ConstraintValidator.super.initialize(constraintAnnotation);
+        annotation = constraintAnnotation;
     }
 
     @Override
