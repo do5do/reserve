@@ -1,6 +1,6 @@
 package com.zerobase.reserve.domain.reservation.entity;
 
-import com.zerobase.reserve.domain.model.BaseTimeEntity;
+import com.zerobase.reserve.domain.common.model.BaseTimeEntity;
 import com.zerobase.reserve.domain.member.entity.Member;
 import com.zerobase.reserve.domain.store.entity.Store;
 import com.zerobase.reserve.domain.reservation.type.ApprovalType;

@@ -2,6 +2,7 @@ package com.zerobase.reserve.domain.member.dto;
 
 import com.zerobase.reserve.domain.member.entity.Member;
 import com.zerobase.reserve.domain.member.entity.Role;
+import com.zerobase.reserve.domain.common.validator.ValidEnum;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -24,6 +25,7 @@ public record Signup(
                 message = "핸드폰 번호의 약식과 맞지 않습니다. ex) 010-1234-1234")
         String phoneNumber,
 
+        @ValidEnum(enumClass = Role.class)
         Role role
 ) {
     public Member toEntity(String password) {

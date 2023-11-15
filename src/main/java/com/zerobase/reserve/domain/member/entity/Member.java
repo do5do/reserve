@@ -1,7 +1,7 @@
 package com.zerobase.reserve.domain.member.entity;
 
 import com.zerobase.reserve.domain.member.converter.RoleConverter;
-import com.zerobase.reserve.domain.model.BaseTimeEntity;
+import com.zerobase.reserve.domain.common.model.BaseTimeEntity;
 import com.zerobase.reserve.domain.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.*;
