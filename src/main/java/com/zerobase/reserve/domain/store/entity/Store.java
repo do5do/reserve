@@ -6,9 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Store extends BaseTimeEntity {
     @Id
@@ -27,6 +25,13 @@ public class Store extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @Builder
+    public Store(String name, String description, Address address) {
+        this.name = name;
+        this.description = description;
+        this.address = address;
+    }
 
     public void setMember(Member member) {
         this.member = member;

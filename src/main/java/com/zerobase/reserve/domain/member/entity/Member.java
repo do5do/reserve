@@ -22,6 +22,9 @@ public class Member extends BaseTimeEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    private String memberId;
+
     @Column(nullable = false)
     private String name;
 
@@ -42,7 +45,8 @@ public class Member extends BaseTimeEntity implements UserDetails {
     private List<Store> stores = new ArrayList<>();
 
     @Builder
-    public Member(String name, String email, String password, String phoneNumber, Role role) {
+    public Member(String memberId, String name, String email, String password, String phoneNumber, Role role) {
+        this.memberId = memberId;
         this.name = name;
         this.email = email;
         this.password = password;

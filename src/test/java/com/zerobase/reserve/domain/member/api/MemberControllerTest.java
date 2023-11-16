@@ -42,7 +42,7 @@ class MemberControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    private final static String NAME = "name";
+    private final static String NAME = "storeName";
     private final static String EMAIL = "do@gmail.com";
     private final static String PASSWORD = "kimdo1234";
     private final static String PHONE_NUMBER = "010-1234-1234";
@@ -179,7 +179,25 @@ class MemberControllerTest {
         // then
         Signin signin = new Signin("gmail.com", PASSWORD);
 
-        mockMvc.perform(post("/api/v1/member/signin")
+        mockMvc.perform(post("/api/v1/members/signin")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(signin)))
+                .andExpect(status().is4xxClientError())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("로그인 실패 - 부적절한 비밀번호 형식")
+    void signin_invalid_password() throws Exception {
+        // given
+        given(memberService.signup(any()))
+                .willReturn(memberDto());
+
+        // when
+        // then
+        Signin signin = new Signin(EMAIL, "1234");
+
+        mockMvc.perform(post("/api/v1/members/signin")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signin)))
                 .andExpect(status().is4xxClientError())
@@ -187,6 +205,6 @@ class MemberControllerTest {
     }
 
     private static MemberDto memberDto() {
-        return new MemberDto(NAME, EMAIL, Role.USER);
+        return new MemberDto(NAME, EMAIL, "", Role.USER);
     }
 }

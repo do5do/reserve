@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -24,6 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
@@ -36,7 +37,7 @@ class MemberServiceTest {
     @InjectMocks
     MemberService memberService;
 
-    private final static String NAME = "name";
+    private final static String NAME = "storeName";
     private final static String EMAIL = "do@gmail.com";
     private final static String PASSWORD = "kimdo1234";
     private final static String PHONE_NUMBER = "010-1234-1234";
@@ -76,10 +77,10 @@ class MemberServiceTest {
     @DisplayName("로그인 성공")
     void signin_success() {
         // given
-        Authentication authentication = Mockito.mock(Authentication.class);
-        Mockito.when(authentication.getPrincipal()).thenReturn(member());
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getPrincipal()).thenReturn(member());
 
-        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
 
         given(authenticationManager.authenticate(any()))
