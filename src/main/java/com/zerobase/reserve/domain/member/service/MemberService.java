@@ -8,8 +8,8 @@ import com.zerobase.reserve.domain.member.entity.Member;
 import com.zerobase.reserve.domain.member.exception.MemberException;
 import com.zerobase.reserve.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +23,7 @@ import static com.zerobase.reserve.global.exception.ErrorCode.MEMBER_ALREADY_EXI
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @Transactional
     public MemberDto signup(Signup request) {
@@ -32,8 +32,8 @@ public class MemberService {
         Member savedMember = memberRepository.save(
                 request.toEntity(
                         GenerateKey.getUserKey(),
-                        passwordEncoder.encode(request.getPassword()))
-        );
+                        passwordEncoder.encode(request.getPassword())));
+
         return MemberDto.fromEntity(savedMember);
     }
 
@@ -44,10 +44,11 @@ public class MemberService {
     }
 
     public MemberDto signin(Signin request) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
+        Authentication authentication = authenticationManagerBuilder.getObject()
+                .authenticate(new UsernamePasswordAuthenticationToken(
                         request.email(), request.password()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
         return MemberDto.fromEntity((Member) authentication.getPrincipal());
     }
 }

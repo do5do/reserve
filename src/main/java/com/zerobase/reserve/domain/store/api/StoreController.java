@@ -18,11 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class StoreController {
     private final StoreService storeService;
 
-    // todo 이게 어떻게 체크 될까? api 테스트 필요
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PreAuthorize("hasRole('MANAGER')")
     @PostMapping
-    public ResponseEntity<StoreDto> registration(@RequestBody @Valid
-                                              Registration request) {
+    public ResponseEntity<StoreDto> registration(
+            @RequestBody @Valid Registration request) {
         return ResponseEntity.ok(storeService.registration(request));
     }
+
+    // 매장 검색, 매장 상세 정보
 }

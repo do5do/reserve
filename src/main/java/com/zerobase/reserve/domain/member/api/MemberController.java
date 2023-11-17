@@ -4,8 +4,10 @@ import com.zerobase.reserve.domain.member.dto.Signin;
 import com.zerobase.reserve.domain.member.service.MemberService;
 import com.zerobase.reserve.domain.member.dto.MemberDto;
 import com.zerobase.reserve.domain.member.dto.Signup;
+import com.zerobase.reserve.global.security.TokenProvider;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MemberController {
     private final MemberService memberService;
+    private final TokenProvider tokenProvider;
 
     @PostMapping("/signup")
     public ResponseEntity<MemberDto> signup(@RequestBody @Valid Signup request) {
@@ -25,6 +28,14 @@ public class MemberController {
 
     @PostMapping("/signin")
     public ResponseEntity<MemberDto> signin(@RequestBody @Valid Signin request) {
-        return ResponseEntity.ok(memberService.signin(request));
+        MemberDto memberDto = memberService.signin(request);
+        String token = tokenProvider.generateToken(memberDto);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.AUTHORIZATION, token);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(memberDto);
     }
 }

@@ -2,7 +2,6 @@ package com.zerobase.reserve.domain.store.dto;
 
 import com.zerobase.reserve.domain.store.entity.Store;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 
 public record Registration(
         @NotBlank
@@ -14,7 +13,6 @@ public record Registration(
         @NotBlank
         String description,
 
-        @NotEmpty
         AddressDto addressDto
 ) {
         public Store toEntity() {
