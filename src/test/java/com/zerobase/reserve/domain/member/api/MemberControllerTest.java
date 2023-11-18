@@ -205,6 +205,10 @@ class MemberControllerTest {
     }
 
     private static MemberDto memberDto() {
-        return new MemberDto(NAME, EMAIL, "", Role.USER);
+        return MemberDto.builder()
+                .name(NAME)
+                .email(EMAIL)
+                .role(Role.USER)
+                .build();
     }
 }

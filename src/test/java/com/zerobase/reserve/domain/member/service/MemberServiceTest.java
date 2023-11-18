@@ -53,9 +53,9 @@ class MemberServiceTest {
         MemberDto memberDto = memberService.signup(Signup.builder().build());
 
         // then
-        assertEquals(NAME, memberDto.name());
-        assertEquals(EMAIL, memberDto.email());
-        assertEquals(Role.USER, memberDto.role());
+        assertEquals(NAME, memberDto.getName());
+        assertEquals(EMAIL, memberDto.getEmail());
+        assertEquals(Role.USER, memberDto.getRole());
     }
 
     @Test
@@ -90,9 +90,9 @@ class MemberServiceTest {
         MemberDto memberDto = memberService.signin(new Signin(EMAIL, PASSWORD));
 
         // then
-        assertEquals(NAME, memberDto.name());
-        assertEquals(EMAIL, memberDto.email());
-        assertEquals(Role.USER, memberDto.role());
+        assertEquals(NAME, memberDto.getName());
+        assertEquals(EMAIL, memberDto.getEmail());
+        assertEquals(Role.USER, memberDto.getRole());
     }
 
     private static Member member() {

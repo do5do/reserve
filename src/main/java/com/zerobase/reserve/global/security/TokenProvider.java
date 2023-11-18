@@ -32,13 +32,13 @@ public class TokenProvider {
     }
 
     public String generateToken(MemberDto memberDto) {
-        String authorities = memberDto.role().getKey();
+        String authorities = memberDto.getRole().getKey();
 
         Date now = new Date();
         Date expiredDate = new Date(now.getTime() + TOKEN_EXPIRE_TIME);
 
         return Jwts.builder()
-                .subject(memberDto.email())
+                .subject(memberDto.getEmail())
                 .claim(KEY_ROLES, authorities)
                 .issuedAt(now)
                 .expiration(expiredDate)
@@ -54,6 +54,11 @@ public class TokenProvider {
                 token, authorities);
     }
 
+    private List<SimpleGrantedAuthority> getAuthorities(Claims claims) {
+        return Collections.singletonList(new SimpleGrantedAuthority(
+                claims.get(KEY_ROLES).toString()));
+    }
+
     public boolean validateToken(String token) {
         if (StringUtils.hasText(token)) {
             Claims claims = parseClaims(token);
@@ -61,11 +66,6 @@ public class TokenProvider {
         }
 
         return false;
-    }
-
-    private static List<SimpleGrantedAuthority> getAuthorities(Claims claims) {
-        return Collections.singletonList(new SimpleGrantedAuthority(
-                claims.get(KEY_ROLES).toString()));
     }
 
     private Claims parseClaims(String token) {

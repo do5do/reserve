@@ -1,16 +1,14 @@
 package com.zerobase.reserve.domain.store.api;
 
 import com.zerobase.reserve.domain.store.dto.Registration;
+import com.zerobase.reserve.domain.store.dto.SearchResponse;
 import com.zerobase.reserve.domain.store.dto.StoreDto;
 import com.zerobase.reserve.domain.store.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/v1/stores")
 @RequiredArgsConstructor
@@ -20,10 +18,22 @@ public class StoreController {
 
     @PreAuthorize("hasRole('MANAGER')")
     @PostMapping
-    public ResponseEntity<StoreDto> registration(
-            @RequestBody @Valid Registration request) {
-        return ResponseEntity.ok(storeService.registration(request));
+    public ResponseEntity<Registration.Response> registration(
+            @RequestBody @Valid Registration.Request request) {
+        StoreDto storeDto = storeService.registration(request);
+        return ResponseEntity.ok(
+                Registration.Response.from(storeDto));
     }
 
-    // 매장 검색, 매장 상세 정보
+    @GetMapping("/search")
+    public ResponseEntity<SearchResponse> searchKeyword(
+            @RequestParam String keyword) {
+        return ResponseEntity.ok(
+                new SearchResponse(storeService.searchKeyword(keyword)));
+    }
+
+    @GetMapping("/{storeId}")
+    public ResponseEntity<StoreDto> information(@PathVariable String storeId) {
+        return ResponseEntity.ok(storeService.information(storeId));
+    }
 }

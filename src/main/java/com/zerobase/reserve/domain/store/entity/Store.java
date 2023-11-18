@@ -7,30 +7,43 @@ import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(indexes = {@Index(name = "idx_name", columnList = "name")})
 @Entity
 public class Store extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    private String storeId;
+
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String description;
+
+    @Column(nullable = false)
+    private String phoneNumber;
 
     @Embedded
     private Address address;
+
+    @Embedded
+    private SalesInfo salesInfo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @Builder
-    public Store(String name, String description, Address address) {
+    public Store(String storeId, String name, String description, String phoneNumber, Address address, SalesInfo salesInfo) {
+        this.storeId = storeId;
         this.name = name;
         this.description = description;
+        this.phoneNumber = phoneNumber;
         this.address = address;
+        this.salesInfo = salesInfo;
     }
 
     public void setMember(Member member) {

@@ -1,6 +1,5 @@
 package com.zerobase.reserve.global.config;
 
-import com.zerobase.reserve.domain.member.service.CustomUserDetailsService;
 import com.zerobase.reserve.global.security.AuthenticationFilter;
 import com.zerobase.reserve.global.security.CustomAccessDeniedHandler;
 import com.zerobase.reserve.global.security.CustomAuthenticationEntryPoint;
@@ -25,16 +24,13 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableMethodSecurity
 public class SecurityConfig {
     private final AuthenticationFilter authenticationFilter;
-    private final CustomAccessDeniedHandler accessDeniedHandler;
-    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
-    private final CustomUserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
-//                .httpBasic(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .headers(c -> c.frameOptions(
                         HeadersConfigurer.FrameOptionsConfig::disable).disable())
                 .sessionManagement(c ->
@@ -43,15 +39,18 @@ public class SecurityConfig {
                 .authorizeHttpRequests((request) ->
                         request.requestMatchers(
                                         new AntPathRequestMatcher("/"),
+                                        new AntPathRequestMatcher("/error"),
                                         new AntPathRequestMatcher("/**/signup"),
                                         new AntPathRequestMatcher("/**/signin")
                                 ).permitAll()
                                 .anyRequest().authenticated())
 
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(c -> c
-                        .authenticationEntryPoint(authenticationEntryPoint)
-                        .accessDeniedHandler(accessDeniedHandler));
+
+                // todo global로 처리 또는 각 클래스에서 response 재정의
+                .exceptionHandling((exceptions) -> exceptions
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                        .accessDeniedHandler(new CustomAccessDeniedHandler()));
 
         return http.build();
     }

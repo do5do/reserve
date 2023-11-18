@@ -1,6 +1,6 @@
 package com.zerobase.reserve.domain.member.service;
 
-import com.zerobase.reserve.domain.common.util.GenerateKey;
+import com.zerobase.reserve.domain.common.util.KeyGenerator;
 import com.zerobase.reserve.domain.member.dto.MemberDto;
 import com.zerobase.reserve.domain.member.dto.Signin;
 import com.zerobase.reserve.domain.member.dto.Signup;
@@ -31,7 +31,7 @@ public class MemberService {
 
         Member savedMember = memberRepository.save(
                 request.toEntity(
-                        GenerateKey.getUserKey(),
+                        KeyGenerator.generateKey(),
                         passwordEncoder.encode(request.getPassword())));
 
         return MemberDto.fromEntity(savedMember);
