@@ -1,10 +1,11 @@
 package com.zerobase.reserve.domain.store.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zerobase.reserve.domain.common.builder.dto.RegistRequestBuilder;
+import com.zerobase.reserve.domain.common.builder.dto.StoreDtoBuilder;
 import com.zerobase.reserve.domain.store.dto.AddressDto;
 import com.zerobase.reserve.domain.store.dto.Registration;
 import com.zerobase.reserve.domain.store.dto.SalesInfoDto;
-import com.zerobase.reserve.domain.store.dto.StoreDto;
 import com.zerobase.reserve.domain.store.service.StoreService;
 import com.zerobase.reserve.global.config.SecurityConfig;
 import com.zerobase.reserve.global.security.AuthenticationFilter;
@@ -24,7 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalTime;
 import java.util.List;
 
-import static com.zerobase.reserve.domain.common.StoreConstants.*;
+import static com.zerobase.reserve.domain.common.constants.StoreConstants.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -63,24 +64,14 @@ class StoreControllerTest {
     void registration_success() throws Exception {
         // given
         given(storeService.registration(any()))
-                .willReturn(storeDto());
+                .willReturn(StoreDtoBuilder.storeDto());
 
         // when
         // then
-        Registration.Request request =
-                Registration.Request.builder()
-                        .memberId(MEMBER_ID)
-                        .storeName(NAME)
-                        .description(DESCRIPTION)
-                        .phoneNumber(PHONE_NUMBER)
-                        .address(new AddressDto(ADDRESS, DETAIL_ADDR, ZIPCODE))
-                        .salesInfo(new SalesInfoDto(OPER_START, OPER_END,
-                                CLOSE_DAYS))
-                        .build();
-
         mockMvc.perform(post("/api/v1/stores")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request))
+                        .content(objectMapper.writeValueAsString(
+                                RegistRequestBuilder.registRequest()))
                 ).andExpect(status().isOk())
                 .andExpect(jsonPath("$.storeId").value(STORE_ID))
                 .andExpect(jsonPath("$.storeName").value(NAME))
@@ -93,7 +84,7 @@ class StoreControllerTest {
     void registration_invalid_number() throws Exception {
         // given
         given(storeService.registration(any()))
-                .willReturn(storeDto());
+                .willReturn(StoreDtoBuilder.storeDto());
 
         // when
         // then
@@ -127,7 +118,7 @@ class StoreControllerTest {
         // when
         // then
         mockMvc.perform(get("/api/v1/stores/search")
-                .param("keyword", "초밥"))
+                        .param("keyword", "초밥"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.storeNames.length()")
                         .value(storeNames.size()))
@@ -142,7 +133,7 @@ class StoreControllerTest {
     void information_success() throws Exception {
         // given
         given(storeService.information(anyString()))
-                .willReturn(storeDto());
+                .willReturn(StoreDtoBuilder.storeDto());
 
         // when
         // then
@@ -162,17 +153,5 @@ class StoreControllerTest {
                 .andExpect(jsonPath("$.salesInfo.closedDays",
                         Matchers.containsInAnyOrder("일요일")))
                 .andDo(print());
-    }
-
-    private static StoreDto storeDto() {
-        return StoreDto.builder()
-                .storeId(STORE_ID)
-                .name(NAME)
-                .description(DESCRIPTION)
-                .phoneNumber(PHONE_NUMBER)
-                .address(new AddressDto(ADDRESS, DETAIL_ADDR, ZIPCODE))
-                .salesInfo(new SalesInfoDto(OPER_START, OPER_END, CLOSE_DAYS))
-                .memberId(MEMBER_ID)
-                .build();
     }
 }

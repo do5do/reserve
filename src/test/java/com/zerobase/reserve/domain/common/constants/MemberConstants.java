@@ -1,4 +1,4 @@
-package com.zerobase.reserve.domain.common;
+package com.zerobase.reserve.domain.common.constants;
 
 public class MemberConstants {
     public final static String MEMBER_ID = "b95c5f9e34da4cf9a394955a328775f5";

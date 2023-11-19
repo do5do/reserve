@@ -1,6 +1,6 @@
 package com.zerobase.reserve.domain.member.service;
 
-import com.zerobase.reserve.domain.common.MemberBuilder;
+import com.zerobase.reserve.domain.common.builder.MemberBuilder;
 import com.zerobase.reserve.domain.common.util.KeyGenerator;
 import com.zerobase.reserve.domain.member.dto.MemberDto;
 import com.zerobase.reserve.domain.member.dto.Signin;
@@ -22,8 +22,8 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static com.zerobase.reserve.domain.common.MemberConstants.*;
-import static com.zerobase.reserve.domain.common.StoreConstants.MEMBER_ID;
+import static com.zerobase.reserve.domain.common.constants.MemberConstants.*;
+import static com.zerobase.reserve.domain.common.constants.StoreConstants.MEMBER_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;

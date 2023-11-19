@@ -1,4 +1,4 @@
-package com.zerobase.reserve.domain.common;
+package com.zerobase.reserve.domain.common.constants;
 
 import java.time.LocalTime;
 import java.util.List;

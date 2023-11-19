@@ -1,11 +1,11 @@
-package com.zerobase.reserve.domain.common;
+package com.zerobase.reserve.domain.common.builder;
 
 import com.zerobase.reserve.domain.store.entity.Address;
 import com.zerobase.reserve.domain.store.entity.SalesInfo;
 import com.zerobase.reserve.domain.store.entity.Store;
 
-import static com.zerobase.reserve.domain.common.StoreConstants.*;
-import static com.zerobase.reserve.domain.common.StoreConstants.CLOSE_DAYS;
+import static com.zerobase.reserve.domain.common.constants.StoreConstants.*;
+import static com.zerobase.reserve.domain.common.constants.StoreConstants.CLOSE_DAYS;
 
 public class StoreBuilder {
     public static Store store() {

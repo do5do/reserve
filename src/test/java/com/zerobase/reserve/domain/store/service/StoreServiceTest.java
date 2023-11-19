@@ -1,7 +1,7 @@
 package com.zerobase.reserve.domain.store.service;
 
-import com.zerobase.reserve.domain.common.MemberBuilder;
-import com.zerobase.reserve.domain.common.StoreBuilder;
+import com.zerobase.reserve.domain.common.builder.MemberBuilder;
+import com.zerobase.reserve.domain.common.builder.StoreBuilder;
 import com.zerobase.reserve.domain.common.util.KeyGenerator;
 import com.zerobase.reserve.domain.member.exception.MemberException;
 import com.zerobase.reserve.domain.member.repository.MemberRepository;
@@ -27,7 +27,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
-import static com.zerobase.reserve.domain.common.StoreConstants.*;
+import static com.zerobase.reserve.domain.common.constants.StoreConstants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
