@@ -24,6 +24,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final KeyGenerator keyGenerator;
 
     @Transactional
     public MemberDto signup(Signup request) {
@@ -31,7 +32,7 @@ public class MemberService {
 
         Member savedMember = memberRepository.save(
                 request.toEntity(
-                        KeyGenerator.generateKey(),
+                        keyGenerator.generateKey(),
                         passwordEncoder.encode(request.getPassword())));
 
         return MemberDto.fromEntity(savedMember);

@@ -14,6 +14,7 @@ public class StoreDto {
     private String storeId;
     private String name;
     private String description;
+    private String phoneNumber;
     private AddressDto address;
     private SalesInfoDto salesInfo;
     private String memberId;
@@ -23,6 +24,7 @@ public class StoreDto {
                 .storeId(store.getStoreId())
                 .name(store.getName())
                 .description(store.getDescription())
+                .phoneNumber(store.getPhoneNumber())
                 .address(AddressDto.fromEntity(store.getAddress()))
                 .salesInfo(SalesInfoDto.fromEntity(store.getSalesInfo()))
                 .memberId(store.getMember().getMemberId())

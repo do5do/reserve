@@ -26,16 +26,20 @@ import static com.zerobase.reserve.global.exception.ErrorCode.STORE_NOT_FOUND;
 public class StoreService {
     private final StoreRepository storeRepository;
     private final MemberRepository memberRepository;
+    private final KeyGenerator keyGenerator;
 
     @Transactional
     public StoreDto registration(Registration.Request request) {
-        Member member = memberRepository.findByMemberId(request.getMemberId())
-                .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
-
-        Store store = request.toEntity(KeyGenerator.generateKey());
+        Member member = validateMember(request.getMemberId());
+        Store store = request.toEntity(keyGenerator.generateKey());
         member.addStore(store);
         storeRepository.save(store);
         return StoreDto.fromEntity(store);
+    }
+
+    private Member validateMember(String memberId) {
+        return memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
 
     public List<String> searchKeyword(String keyword) {

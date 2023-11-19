@@ -6,18 +6,17 @@ import com.zerobase.reserve.domain.member.dto.Signin;
 import com.zerobase.reserve.domain.member.dto.Signup;
 import com.zerobase.reserve.domain.member.entity.Role;
 import com.zerobase.reserve.domain.member.service.MemberService;
-import com.zerobase.reserve.global.config.SecurityConfig;
+import com.zerobase.reserve.global.security.TokenProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.zerobase.reserve.domain.common.MemberConstants.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -27,25 +26,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(
         controllers = MemberController.class,
-        excludeAutoConfiguration = SecurityAutoConfiguration.class,
-        excludeFilters = {
-                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
-                        classes = SecurityConfig.class)}
+        excludeAutoConfiguration = SecurityAutoConfiguration.class
 )
 class MemberControllerTest {
     @MockBean
     MemberService memberService;
+
+    @MockBean
+    TokenProvider tokenProvider;
 
     @Autowired
     MockMvc mockMvc;
 
     @Autowired
     ObjectMapper objectMapper;
-
-    private final static String NAME = "storeName";
-    private final static String EMAIL = "do@gmail.com";
-    private final static String PASSWORD = "kimdo1234";
-    private final static String PHONE_NUMBER = "010-1234-1234";
 
     @Test
     @DisplayName("회원가입 성공")
@@ -64,7 +58,7 @@ class MemberControllerTest {
                 .role(Role.USER)
                 .build();
 
-        mockMvc.perform(post("/api/v1/member/signup")
+        mockMvc.perform(post("/api/v1/members/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signup)))
                 .andExpect(status().isOk())
@@ -92,7 +86,7 @@ class MemberControllerTest {
                 .role(Role.USER)
                 .build();
 
-        mockMvc.perform(post("/api/v1/member/signup")
+        mockMvc.perform(post("/api/v1/members/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signup)))
                 .andExpect(status().is4xxClientError())
@@ -116,7 +110,31 @@ class MemberControllerTest {
                 .role(Role.USER)
                 .build();
 
-        mockMvc.perform(post("/api/v1/member/signup")
+        mockMvc.perform(post("/api/v1/members/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(signup)))
+                .andExpect(status().is4xxClientError())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("회원가입 실패 - 부적절한 전화번호 형식")
+    void signup_invalid_phoneNumber() throws Exception {
+        // given
+        given(memberService.signup(any()))
+                .willReturn(memberDto());
+
+        // when
+        // then
+        Signup signup = Signup.builder()
+                .name(NAME)
+                .email(EMAIL)
+                .password(PASSWORD)
+                .phoneNumber("1234-1234")
+                .role(Role.USER)
+                .build();
+
+        mockMvc.perform(post("/api/v1/members/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signup)))
                 .andExpect(status().is4xxClientError())
@@ -139,7 +157,7 @@ class MemberControllerTest {
                 .phoneNumber(PHONE_NUMBER)
                 .build();
 
-        mockMvc.perform(post("/api/v1/member/signup")
+        mockMvc.perform(post("/api/v1/members/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signup)))
                 .andExpect(status().is4xxClientError())
@@ -153,11 +171,14 @@ class MemberControllerTest {
         given(memberService.signin(any()))
                 .willReturn(memberDto());
 
+        given(tokenProvider.generateToken(any()))
+                .willReturn("");
+
         // when
         // then
         Signin signin = new Signin(EMAIL, PASSWORD);
 
-        mockMvc.perform(post("/api/v1/member/signin")
+        mockMvc.perform(post("/api/v1/members/signin")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signin)))
                 .andExpect(status().isOk())
