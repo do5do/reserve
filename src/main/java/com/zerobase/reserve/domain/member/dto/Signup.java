@@ -36,9 +36,9 @@ public class Signup {
     @ValidEnum(enumClass = Role.class)
     private Role role;
 
-    public Member toEntity(String memberId, String password) {
+    public Member toEntity(String memberKey, String password) {
         return Member.builder()
-                .memberId(memberId)
+                .memberKey(memberKey)
                 .name(name)
                 .email(email)
                 .password(password)

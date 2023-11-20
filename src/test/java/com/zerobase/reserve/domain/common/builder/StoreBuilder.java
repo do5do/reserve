@@ -10,8 +10,8 @@ import static com.zerobase.reserve.domain.common.constants.StoreConstants.CLOSE_
 public class StoreBuilder {
     public static Store store() {
         return Store.builder()
-                .storeId(STORE_ID)
-                .name(NAME)
+                .storeKey(STORE_KEY)
+                .name(STORE_NAME)
                 .description(DESCRIPTION)
                 .phoneNumber(PHONE_NUMBER)
                 .address(new Address(ADDRESS, DETAIL_ADDR, ZIPCODE))

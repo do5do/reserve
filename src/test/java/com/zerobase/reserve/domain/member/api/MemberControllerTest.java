@@ -1,7 +1,7 @@
 package com.zerobase.reserve.domain.member.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zerobase.reserve.domain.member.dto.MemberDto;
+import com.zerobase.reserve.domain.common.builder.dto.MemberDtoBuilder;
 import com.zerobase.reserve.domain.member.dto.Signin;
 import com.zerobase.reserve.domain.member.dto.Signup;
 import com.zerobase.reserve.domain.member.entity.Role;
@@ -46,12 +46,12 @@ class MemberControllerTest {
     void signup_success() throws Exception {
         // given
         given(memberService.signup(any()))
-                .willReturn(memberDto());
+                .willReturn(MemberDtoBuilder.memberDto());
 
         // when
         // then
         Signup signup = Signup.builder()
-                .name(NAME)
+                .name(MEMBER_NAME)
                 .email(EMAIL)
                 .password(PASSWORD)
                 .phoneNumber(PHONE_NUMBER)
@@ -62,7 +62,7 @@ class MemberControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signup)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value(NAME))
+                .andExpect(jsonPath("$.name").value(MEMBER_NAME))
                 .andExpect(jsonPath("$.email").value(EMAIL))
                 .andExpect(jsonPath("$.role")
                         .value("USER"))
@@ -74,12 +74,12 @@ class MemberControllerTest {
     void signup_invalid_email() throws Exception {
         // given
         given(memberService.signup(any()))
-                .willReturn(memberDto());
+                .willReturn(MemberDtoBuilder.memberDto());
 
         // when
         // then
         Signup signup = Signup.builder()
-                .name(NAME)
+                .name(MEMBER_NAME)
                 .email("gmail.com")
                 .password(PASSWORD)
                 .phoneNumber(PHONE_NUMBER)
@@ -98,12 +98,12 @@ class MemberControllerTest {
     void signup_invalid_password() throws Exception {
         // given
         given(memberService.signup(any()))
-                .willReturn(memberDto());
+                .willReturn(MemberDtoBuilder.memberDto());
 
         // when
         // then
         Signup signup = Signup.builder()
-                .name(NAME)
+                .name(MEMBER_NAME)
                 .email(EMAIL)
                 .password("kimdodo")
                 .phoneNumber(PHONE_NUMBER)
@@ -122,12 +122,12 @@ class MemberControllerTest {
     void signup_invalid_phoneNumber() throws Exception {
         // given
         given(memberService.signup(any()))
-                .willReturn(memberDto());
+                .willReturn(MemberDtoBuilder.memberDto());
 
         // when
         // then
         Signup signup = Signup.builder()
-                .name(NAME)
+                .name(MEMBER_NAME)
                 .email(EMAIL)
                 .password(PASSWORD)
                 .phoneNumber("1234-1234")
@@ -146,12 +146,12 @@ class MemberControllerTest {
     void signup_invalid_role() throws Exception {
         // given
         given(memberService.signup(any()))
-                .willReturn(memberDto());
+                .willReturn(MemberDtoBuilder.memberDto());
 
         // when
         // then
         Signup signup = Signup.builder()
-                .name(NAME)
+                .name(MEMBER_NAME)
                 .email(EMAIL)
                 .password(PASSWORD)
                 .phoneNumber(PHONE_NUMBER)
@@ -169,7 +169,7 @@ class MemberControllerTest {
     void signin_success() throws Exception {
         // given
         given(memberService.signin(any()))
-                .willReturn(memberDto());
+                .willReturn(MemberDtoBuilder.memberDto());
 
         given(tokenProvider.generateToken(any()))
                 .willReturn("");
@@ -182,7 +182,7 @@ class MemberControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signin)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value(NAME))
+                .andExpect(jsonPath("$.name").value(MEMBER_NAME))
                 .andExpect(jsonPath("$.email").value(EMAIL))
                 .andExpect(jsonPath("$.role")
                         .value("USER"))
@@ -194,7 +194,7 @@ class MemberControllerTest {
     void signin_invalid_email() throws Exception {
         // given
         given(memberService.signup(any()))
-                .willReturn(memberDto());
+                .willReturn(MemberDtoBuilder.memberDto());
 
         // when
         // then
@@ -212,7 +212,7 @@ class MemberControllerTest {
     void signin_invalid_password() throws Exception {
         // given
         given(memberService.signup(any()))
-                .willReturn(memberDto());
+                .willReturn(MemberDtoBuilder.memberDto());
 
         // when
         // then
@@ -223,13 +223,5 @@ class MemberControllerTest {
                         .content(objectMapper.writeValueAsString(signin)))
                 .andExpect(status().is4xxClientError())
                 .andDo(print());
-    }
-
-    private static MemberDto memberDto() {
-        return MemberDto.builder()
-                .name(NAME)
-                .email(EMAIL)
-                .role(Role.USER)
-                .build();
     }
 }

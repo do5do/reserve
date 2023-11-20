@@ -52,20 +52,20 @@ class StoreServiceTest {
     @DisplayName("매장 등록 성공")
     void registration_success() {
         // given
-        given(memberRepository.findByMemberId(anyString()))
+        given(memberRepository.findByMemberKey(anyString()))
                 .willReturn(Optional.of(MemberBuilder.member()));
 
         given(storeRepository.save(any()))
                 .willReturn(StoreBuilder.store());
 
         given(keyGenerator.generateKey())
-                .willReturn(STORE_ID);
+                .willReturn(STORE_KEY);
 
         // when
         StoreDto storeDto = storeService.registration(
                 Registration.Request.builder()
-                        .memberId(MEMBER_ID)
-                        .storeName(NAME)
+                        .memberKey(MEMBER_KEY)
+                        .storeName(STORE_NAME)
                         .description(DESCRIPTION)
                         .phoneNumber(PHONE_NUMBER)
                         .address(new AddressDto(ADDRESS, DETAIL_ADDR, ZIPCODE))
@@ -74,8 +74,8 @@ class StoreServiceTest {
                         .build());
 
         // then
-        assertEquals(STORE_ID, storeDto.getStoreId());
-        assertEquals(NAME, storeDto.getName());
+        assertEquals(STORE_KEY, storeDto.getStoreKey());
+        assertEquals(STORE_NAME, storeDto.getName());
         assertEquals(DESCRIPTION, storeDto.getDescription());
     }
 
@@ -83,7 +83,7 @@ class StoreServiceTest {
     @DisplayName("매장 등록 실패 - 존재하지 않는 회원")
     void registration_member_not_found() {
         // given
-        given(memberRepository.findByMemberId(any()))
+        given(memberRepository.findByMemberKey(any()))
                 .willReturn(Optional.empty());
 
         // when
@@ -128,26 +128,26 @@ class StoreServiceTest {
         Store store = StoreBuilder.store();
         store.setMember(MemberBuilder.member());
 
-        given(storeRepository.findByStoreId(STORE_ID))
+        given(storeRepository.findByStoreKey(STORE_KEY))
                 .willReturn(Optional.of(store));
 
         // when
-        StoreDto storeDto = storeService.information(STORE_ID);
+        StoreDto storeDto = storeService.information(STORE_KEY);
 
         // then
-        assertEquals(STORE_ID, storeDto.getStoreId());
+        assertEquals(STORE_KEY, storeDto.getStoreKey());
     }
 
     @Test
     @DisplayName("매장 조회 실패 - 존재하지 않는 매장")
     void information_store_not_found() {
         // given
-        given(storeRepository.findByStoreId(STORE_ID))
+        given(storeRepository.findByStoreKey(STORE_KEY))
                 .willReturn(Optional.empty());
 
         // when
         StoreException exception = assertThrows(StoreException.class, () ->
-                storeService.information(STORE_ID));
+                storeService.information(STORE_KEY));
 
         // then
         assertEquals(ErrorCode.STORE_NOT_FOUND, exception.getErrorCode());

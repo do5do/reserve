@@ -10,8 +10,8 @@ import static com.zerobase.reserve.domain.common.constants.StoreConstants.CLOSE_
 public class RegistRequestBuilder {
     public static Registration.Request registRequest() {
         return Registration.Request.builder()
-                        .memberId(MEMBER_ID)
-                        .storeName(NAME)
+                        .memberKey(MEMBER_KEY)
+                        .storeName(STORE_NAME)
                         .description(DESCRIPTION)
                         .phoneNumber(PHONE_NUMBER)
                         .address(new AddressDto(ADDRESS, DETAIL_ADDR, ZIPCODE))

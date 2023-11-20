@@ -9,8 +9,8 @@ import static com.zerobase.reserve.domain.common.constants.MemberConstants.PHONE
 public class MemberBuilder {
     public static Member member() {
         return Member.builder()
-                .memberId(MEMBER_ID)
-                .name(NAME)
+                .memberKey(MEMBER_KEY)
+                .name(MEMBER_NAME)
                 .email(EMAIL)
                 .password(PASSWORD)
                 .phoneNumber(PHONE_NUMBER)

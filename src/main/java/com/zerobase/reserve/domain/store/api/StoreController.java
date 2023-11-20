@@ -32,8 +32,8 @@ public class StoreController {
                 new SearchResponse(storeService.searchKeyword(keyword)));
     }
 
-    @GetMapping("/{storeId}")
-    public ResponseEntity<StoreDto> information(@PathVariable String storeId) {
-        return ResponseEntity.ok(storeService.information(storeId));
+    @GetMapping("/{storeKey}")
+    public ResponseEntity<StoreDto> information(@PathVariable String storeKey) {
+        return ResponseEntity.ok(storeService.information(storeKey));
     }
 }

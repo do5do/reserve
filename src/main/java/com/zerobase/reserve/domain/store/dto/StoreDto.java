@@ -11,23 +11,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StoreDto {
-    private String storeId;
+    private String storeKey;
     private String name;
     private String description;
     private String phoneNumber;
     private AddressDto address;
     private SalesInfoDto salesInfo;
-    private String memberId;
+    private String memberKey;
 
     public static StoreDto fromEntity(Store store) {
         return StoreDto.builder()
-                .storeId(store.getStoreId())
+                .storeKey(store.getStoreKey())
                 .name(store.getName())
                 .description(store.getDescription())
                 .phoneNumber(store.getPhoneNumber())
                 .address(AddressDto.fromEntity(store.getAddress()))
                 .salesInfo(SalesInfoDto.fromEntity(store.getSalesInfo()))
-                .memberId(store.getMember().getMemberId())
+                .memberKey(store.getMember().getMemberKey())
                 .build();
     }
 }

@@ -17,7 +17,7 @@ public class Registration {
     @AllArgsConstructor
     public static class Request {
         @NotBlank
-        private String memberId;
+        private String memberKey;
 
         @NotBlank
         private String storeName;
@@ -38,9 +38,9 @@ public class Registration {
         @NotNull
         private SalesInfoDto salesInfo;
 
-        public Store toEntity(String storeId) {
+        public Store toEntity(String storeKey) {
             return Store.builder()
-                    .storeId(storeId)
+                    .storeKey(storeKey)
                     .name(storeName)
                     .description(description)
                     .phoneNumber(phoneNumber)
@@ -55,14 +55,14 @@ public class Registration {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Response {
-        private String memberId;
-        private String storeId;
+        private String memberKey;
+        private String storeKey;
         private String storeName;
 
         public static Response from(StoreDto storeDto) {
             return Response.builder()
-                    .memberId(storeDto.getMemberId())
-                    .storeId(storeDto.getStoreId())
+                    .memberKey(storeDto.getMemberKey())
+                    .storeKey(storeDto.getStoreKey())
                     .storeName(storeDto.getName())
                     .build();
         }

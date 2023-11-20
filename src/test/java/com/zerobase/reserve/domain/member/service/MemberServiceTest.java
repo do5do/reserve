@@ -23,7 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static com.zerobase.reserve.domain.common.constants.MemberConstants.*;
-import static com.zerobase.reserve.domain.common.constants.StoreConstants.MEMBER_ID;
+import static com.zerobase.reserve.domain.common.constants.StoreConstants.MEMBER_KEY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -56,7 +56,7 @@ class MemberServiceTest {
                 .willReturn(MemberBuilder.member());
 
         given(keyGenerator.generateKey())
-                .willReturn(MEMBER_ID);
+                .willReturn(MEMBER_KEY);
 
         given(passwordEncoder.encode(any()))
                 .willReturn(PASSWORD);
@@ -65,8 +65,8 @@ class MemberServiceTest {
         MemberDto memberDto = memberService.signup(Signup.builder().build());
 
         // then
-        assertEquals(MEMBER_ID, memberDto.getMemberId());
-        assertEquals(NAME, memberDto.getName());
+        assertEquals(MEMBER_KEY, memberDto.getMemberKey());
+        assertEquals(MEMBER_NAME, memberDto.getName());
         assertEquals(EMAIL, memberDto.getEmail());
         assertEquals(Role.USER, memberDto.getRole());
     }
@@ -106,7 +106,7 @@ class MemberServiceTest {
         MemberDto memberDto = memberService.signin(new Signin(EMAIL, PASSWORD));
 
         // then
-        assertEquals(NAME, memberDto.getName());
+        assertEquals(MEMBER_NAME, memberDto.getName());
         assertEquals(EMAIL, memberDto.getEmail());
         assertEquals(Role.USER, memberDto.getRole());
     }

@@ -23,7 +23,7 @@ public class Member extends BaseTimeEntity implements UserDetails {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String memberId;
+    private String memberKey;
 
     @Column(nullable = false)
     private String name;
@@ -45,8 +45,8 @@ public class Member extends BaseTimeEntity implements UserDetails {
     private List<Store> stores = new ArrayList<>();
 
     @Builder
-    public Member(String memberId, String name, String email, String password, String phoneNumber, Role role) {
-        this.memberId = memberId;
+    public Member(String memberKey, String name, String email, String password, String phoneNumber, Role role) {
+        this.memberKey = memberKey;
         this.name = name;
         this.email = email;
         this.password = password;

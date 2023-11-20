@@ -30,15 +30,15 @@ public class StoreService {
 
     @Transactional
     public StoreDto registration(Registration.Request request) {
-        Member member = validateMember(request.getMemberId());
+        Member member = validateMember(request.getMemberKey());
         Store store = request.toEntity(keyGenerator.generateKey());
         member.addStore(store);
         storeRepository.save(store);
         return StoreDto.fromEntity(store);
     }
 
-    private Member validateMember(String memberId) {
-        return memberRepository.findByMemberId(memberId)
+    private Member validateMember(String memberKey) {
+        return memberRepository.findByMemberKey(memberKey)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
 
@@ -50,8 +50,8 @@ public class StoreService {
                 .toList();
     }
 
-    public StoreDto information(String storeId) {
-        return storeRepository.findByStoreId(storeId)
+    public StoreDto information(String storeKey) {
+        return storeRepository.findByStoreKey(storeKey)
                 .map(StoreDto::fromEntity)
                 .orElseThrow(() -> new StoreException(STORE_NOT_FOUND));
     }

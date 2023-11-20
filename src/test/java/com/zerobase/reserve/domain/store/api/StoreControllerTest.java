@@ -73,9 +73,9 @@ class StoreControllerTest {
                         .content(objectMapper.writeValueAsString(
                                 RegistRequestBuilder.registRequest()))
                 ).andExpect(status().isOk())
-                .andExpect(jsonPath("$.storeId").value(STORE_ID))
-                .andExpect(jsonPath("$.storeName").value(NAME))
-                .andExpect(jsonPath("$.memberId").value(MEMBER_ID))
+                .andExpect(jsonPath("$.storeKey").value(STORE_KEY))
+                .andExpect(jsonPath("$.storeName").value(STORE_NAME))
+                .andExpect(jsonPath("$.memberKey").value(MEMBER_KEY))
                 .andDo(print());
     }
 
@@ -90,8 +90,8 @@ class StoreControllerTest {
         // then
         Registration.Request request =
                 Registration.Request.builder()
-                        .memberId(MEMBER_ID)
-                        .storeName(NAME)
+                        .memberKey(MEMBER_KEY)
+                        .storeName(STORE_NAME)
                         .description(DESCRIPTION)
                         .phoneNumber("123-123-12")
                         .address(new AddressDto(ADDRESS, DETAIL_ADDR, ZIPCODE))
@@ -137,10 +137,10 @@ class StoreControllerTest {
 
         // when
         // then
-        mockMvc.perform(get("/api/v1/stores/" + STORE_ID))
-                .andExpect(jsonPath("$.storeId").value(STORE_ID))
-                .andExpect(jsonPath("$.memberId").value(MEMBER_ID))
-                .andExpect(jsonPath("$.name").value(NAME))
+        mockMvc.perform(get("/api/v1/stores/" + STORE_KEY))
+                .andExpect(jsonPath("$.storeKey").value(STORE_KEY))
+                .andExpect(jsonPath("$.memberKey").value(MEMBER_KEY))
+                .andExpect(jsonPath("$.name").value(STORE_NAME))
                 .andExpect(jsonPath("$.description").value(DESCRIPTION))
                 .andExpect(jsonPath("$.phoneNumber").value(PHONE_NUMBER))
                 .andExpect(jsonPath("$.address.address").value(ADDRESS))

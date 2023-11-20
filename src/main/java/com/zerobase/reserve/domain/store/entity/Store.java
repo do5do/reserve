@@ -15,7 +15,7 @@ public class Store extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String storeId;
+    private String storeKey;
 
     @Column(nullable = false)
     private String name;
@@ -37,8 +37,8 @@ public class Store extends BaseTimeEntity {
     private Member member;
 
     @Builder
-    public Store(String storeId, String name, String description, String phoneNumber, Address address, SalesInfo salesInfo) {
-        this.storeId = storeId;
+    public Store(String storeKey, String name, String description, String phoneNumber, Address address, SalesInfo salesInfo) {
+        this.storeKey = storeKey;
         this.name = name;
         this.description = description;
         this.phoneNumber = phoneNumber;
