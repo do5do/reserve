@@ -7,9 +7,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Review {
     @Id
@@ -29,6 +27,12 @@ public class Review {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
+
+    @Builder
+    public Review(String contents, Integer score) {
+        this.contents = contents;
+        this.score = score;
+    }
 
     public void setMember(Member member) {
         this.member = member;

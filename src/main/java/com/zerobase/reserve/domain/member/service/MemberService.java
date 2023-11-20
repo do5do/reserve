@@ -1,7 +1,7 @@
 package com.zerobase.reserve.domain.member.service;
 
-import com.zerobase.reserve.domain.common.util.KeyGenerator;
-import com.zerobase.reserve.domain.member.dto.MemberDto;
+import com.zerobase.reserve.domain.common.utils.KeyGenerator;
+import com.zerobase.reserve.domain.member.dto.model.MemberDto;
 import com.zerobase.reserve.domain.member.dto.Signin;
 import com.zerobase.reserve.domain.member.dto.Signup;
 import com.zerobase.reserve.domain.member.entity.Member;

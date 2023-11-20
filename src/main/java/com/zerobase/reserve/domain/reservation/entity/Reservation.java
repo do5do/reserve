@@ -10,9 +10,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Reservation extends BaseTimeEntity {
     @Id
@@ -36,6 +34,13 @@ public class Reservation extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
+
+    @Builder
+    public Reservation(LocalDateTime reservedDate, ApprovalType approvalType, boolean arrival) {
+        this.reservedDate = reservedDate;
+        this.approvalType = approvalType;
+        this.arrival = arrival;
+    }
 
     public void setMember(Member member) {
         this.member = member;

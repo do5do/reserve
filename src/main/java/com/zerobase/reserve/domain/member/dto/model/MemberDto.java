@@ -1,4 +1,4 @@
-package com.zerobase.reserve.domain.member.dto;
+package com.zerobase.reserve.domain.member.dto.model;
 
 import com.zerobase.reserve.domain.member.entity.Member;
 import com.zerobase.reserve.domain.member.entity.Role;

@@ -1,4 +1,4 @@
-package com.zerobase.reserve.domain.common.util;
+package com.zerobase.reserve.domain.common.utils;
 
 import org.springframework.stereotype.Component;
 

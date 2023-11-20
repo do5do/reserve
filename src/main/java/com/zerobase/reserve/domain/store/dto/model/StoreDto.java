@@ -1,4 +1,4 @@
-package com.zerobase.reserve.domain.store.dto;
+package com.zerobase.reserve.domain.store.dto.model;
 
 import com.zerobase.reserve.domain.store.entity.Store;
 import lombok.AllArgsConstructor;

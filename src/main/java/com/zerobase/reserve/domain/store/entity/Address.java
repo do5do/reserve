@@ -20,10 +20,21 @@ public class Address {
     @Column(nullable = false)
     private String zipcode;
 
+    @Column(nullable = false)
+    private Double x;
+
+    @Column(nullable = false)
+    private Double y;
+
     @Builder
     public Address(String address, String detailAddr, String zipcode) {
         this.address = address;
         this.detailAddr = detailAddr;
         this.zipcode = zipcode;
+    }
+
+    public void addCoordinate(Double x, Double y) {
+        this.x = x;
+        this.y = y;
     }
 }

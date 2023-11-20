@@ -2,13 +2,13 @@ package com.zerobase.reserve.domain.store.service;
 
 import com.zerobase.reserve.domain.common.builder.MemberBuilder;
 import com.zerobase.reserve.domain.common.builder.StoreBuilder;
-import com.zerobase.reserve.domain.common.util.KeyGenerator;
+import com.zerobase.reserve.domain.common.utils.KeyGenerator;
 import com.zerobase.reserve.domain.member.exception.MemberException;
 import com.zerobase.reserve.domain.member.repository.MemberRepository;
-import com.zerobase.reserve.domain.store.dto.AddressDto;
+import com.zerobase.reserve.domain.store.dto.model.AddressDto;
 import com.zerobase.reserve.domain.store.dto.Registration;
-import com.zerobase.reserve.domain.store.dto.SalesInfoDto;
-import com.zerobase.reserve.domain.store.dto.StoreDto;
+import com.zerobase.reserve.domain.store.dto.model.SalesInfoDto;
+import com.zerobase.reserve.domain.store.dto.model.StoreDto;
 import com.zerobase.reserve.domain.store.entity.Store;
 import com.zerobase.reserve.domain.store.exception.StoreException;
 import com.zerobase.reserve.domain.store.repository.StoreRepository;

@@ -1,4 +1,4 @@
-package com.zerobase.reserve.domain.store.dto;
+package com.zerobase.reserve.domain.store.dto.model;
 
 import com.zerobase.reserve.domain.store.entity.SalesInfo;
 import org.springframework.format.annotation.DateTimeFormat;

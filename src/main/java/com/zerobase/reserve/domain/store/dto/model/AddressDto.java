@@ -1,4 +1,4 @@
-package com.zerobase.reserve.domain.store.dto;
+package com.zerobase.reserve.domain.store.dto.model;
 
 import com.zerobase.reserve.domain.store.entity.Address;
 import jakarta.validation.constraints.NotBlank;
@@ -13,12 +13,14 @@ public record AddressDto(
         @NotBlank
         String zipcode
 ) {
-        public static Address toEntity(AddressDto addressDto) {
-                return Address.builder()
+        public static Address toEntity(AddressDto addressDto, Double x, Double y) {
+                Address address = Address.builder()
                         .address(addressDto.address)
                         .detailAddr(addressDto.detailAddr)
                         .zipcode(addressDto.zipcode)
                         .build();
+                address.addCoordinate(x, y);
+                return address;
         }
 
         public static AddressDto fromEntity(Address addressEntity) {

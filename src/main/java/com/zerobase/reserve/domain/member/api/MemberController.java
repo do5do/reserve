@@ -2,7 +2,7 @@ package com.zerobase.reserve.domain.member.api;
 
 import com.zerobase.reserve.domain.member.dto.Signin;
 import com.zerobase.reserve.domain.member.service.MemberService;
-import com.zerobase.reserve.domain.member.dto.MemberDto;
+import com.zerobase.reserve.domain.member.dto.model.MemberDto;
 import com.zerobase.reserve.domain.member.dto.Signup;
 import com.zerobase.reserve.global.security.TokenProvider;
 import jakarta.validation.Valid;

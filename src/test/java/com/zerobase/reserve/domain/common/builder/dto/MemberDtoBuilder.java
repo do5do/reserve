@@ -1,6 +1,6 @@
 package com.zerobase.reserve.domain.common.builder.dto;
 
-import com.zerobase.reserve.domain.member.dto.MemberDto;
+import com.zerobase.reserve.domain.member.dto.model.MemberDto;
 import com.zerobase.reserve.domain.member.entity.Role;
 
 import static com.zerobase.reserve.domain.common.constants.MemberConstants.EMAIL;

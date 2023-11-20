@@ -1,5 +1,8 @@
 package com.zerobase.reserve.domain.store.dto;
 
+import com.zerobase.reserve.domain.store.dto.model.AddressDto;
+import com.zerobase.reserve.domain.store.dto.model.SalesInfoDto;
+import com.zerobase.reserve.domain.store.dto.model.StoreDto;
 import com.zerobase.reserve.domain.store.entity.Store;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -38,13 +41,13 @@ public class Registration {
         @NotNull
         private SalesInfoDto salesInfo;
 
-        public Store toEntity(String storeKey) {
+        public Store toEntity(String storeKey, Double x, Double y) {
             return Store.builder()
                     .storeKey(storeKey)
                     .name(storeName)
                     .description(description)
                     .phoneNumber(phoneNumber)
-                    .address(AddressDto.toEntity(address))
+                    .address(AddressDto.toEntity(address, x, y))
                     .salesInfo(SalesInfoDto.toEntity(salesInfo))
                     .build();
         }

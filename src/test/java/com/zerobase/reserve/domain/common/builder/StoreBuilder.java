@@ -14,8 +14,16 @@ public class StoreBuilder {
                 .name(STORE_NAME)
                 .description(DESCRIPTION)
                 .phoneNumber(PHONE_NUMBER)
-                .address(new Address(ADDRESS, DETAIL_ADDR, ZIPCODE))
-                .salesInfo(new SalesInfo(OPER_START, OPER_END, CLOSE_DAYS))
+                .address(Address.builder()
+                        .address(ADDRESS)
+                        .detailAddr(DETAIL_ADDR)
+                        .zipcode(ZIPCODE)
+                        .build())
+                .salesInfo(SalesInfo.builder()
+                        .operatingStart(OPER_START)
+                        .operatingEnd(OPER_END)
+                        .closedDays(CLOSE_DAYS)
+                        .build())
                 .build();
     }
 }

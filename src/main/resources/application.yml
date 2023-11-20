@@ -16,6 +16,5 @@ spring:
     open-in-view: false
     generate-ddl: false
 
-  jwt:
-    key: ZG9kby1zcHJpbmctYm9vdC1yZXNlcnZhdGlvbi1zZXJ2aWNlLWp3dC1zZWNyZXQta2V5LXN1cGVyLXNlY3JldC15ZXMteWVzCg==
-
+  profiles:
+    include: key

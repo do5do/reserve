@@ -1,6 +1,6 @@
 package com.zerobase.reserve.global.security;
 
-import com.zerobase.reserve.domain.member.dto.MemberDto;
+import com.zerobase.reserve.domain.member.dto.model.MemberDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -20,7 +20,7 @@ import java.util.List;
 
 @Component
 public class TokenProvider {
-    @Value("${spring.jwt.key}")
+    @Value("${jwt.key}")
     private String key;
     private SecretKey secretKey;
     private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60L;

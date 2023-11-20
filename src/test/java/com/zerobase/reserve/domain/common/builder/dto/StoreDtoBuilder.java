@@ -1,8 +1,8 @@
 package com.zerobase.reserve.domain.common.builder.dto;
 
-import com.zerobase.reserve.domain.store.dto.AddressDto;
-import com.zerobase.reserve.domain.store.dto.SalesInfoDto;
-import com.zerobase.reserve.domain.store.dto.StoreDto;
+import com.zerobase.reserve.domain.store.dto.model.AddressDto;
+import com.zerobase.reserve.domain.store.dto.model.SalesInfoDto;
+import com.zerobase.reserve.domain.store.dto.model.StoreDto;
 
 import static com.zerobase.reserve.domain.common.constants.StoreConstants.*;
 
