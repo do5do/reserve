@@ -1,0 +1,59 @@
+### registraton store
+POST {{host}}/api/v1/stores
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "memberKey": "896c71f2384a4c228993a0512a7eb4f4",
+  "storeName": "매장 1",
+  "description": "매장 1 설명입니다.",
+  "phoneNumber": "02-123-1234",
+  "address": {
+    "address": "서울시 마포구 와우산로15길 24",
+    "detailAddr": "AA빌딩",
+    "zipcode": "123-1"
+  },
+  "salesInfo": {
+    "operatingStart": "10:00",
+    "operatingEnd": "21:00",
+    "closedDays": ["수요일", "일요일"]
+  }
+}
+
+### search store by keyword
+GET {{host}}/api/v1/stores/search?keyword=매
+Authorization: Bearer {{token}}
+
+### get store information
+GET {{host}}/api/v1/stores/08a524e36f0b451daac110df2f708404
+Authorization: Bearer {{token}}
+
+### edit store
+PATCH {{host}}/api/v1/stores
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "storeKey": "08a524e36f0b451daac110df2f708404",
+  "storeName": "그동네 떡볶이",
+  "description": "매장 설명입니다.",
+  "phoneNumber": "02-123-1234",
+  "address": {
+    "address": "서울시 마포구 월드컵로34길 14",
+    "detailAddr": "강강 빌딩",
+    "zipcode": "593-6"
+  },
+  "salesInfo": {
+    "operatingStart": "10:00",
+    "operatingEnd": "21:00",
+    "closedDays": ["일요일"]
+  }
+}
+
+### delete store
+DELETE {{host}}/api/v1/stores/dbaf7b81a40f4fe1be40db9e43b530b9
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### get store list
+GET {{host}}/api/v1/stores?page=0&size=5&sort=name

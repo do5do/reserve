@@ -32,7 +32,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class MemberServiceTest {
+class AuthServiceTest {
     @Mock
     MemberRepository memberRepository;
 
@@ -46,7 +46,7 @@ class MemberServiceTest {
     KeyGenerator keyGenerator;
 
     @InjectMocks
-    MemberService memberService;
+    AuthService authService;
 
     @Test
     @DisplayName("회원가입 성공")
@@ -62,7 +62,7 @@ class MemberServiceTest {
                 .willReturn(PASSWORD);
 
         // when
-        MemberDto memberDto = memberService.signup(Signup.builder().build());
+        MemberDto memberDto = authService.signup(Signup.builder().build());
 
         // then
         assertEquals(MEMBER_KEY, memberDto.getMemberKey());
@@ -80,7 +80,7 @@ class MemberServiceTest {
 
         // when
         MemberException exception = assertThrows(MemberException.class, () ->
-                memberService.signup(Signup.builder().build()));
+                authService.signup(Signup.builder().build()));
 
         // then
         assertEquals(ErrorCode.MEMBER_ALREADY_EXISTS, exception.getErrorCode());
@@ -103,7 +103,7 @@ class MemberServiceTest {
                 .willReturn(authentication);
 
         // when
-        MemberDto memberDto = memberService.signin(new Signin(EMAIL, PASSWORD));
+        MemberDto memberDto = authService.signin(new Signin(EMAIL, PASSWORD));
 
         // then
         assertEquals(MEMBER_NAME, memberDto.getName());

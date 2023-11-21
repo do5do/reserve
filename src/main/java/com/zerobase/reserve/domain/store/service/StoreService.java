@@ -4,9 +4,12 @@ import com.zerobase.reserve.domain.common.utils.KeyGenerator;
 import com.zerobase.reserve.domain.member.entity.Member;
 import com.zerobase.reserve.domain.member.exception.MemberException;
 import com.zerobase.reserve.domain.member.repository.MemberRepository;
+import com.zerobase.reserve.domain.store.dto.EditRequest;
 import com.zerobase.reserve.domain.store.dto.Registration;
 import com.zerobase.reserve.domain.store.dto.SortCondition;
+import com.zerobase.reserve.domain.store.dto.model.AddressDto;
 import com.zerobase.reserve.domain.store.dto.model.StoreDto;
+import com.zerobase.reserve.domain.store.entity.Address;
 import com.zerobase.reserve.domain.store.entity.Store;
 import com.zerobase.reserve.domain.store.exception.StoreException;
 import com.zerobase.reserve.domain.store.repository.StoreRepository;
@@ -34,11 +37,9 @@ public class StoreService {
     private final CoordinateClient coordinateClient;
 
     @Transactional
-    public StoreDto registration(Registration.Request request) { // todo test 다시...
-        Member member = validateMember(request.getMemberKey());
-
-        CoordinateDto response =
-                coordinateClient.getCoordinate(request.getAddress().address());
+    public StoreDto registration(Registration.Request request) {
+        Member member = getMember(request.getMemberKey());
+        CoordinateDto response = getCoordinate(request.getAddress().address());
 
         Store store = request.toEntity(
                 keyGenerator.generateKey(),
@@ -50,7 +51,11 @@ public class StoreService {
         return StoreDto.fromEntity(store);
     }
 
-    private Member validateMember(String memberKey) {
+    private CoordinateDto getCoordinate(String address) {
+        return coordinateClient.getCoordinate(address);
+    }
+
+    private Member getMember(String memberKey) {
         return memberRepository.findByMemberKey(memberKey)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
@@ -64,13 +69,50 @@ public class StoreService {
     }
 
     public StoreDto information(String storeKey) {
+        return StoreDto.fromEntity(getStore(storeKey));
+    }
+
+    private Store getStore(String storeKey) {
         return storeRepository.findByStoreKey(storeKey)
-                .map(StoreDto::fromEntity)
                 .orElseThrow(() -> new StoreException(STORE_NOT_FOUND));
     }
 
     public Page<StoreDto> stores(Pageable pageable, SortCondition sortCondition) {
         return storeRepository.findAll(pageable)
                 .map(StoreDto::fromEntity);
+    }
+
+    @Transactional
+    public StoreDto edit(EditRequest request) {
+        Store store = getStore(request.getStoreKey());
+
+        Address savedAddress = store.getAddress();
+        Double x = savedAddress.getX();
+        Double y = savedAddress.getY();
+
+        String requestAddr = request.getAddress().address();
+
+        if (!requestAddr.equals(savedAddress.getAddress())) {
+            CoordinateDto coordinate = getCoordinate(requestAddr);
+            x = coordinate.getX();
+            y = coordinate.getY();
+        }
+
+        store.updateStore(request,
+                AddressDto.toEntity(request.getAddress(), x, y));
+        return StoreDto.fromEntity(store);
+    }
+
+    @Transactional
+    public String delete(String storeKey) {
+        validateStoreExists(storeKey);
+        storeRepository.deleteByStoreKey(storeKey);
+        return storeKey;
+    }
+
+    private void validateStoreExists(String storeKey) {
+        if (!storeRepository.existsByStoreKey(storeKey)) {
+            throw new StoreException(STORE_NOT_FOUND);
+        }
     }
 }

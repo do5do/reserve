@@ -20,7 +20,7 @@ import static com.zerobase.reserve.global.exception.ErrorCode.MEMBER_ALREADY_EXI
 
 @RequiredArgsConstructor
 @Service
-public class MemberService {
+public class AuthService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;

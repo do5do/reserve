@@ -43,11 +43,11 @@ public class SecurityConfig {
                                         new AntPathRequestMatcher("/**/signup"),
                                         new AntPathRequestMatcher("/**/signin")
                                 ).permitAll()
-                                .anyRequest().authenticated())
+                                .anyRequest().authenticated()
+                )
 
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
 
-                // todo global로 처리 또는 각 클래스에서 response 재정의
                 .exceptionHandling((exceptions) -> exceptions
                         .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                         .accessDeniedHandler(new CustomAccessDeniedHandler()));

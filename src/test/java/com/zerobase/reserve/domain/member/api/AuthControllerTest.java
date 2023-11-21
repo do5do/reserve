@@ -5,7 +5,7 @@ import com.zerobase.reserve.domain.common.builder.dto.MemberDtoBuilder;
 import com.zerobase.reserve.domain.member.dto.Signin;
 import com.zerobase.reserve.domain.member.dto.Signup;
 import com.zerobase.reserve.domain.member.entity.Role;
-import com.zerobase.reserve.domain.member.service.MemberService;
+import com.zerobase.reserve.domain.member.service.AuthService;
 import com.zerobase.reserve.global.security.TokenProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,12 +25,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(
-        controllers = MemberController.class,
+        controllers = AuthController.class,
         excludeAutoConfiguration = SecurityAutoConfiguration.class
 )
-class MemberControllerTest {
+class AuthControllerTest {
     @MockBean
-    MemberService memberService;
+    AuthService authService;
 
     @MockBean
     TokenProvider tokenProvider;
@@ -45,7 +45,7 @@ class MemberControllerTest {
     @DisplayName("회원가입 성공")
     void signup_success() throws Exception {
         // given
-        given(memberService.signup(any()))
+        given(authService.signup(any()))
                 .willReturn(MemberDtoBuilder.memberDto());
 
         // when
@@ -58,7 +58,7 @@ class MemberControllerTest {
                 .role(Role.USER)
                 .build();
 
-        mockMvc.perform(post("/api/v1/members/signup")
+        mockMvc.perform(post("/api/v1/auth/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signup)))
                 .andExpect(status().isOk())
@@ -73,7 +73,7 @@ class MemberControllerTest {
     @DisplayName("회원가입 실패 - 부적절한 이메일 형식")
     void signup_invalid_email() throws Exception {
         // given
-        given(memberService.signup(any()))
+        given(authService.signup(any()))
                 .willReturn(MemberDtoBuilder.memberDto());
 
         // when
@@ -86,7 +86,7 @@ class MemberControllerTest {
                 .role(Role.USER)
                 .build();
 
-        mockMvc.perform(post("/api/v1/members/signup")
+        mockMvc.perform(post("/api/v1/auth/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signup)))
                 .andExpect(status().is4xxClientError())
@@ -97,7 +97,7 @@ class MemberControllerTest {
     @DisplayName("회원가입 실패 - 부적절한 비밀번호 형식")
     void signup_invalid_password() throws Exception {
         // given
-        given(memberService.signup(any()))
+        given(authService.signup(any()))
                 .willReturn(MemberDtoBuilder.memberDto());
 
         // when
@@ -110,7 +110,7 @@ class MemberControllerTest {
                 .role(Role.USER)
                 .build();
 
-        mockMvc.perform(post("/api/v1/members/signup")
+        mockMvc.perform(post("/api/v1/auth/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signup)))
                 .andExpect(status().is4xxClientError())
@@ -121,7 +121,7 @@ class MemberControllerTest {
     @DisplayName("회원가입 실패 - 부적절한 전화번호 형식")
     void signup_invalid_phoneNumber() throws Exception {
         // given
-        given(memberService.signup(any()))
+        given(authService.signup(any()))
                 .willReturn(MemberDtoBuilder.memberDto());
 
         // when
@@ -134,7 +134,7 @@ class MemberControllerTest {
                 .role(Role.USER)
                 .build();
 
-        mockMvc.perform(post("/api/v1/members/signup")
+        mockMvc.perform(post("/api/v1/auth/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signup)))
                 .andExpect(status().is4xxClientError())
@@ -145,7 +145,7 @@ class MemberControllerTest {
     @DisplayName("회원가입 실패 - 부적절한 enum 형식")
     void signup_invalid_role() throws Exception {
         // given
-        given(memberService.signup(any()))
+        given(authService.signup(any()))
                 .willReturn(MemberDtoBuilder.memberDto());
 
         // when
@@ -157,7 +157,7 @@ class MemberControllerTest {
                 .phoneNumber(PHONE_NUMBER)
                 .build();
 
-        mockMvc.perform(post("/api/v1/members/signup")
+        mockMvc.perform(post("/api/v1/auth/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signup)))
                 .andExpect(status().is4xxClientError())
@@ -168,7 +168,7 @@ class MemberControllerTest {
     @DisplayName("로그인 성공")
     void signin_success() throws Exception {
         // given
-        given(memberService.signin(any()))
+        given(authService.signin(any()))
                 .willReturn(MemberDtoBuilder.memberDto());
 
         given(tokenProvider.generateToken(any()))
@@ -178,7 +178,7 @@ class MemberControllerTest {
         // then
         Signin signin = new Signin(EMAIL, PASSWORD);
 
-        mockMvc.perform(post("/api/v1/members/signin")
+        mockMvc.perform(post("/api/v1/auth/signin")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signin)))
                 .andExpect(status().isOk())
@@ -193,14 +193,14 @@ class MemberControllerTest {
     @DisplayName("로그인 실패 - 부적절한 이메일 형식")
     void signin_invalid_email() throws Exception {
         // given
-        given(memberService.signup(any()))
+        given(authService.signup(any()))
                 .willReturn(MemberDtoBuilder.memberDto());
 
         // when
         // then
         Signin signin = new Signin("gmail.com", PASSWORD);
 
-        mockMvc.perform(post("/api/v1/members/signin")
+        mockMvc.perform(post("/api/v1/auth/signin")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signin)))
                 .andExpect(status().is4xxClientError())
@@ -211,14 +211,14 @@ class MemberControllerTest {
     @DisplayName("로그인 실패 - 부적절한 비밀번호 형식")
     void signin_invalid_password() throws Exception {
         // given
-        given(memberService.signup(any()))
+        given(authService.signup(any()))
                 .willReturn(MemberDtoBuilder.memberDto());
 
         // when
         // then
         Signin signin = new Signin(EMAIL, "1234");
 
-        mockMvc.perform(post("/api/v1/members/signin")
+        mockMvc.perform(post("/api/v1/auth/signin")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signin)))
                 .andExpect(status().is4xxClientError())

@@ -29,7 +29,7 @@ public class KakaoCoordinateClient implements CoordinateClient {
 
     @Override
     public CoordinateDto getCoordinate(String address) {
-        UriComponents uri = UriComponentsBuilder.fromHttpUrl(URL)
+        UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(URL)
                 .queryParam("query", address)
                 .build();
 
@@ -40,7 +40,8 @@ public class KakaoCoordinateClient implements CoordinateClient {
 
         try {
             ResponseEntity<String> response = restTemplate.exchange(
-                    uri.toUri(), HttpMethod.GET, entity, String.class);
+                    uriComponents.encode().toUri(), HttpMethod.GET,
+                    entity, String.class);
 
             return objectMapperUtils.jsonToObject(response.getBody(),
                     KakaoResponseDto.class);

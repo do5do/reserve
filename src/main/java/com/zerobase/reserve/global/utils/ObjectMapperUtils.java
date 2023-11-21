@@ -3,8 +3,8 @@ package com.zerobase.reserve.global.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zerobase.reserve.global.exception.ApiBadRequestException;
 import com.zerobase.reserve.global.exception.ErrorCode;
-import com.zerobase.reserve.global.exception.JsonToObjectException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,7 @@ public class ObjectMapperUtils {
             return objectMapper.readValue(json, tClass);
         } catch (JsonProcessingException e) {
             log.error("JsonProcessingException is occurred. ", e);
-            throw new JsonToObjectException(ErrorCode.JSON_TO_OBJECT_FAIL);
+            throw new ApiBadRequestException(ErrorCode.JSON_TO_OBJECT_FAIL);
         }
     }
 }

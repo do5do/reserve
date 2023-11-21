@@ -5,14 +5,18 @@ import com.zerobase.reserve.domain.common.builder.StoreBuilder;
 import com.zerobase.reserve.domain.common.utils.KeyGenerator;
 import com.zerobase.reserve.domain.member.exception.MemberException;
 import com.zerobase.reserve.domain.member.repository.MemberRepository;
-import com.zerobase.reserve.domain.store.dto.model.AddressDto;
+import com.zerobase.reserve.domain.store.dto.EditRequest;
 import com.zerobase.reserve.domain.store.dto.Registration;
+import com.zerobase.reserve.domain.store.dto.model.AddressDto;
 import com.zerobase.reserve.domain.store.dto.model.SalesInfoDto;
 import com.zerobase.reserve.domain.store.dto.model.StoreDto;
 import com.zerobase.reserve.domain.store.entity.Store;
 import com.zerobase.reserve.domain.store.exception.StoreException;
 import com.zerobase.reserve.domain.store.repository.StoreRepository;
-import com.zerobase.reserve.global.exception.ErrorCode;
+import com.zerobase.reserve.global.exception.ApiBadRequestException;
+import com.zerobase.reserve.global.infra.address.CoordinateClient;
+import com.zerobase.reserve.global.infra.address.dto.CoordinateDto;
+import com.zerobase.reserve.global.infra.address.dto.KakaoResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,15 +28,19 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static com.zerobase.reserve.domain.common.constants.StoreConstants.*;
+import static com.zerobase.reserve.global.exception.ErrorCode.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 
 @ExtendWith(MockitoExtension.class)
 class StoreServiceTest {
@@ -44,6 +52,9 @@ class StoreServiceTest {
 
     @Mock
     KeyGenerator keyGenerator;
+
+    @Mock
+    CoordinateClient coordinateClient;
 
     @InjectMocks
     StoreService storeService;
@@ -61,6 +72,9 @@ class StoreServiceTest {
         given(keyGenerator.generateKey())
                 .willReturn(STORE_KEY);
 
+        given(coordinateClient.getCoordinate(any()))
+                .willReturn(getCoordinateDto());
+
         // when
         StoreDto storeDto = storeService.registration(
                 Registration.Request.builder()
@@ -71,12 +85,21 @@ class StoreServiceTest {
                         .address(new AddressDto(ADDRESS, DETAIL_ADDR, ZIPCODE))
                         .salesInfo(new SalesInfoDto(OPER_START, OPER_END,
                                 CLOSE_DAYS))
-                        .build());
+                        .build()
+        );
 
         // then
         assertEquals(STORE_KEY, storeDto.getStoreKey());
         assertEquals(STORE_NAME, storeDto.getName());
         assertEquals(DESCRIPTION, storeDto.getDescription());
+    }
+
+    private static CoordinateDto getCoordinateDto() {
+        return new KakaoResponseDto(
+                List.of(new KakaoResponseDto.Document(
+                        126.921834561892,
+                        37.5494881397462))
+        );
     }
 
     @Test
@@ -92,7 +115,30 @@ class StoreServiceTest {
                         Registration.Request.builder().build()));
 
         // then
-        assertEquals(ErrorCode.MEMBER_NOT_FOUND, exception.getErrorCode());
+        assertEquals(MEMBER_NOT_FOUND, exception.getErrorCode());
+    }
+
+    @Test
+    @DisplayName("매장 등록 실패 - 없는 주소")
+    void registration_address_not_found() {
+        // given
+        given(memberRepository.findByMemberKey(any()))
+                .willReturn(Optional.of(MemberBuilder.member()));
+
+        given(coordinateClient.getCoordinate(any()))
+                .willReturn(new KakaoResponseDto(Collections.emptyList()));
+
+        // when
+        ApiBadRequestException exception =
+                assertThrows(ApiBadRequestException.class, () ->
+                        storeService.registration(
+                                Registration.Request.builder()
+                                        .address(new AddressDto(ADDRESS,
+                                                DETAIL_ADDR, ZIPCODE))
+                                        .build()));
+
+        // then
+        assertEquals(RESOURCE_NOT_FOUND, exception.getErrorCode());
     }
 
     @Test
@@ -128,7 +174,7 @@ class StoreServiceTest {
         Store store = StoreBuilder.store();
         store.setMember(MemberBuilder.member());
 
-        given(storeRepository.findByStoreKey(STORE_KEY))
+        given(storeRepository.findByStoreKey(any()))
                 .willReturn(Optional.of(store));
 
         // when
@@ -142,7 +188,7 @@ class StoreServiceTest {
     @DisplayName("매장 조회 실패 - 존재하지 않는 매장")
     void information_store_not_found() {
         // given
-        given(storeRepository.findByStoreKey(STORE_KEY))
+        given(storeRepository.findByStoreKey(any()))
                 .willReturn(Optional.empty());
 
         // when
@@ -150,6 +196,118 @@ class StoreServiceTest {
                 storeService.information(STORE_KEY));
 
         // then
-        assertEquals(ErrorCode.STORE_NOT_FOUND, exception.getErrorCode());
+        assertEquals(STORE_NOT_FOUND, exception.getErrorCode());
+    }
+
+    @Test
+    @DisplayName("매장 수정 성공")
+    void edit_success() {
+        // given
+        Store store = StoreBuilder.store();
+        store.setMember(MemberBuilder.member());
+
+        given(storeRepository.findByStoreKey(any()))
+                .willReturn(Optional.of(store));
+
+        given(coordinateClient.getCoordinate(any()))
+                .willReturn(getCoordinateDto());
+
+        // when
+        StoreDto storeDto = storeService.edit(EditRequest.builder()
+                .storeKey(STORE_KEY)
+                .storeName("수정된 이름")
+                .description(DESCRIPTION)
+                .phoneNumber(PHONE_NUMBER)
+                .address(new AddressDto("주소 수정", DETAIL_ADDR, ZIPCODE))
+                .salesInfo(new SalesInfoDto(LocalTime.MIN, LocalTime.MAX,
+                        List.of("일요일")))
+                .build()
+        );
+
+        // then
+        assertEquals(STORE_KEY, storeDto.getStoreKey());
+        assertEquals("수정된 이름", storeDto.getName());
+        assertEquals("주소 수정", storeDto.getAddress().address());
+    }
+
+    @Test
+    @DisplayName("매장 수정 실패 - 존재하지 않는 매장")
+    void edit_store_not_found() {
+        // given
+        given(storeRepository.findByStoreKey(any()))
+                .willReturn(Optional.empty());
+
+        // when
+        StoreException exception = assertThrows(StoreException.class, () ->
+                storeService.edit(EditRequest.builder()
+                        .storeKey(STORE_KEY)
+                        .storeName("수정된 이름")
+                        .description(DESCRIPTION)
+                        .phoneNumber(PHONE_NUMBER)
+                        .address(new AddressDto("주소 수정", DETAIL_ADDR, ZIPCODE))
+                        .salesInfo(new SalesInfoDto(LocalTime.MIN, LocalTime.MAX,
+                                List.of("일요일")))
+                        .build())
+        );
+
+        // then
+        assertEquals(STORE_NOT_FOUND, exception.getErrorCode());
+    }
+
+    @Test
+    @DisplayName("매장 수정 실패 - 없는 주소")
+    void edit_address_not_found() {
+        // given
+        Store store = StoreBuilder.store();
+        store.setMember(MemberBuilder.member());
+
+        given(storeRepository.findByStoreKey(any()))
+                .willReturn(Optional.of(store));
+
+        given(coordinateClient.getCoordinate(any()))
+                .willReturn(new KakaoResponseDto(Collections.emptyList()));
+
+        // when
+        ApiBadRequestException exception =
+                assertThrows(ApiBadRequestException.class, () ->
+                        storeService.edit(EditRequest.builder()
+                                .address(new AddressDto("주소 수정",
+                                        DETAIL_ADDR, ZIPCODE))
+                                .build())
+                );
+
+        // then
+        assertEquals(RESOURCE_NOT_FOUND, exception.getErrorCode());
+    }
+
+    @Test
+    @DisplayName("매장 삭제 성공")
+    void delete_success() {
+        // given
+        given(storeRepository.existsByStoreKey(any()))
+                .willReturn(true);
+
+        doNothing().when(storeRepository).deleteByStoreKey(any());
+
+        // when
+        String result = storeService.delete(STORE_KEY);
+
+        // then
+        assertEquals(STORE_KEY, result);
+    }
+
+    @Test
+    @DisplayName("매장 삭제 실패 - 존재하지 않는 매장")
+    void delete_store_not_found() {
+        // given
+        given(storeRepository.existsByStoreKey(any()))
+                .willReturn(false);
+
+        // when
+        StoreException exception = assertThrows(StoreException.class, () ->
+                storeService.delete(STORE_KEY));
+
+        // then
+        assertEquals(STORE_NOT_FOUND, exception.getErrorCode());
     }
 }

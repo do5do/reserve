@@ -1,8 +1,6 @@
 package com.zerobase.reserve.domain.store.api;
 
-import com.zerobase.reserve.domain.store.dto.Registration;
-import com.zerobase.reserve.domain.store.dto.SearchResponse;
-import com.zerobase.reserve.domain.store.dto.SortCondition;
+import com.zerobase.reserve.domain.store.dto.*;
 import com.zerobase.reserve.domain.store.dto.model.StoreDto;
 import com.zerobase.reserve.domain.store.service.StoreService;
 import jakarta.validation.Valid;
@@ -40,10 +38,24 @@ public class StoreController {
         return ResponseEntity.ok(storeService.information(storeKey));
     }
 
-    // todo 상점 목록 (가나다순, 별점순, 거리순) 가나다 순은 sort=name 으로 하면 되는데, 별점, 거리를 어떻게 구현하지,, if로 나누고 싶진 않은데,,
+    // todo 상점 목록 (가나다순, 별점순, 거리순) 팩토리 패턴 사용
     @GetMapping
     public ResponseEntity<?> stores(final Pageable pageable,
                                     @Valid SortCondition sortCondition) {
         return ResponseEntity.ok(storeService.stores(pageable, sortCondition));
+    }
+
+    @PreAuthorize("hasRole('MANAGER')")
+    @PatchMapping
+    public ResponseEntity<StoreDto> edit(@RequestBody @Valid EditRequest request) {
+        return ResponseEntity.ok(storeService.edit(request));
+    }
+
+    @PreAuthorize("hasRole('MANAGER')")
+    @DeleteMapping("/{storeKey}")
+    public ResponseEntity<DeleteResponse> delete(@PathVariable String storeKey) {
+        return ResponseEntity.ok(
+                new DeleteResponse(storeService.delete(storeKey))
+        );
     }
 }

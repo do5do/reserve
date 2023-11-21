@@ -2,8 +2,13 @@ package com.zerobase.reserve.domain.store.entity;
 
 import com.zerobase.reserve.domain.common.model.BaseTimeEntity;
 import com.zerobase.reserve.domain.member.entity.Member;
+import com.zerobase.reserve.domain.store.dto.EditRequest;
+import com.zerobase.reserve.domain.store.dto.model.SalesInfoDto;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -48,5 +53,13 @@ public class Store extends BaseTimeEntity {
 
     public void setMember(Member member) {
         this.member = member;
+    }
+
+    public void updateStore(EditRequest request, Address address) {
+        this.name = request.getStoreName();
+        this.description = request.getDescription();
+        this.phoneNumber = request.getPhoneNumber();
+        this.address = address;
+        this.salesInfo = SalesInfoDto.toEntity(request.getSalesInfo());
     }
 }
