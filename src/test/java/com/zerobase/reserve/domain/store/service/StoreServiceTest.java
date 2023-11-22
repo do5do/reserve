@@ -172,7 +172,7 @@ class StoreServiceTest {
     void information_success() {
         // given
         Store store = StoreBuilder.store();
-        store.setMember(MemberBuilder.member());
+        store.addMember(MemberBuilder.member());
 
         given(storeRepository.findByStoreKey(any()))
                 .willReturn(Optional.of(store));
@@ -204,7 +204,7 @@ class StoreServiceTest {
     void edit_success() {
         // given
         Store store = StoreBuilder.store();
-        store.setMember(MemberBuilder.member());
+        store.addMember(MemberBuilder.member());
 
         given(storeRepository.findByStoreKey(any()))
                 .willReturn(Optional.of(store));
@@ -259,7 +259,7 @@ class StoreServiceTest {
     void edit_address_not_found() {
         // given
         Store store = StoreBuilder.store();
-        store.setMember(MemberBuilder.member());
+        store.addMember(MemberBuilder.member());
 
         given(storeRepository.findByStoreKey(any()))
                 .willReturn(Optional.of(store));

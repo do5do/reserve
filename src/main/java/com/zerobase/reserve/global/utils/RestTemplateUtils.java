@@ -39,12 +39,10 @@ public class RestTemplateUtils {
     }
 
     public String exchange(UriComponents uriComponents, HttpHeaders headers) {
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
         try {
             ResponseEntity<String> response = restTemplate.exchange(
                     uriComponents.encode().toUri(), HttpMethod.GET,
-                    entity, String.class);
+                    new HttpEntity<>(headers), String.class);
 
             return response.getBody();
         } catch (RestClientException e) {

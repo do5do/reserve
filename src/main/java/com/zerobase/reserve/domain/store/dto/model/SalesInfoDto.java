@@ -1,15 +1,18 @@
 package com.zerobase.reserve.domain.store.dto.model;
 
 import com.zerobase.reserve.domain.store.entity.SalesInfo;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalTime;
 import java.util.List;
 
 public record SalesInfoDto(
+        @NotNull
         @DateTimeFormat(pattern = "HH:mm:ss")
         LocalTime operatingStart,
 
+        @NotNull
         @DateTimeFormat(pattern = "HH:mm:ss")
         LocalTime operatingEnd,
 

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(indexes = {@Index(name = "idx_name", columnList = "name")})
+@Table(indexes = {@Index(name = "idx_store_key", columnList = "store_key")})
 @Entity
 public class Store extends BaseTimeEntity {
     @Id
@@ -51,7 +51,7 @@ public class Store extends BaseTimeEntity {
         this.salesInfo = salesInfo;
     }
 
-    public void setMember(Member member) {
+    public void addMember(Member member) {
         this.member = member;
     }
 

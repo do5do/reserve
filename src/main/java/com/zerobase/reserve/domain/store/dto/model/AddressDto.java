@@ -19,6 +19,7 @@ public record AddressDto(
                         .detailAddr(addressDto.detailAddr)
                         .zipcode(addressDto.zipcode)
                         .build();
+
                 address.addCoordinate(x, y);
                 return address;
         }

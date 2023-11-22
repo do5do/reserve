@@ -1,21 +1,22 @@
 package com.zerobase.reserve.domain.member.entity;
 
-import com.zerobase.reserve.domain.member.converter.RoleConverter;
 import com.zerobase.reserve.domain.common.model.BaseTimeEntity;
-import com.zerobase.reserve.domain.store.entity.Store;
+import com.zerobase.reserve.domain.member.converter.RoleConverter;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(indexes = {@Index(name = "idx_member_key", columnList = "member_key")})
 @Entity
 public class Member extends BaseTimeEntity implements UserDetails {
     @Id
@@ -41,9 +42,6 @@ public class Member extends BaseTimeEntity implements UserDetails {
     @Column(nullable = false)
     private Role role;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<Store> stores = new ArrayList<>();
-
     @Builder
     public Member(String memberKey, String name, String email, String password, String phoneNumber, Role role) {
         this.memberKey = memberKey;
@@ -52,16 +50,6 @@ public class Member extends BaseTimeEntity implements UserDetails {
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.role = role;
-    }
-
-    public void addStore(Store store) {
-        stores.add(store);
-        store.setMember(this);
-    }
-
-    public void removeStore(Store store) {
-        stores.remove(store);
-        store.setMember(null);
     }
 
     @Override

@@ -12,6 +12,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     Optional<Store> findByStoreKey(String storeKey);
 
+    // todo fetch join으로 변경
     boolean existsByStoreKey(String storeKey);
 
     void deleteByStoreKey(String storeKey);

@@ -7,4 +7,8 @@ public class MemberException extends CustomException {
     public MemberException(ErrorCode errorCode) {
         super(errorCode);
     }
+
+    public MemberException(ErrorCode errorCode, String msg) {
+        super(errorCode, msg);
+    }
 }

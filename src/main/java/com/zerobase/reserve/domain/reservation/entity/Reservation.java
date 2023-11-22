@@ -2,30 +2,47 @@ package com.zerobase.reserve.domain.reservation.entity;
 
 import com.zerobase.reserve.domain.common.model.BaseTimeEntity;
 import com.zerobase.reserve.domain.member.entity.Member;
+import com.zerobase.reserve.domain.reservation.converter.ReservationTypeConverter;
+import com.zerobase.reserve.domain.reservation.type.ReservationType;
 import com.zerobase.reserve.domain.store.entity.Store;
-import com.zerobase.reserve.domain.reservation.type.ApprovalType;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"store_id", "rsv_date", "rsv_time", "rsv_type"})
+})
 @Entity
 public class Reservation extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private LocalDateTime reservedDate;
+    @Column(nullable = false, unique = true)
+    private String reservationKey;
+
+    @Column(nullable = false, name = "rsv_date")
+    private LocalDate reservationDate;
+
+    @Column(nullable = false, name = "rsv_time")
+    private LocalTime reservationTime;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private ApprovalType approvalType;
+    private Integer persons;
+
+    @Column(nullable = false, name = "rsv_type")
+    @Convert(converter = ReservationTypeConverter.class)
+    private ReservationType reservationType;
 
     @Column(nullable = false)
-    private boolean arrival = false; // 매장 도착 확인 여부
+    private boolean arrival = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -36,17 +53,20 @@ public class Reservation extends BaseTimeEntity {
     private Store store;
 
     @Builder
-    public Reservation(LocalDateTime reservedDate, ApprovalType approvalType, boolean arrival) {
-        this.reservedDate = reservedDate;
-        this.approvalType = approvalType;
-        this.arrival = arrival;
+    public Reservation(String reservationKey, LocalDate reservationDate, LocalTime reservationTime, Integer persons, ReservationType reservationType) {
+        this.reservationKey = reservationKey;
+        this.reservationDate = reservationDate;
+        this.reservationTime = reservationTime;
+        this.persons = persons;
+        this.reservationType = reservationType;
     }
 
-    public void setMember(Member member) {
+    public void addMemberAndStore(Member member, Store store) {
         this.member = member;
+        this.store = store;
     }
 
-    public void setStore(Store store) {
-        this.store = store;
+    public void updateArrival() {
+        this.arrival = true;
     }
 }

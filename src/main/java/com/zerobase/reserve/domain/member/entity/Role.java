@@ -1,9 +1,12 @@
 package com.zerobase.reserve.domain.member.entity;
 
+import com.zerobase.reserve.domain.member.exception.MemberException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
+
+import static com.zerobase.reserve.global.exception.ErrorCode.INVALID_REQUEST;
 
 @Getter
 @RequiredArgsConstructor
@@ -14,9 +17,10 @@ public enum Role {
     private final String key;
 
     public static Role fromKey(String key) {
-        return Arrays.stream(values()).filter(o -> o.getKey().equals(key))
+        return Arrays.stream(values())
+                .filter(o -> o.getKey().equals(key))
                 .findFirst()
-                .orElseThrow(() ->
-                        new IllegalArgumentException("권한 키가 존재하지 않습니다."));
+                .orElseThrow(() -> new MemberException(
+                        INVALID_REQUEST, "잘못된 권한 타입입니다."));
     }
 }
