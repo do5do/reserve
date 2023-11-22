@@ -24,8 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.zerobase.reserve.global.exception.ErrorCode.MEMBER_NOT_FOUND;
-import static com.zerobase.reserve.global.exception.ErrorCode.STORE_NOT_FOUND;
+import static com.zerobase.reserve.global.exception.ErrorCode.*;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -112,7 +111,7 @@ public class StoreService {
 
     private void validateStoreExists(String storeKey) {
         if (!storeRepository.existsByStoreKey(storeKey)) {
-            throw new StoreException(STORE_NOT_FOUND);
+            throw new StoreException(STORE_ALREADY_EXISTS);
         }
     }
 }

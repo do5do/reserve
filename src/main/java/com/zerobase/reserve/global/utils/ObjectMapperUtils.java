@@ -29,7 +29,8 @@ public class ObjectMapperUtils {
             return objectMapper.readValue(json, tClass);
         } catch (JsonProcessingException e) {
             log.error("JsonProcessingException is occurred. ", e);
-            throw new ApiBadRequestException(ErrorCode.JSON_TO_OBJECT_FAIL);
+            throw new ApiBadRequestException(ErrorCode.INTERNAL_ERROR,
+                    "객체 매핑에 문제가 발생했습니다.");
         }
     }
 }
