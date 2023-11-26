@@ -26,7 +26,7 @@ public class EditRequest {
     private String description;
 
     @NotBlank
-    @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$",
+    @Pattern(regexp = "^\\d{2}-\\d{3}-\\d{4}$",
             message = "전화번호의 약식과 맞지 않습니다. ex) 02-123-1234")
     private String phoneNumber;
 

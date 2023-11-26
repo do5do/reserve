@@ -17,4 +17,9 @@ public class MemberService {
         return memberRepository.findByMemberKey(memberKey)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
+
+    public Member getMemberByPhoneNumberOrThrow(String phoneNumber) {
+        return memberRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
+    }
 }

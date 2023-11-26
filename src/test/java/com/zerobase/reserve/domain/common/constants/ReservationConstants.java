@@ -12,5 +12,4 @@ public class ReservationConstants {
     public static final Integer PERSONS = 2;
     public static final ReservationType RESERVATION_TYPE = ReservationType.WAIT;
 
-    public static final String RESERVATION_TIME_STR = "11:00:00";
 }

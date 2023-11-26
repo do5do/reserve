@@ -31,7 +31,7 @@ public class Reserve {
         @DateTimeFormat(iso = ISO.DATE)
         private LocalDate reservationDate;
 
-        @DateTimeFormat(pattern = "HH:mm:ss")
+        @DateTimeFormat(pattern = "HH:mm")
         private LocalTime reservationTime;
 
         private Integer persons;

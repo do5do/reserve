@@ -29,7 +29,7 @@ public class Signup {
     private String password;
 
     @NotBlank
-    @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$",
+    @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$",
             message = "핸드폰 번호의 약식과 맞지 않습니다. ex) 010-1234-1234")
     private String phoneNumber;
 

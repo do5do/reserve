@@ -1,7 +1,9 @@
 package com.zerobase.reserve.domain.reservation.api;
 
+import com.zerobase.reserve.domain.reservation.dto.Confirm;
 import com.zerobase.reserve.domain.reservation.dto.ReservationsResponse;
 import com.zerobase.reserve.domain.reservation.dto.Reserve;
+import com.zerobase.reserve.domain.reservation.dto.Visit;
 import com.zerobase.reserve.domain.reservation.service.ReservationService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
-import static org.springframework.format.annotation.DateTimeFormat.*;
+import static org.springframework.format.annotation.DateTimeFormat.ISO;
 
 @RequestMapping("/api/v1/reservation")
 @RequiredArgsConstructor
@@ -48,7 +50,21 @@ public class ReservationController {
                 storeKey, reservationDate, pageable));
     }
 
-    // 방문 확인? 회원의 확정된(예약 타입이 confirm) 예약 정보 조회를 한 뒤 -> 회원 번호로 조회
-    // 현재 시간이 예약 시간 10분 전인 경우 도착 확인을 한다. (arrival true로 변경)
+    /**
+     * 점주용 예약 확인 (승인/취소)
+     */
+    @PreAuthorize("hasRole('MANAGER')")
+    @PatchMapping("/confirm")
+    public ResponseEntity<Confirm.Response> confirm(
+            @RequestBody @Valid Confirm.Request request) {
+        return ResponseEntity.ok(reservationService.confirm(request));
+    }
 
+    /**
+     * 방문 확인
+     */
+    @PatchMapping("/visit")
+    public ResponseEntity<?> visit(@RequestBody Visit.Request request) {
+        return ResponseEntity.ok(reservationService.visit(request));
+    }
 }

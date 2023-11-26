@@ -3,6 +3,7 @@ package com.zerobase.reserve.domain.reservation.entity;
 import com.zerobase.reserve.domain.common.model.BaseTimeEntity;
 import com.zerobase.reserve.domain.member.entity.Member;
 import com.zerobase.reserve.domain.reservation.converter.ReservationTypeConverter;
+import com.zerobase.reserve.domain.reservation.converter.LocalTimeConverter;
 import com.zerobase.reserve.domain.reservation.type.ReservationType;
 import com.zerobase.reserve.domain.store.entity.Store;
 import jakarta.persistence.*;
@@ -32,6 +33,7 @@ public class Reservation extends BaseTimeEntity {
     private LocalDate reservationDate;
 
     @Column(nullable = false, name = "reservation_time")
+    @Convert(converter = LocalTimeConverter.class)
     private LocalTime reservationTime;
 
     @Column(nullable = false)
@@ -68,5 +70,9 @@ public class Reservation extends BaseTimeEntity {
 
     public void updateArrival() {
         this.arrival = true;
+    }
+
+    public void updateReservationType(ReservationType reservationType) {
+        this.reservationType = reservationType;
     }
 }

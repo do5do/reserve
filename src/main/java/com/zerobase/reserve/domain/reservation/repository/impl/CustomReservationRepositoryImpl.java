@@ -2,6 +2,7 @@ package com.zerobase.reserve.domain.reservation.repository.impl;
 
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.zerobase.reserve.domain.member.entity.Member;
 import com.zerobase.reserve.domain.reservation.entity.Reservation;
 import com.zerobase.reserve.domain.reservation.repository.CustomReservationRepository;
 import com.zerobase.reserve.domain.reservation.type.ReservationType;
@@ -14,6 +15,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 import static com.zerobase.reserve.domain.member.entity.QMember.member;
 import static com.zerobase.reserve.domain.reservation.entity.QReservation.reservation;
@@ -64,5 +66,24 @@ public class CustomReservationRepositoryImpl implements CustomReservationReposit
                 );
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public Optional<Reservation> findReservation(Member member,
+                                                 Store store,
+                                                 LocalDate reservationDate,
+                                                 LocalTime reservationTime,
+                                                 ReservationType reservationType) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(reservation)
+                .where(
+                        reservation.member.eq(member),
+                        reservation.store.eq(store),
+                        reservation.reservationDate.eq(reservationDate),
+                        reservation.reservationTime.eq(reservationTime),
+                        reservation.reservationType.eq(reservationType)
+                )
+                .orderBy(reservation.reservationTime.asc())
+                .fetchOne());
     }
 }

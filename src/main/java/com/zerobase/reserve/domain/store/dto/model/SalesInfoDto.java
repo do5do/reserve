@@ -9,11 +9,11 @@ import java.util.List;
 
 public record SalesInfoDto(
         @NotNull
-        @DateTimeFormat(pattern = "HH:mm:ss")
+        @DateTimeFormat(pattern = "HH:mm")
         LocalTime operatingStart,
 
         @NotNull
-        @DateTimeFormat(pattern = "HH:mm:ss")
+        @DateTimeFormat(pattern = "HH:mm")
         LocalTime operatingEnd,
 
         List<String> closedDays
