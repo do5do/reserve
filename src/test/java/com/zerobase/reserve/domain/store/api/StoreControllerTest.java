@@ -60,7 +60,7 @@ class StoreControllerTest {
     ObjectMapper objectMapper;
 
     @Test
-    @DisplayName("매장 등록")
+    @DisplayName("매장 등록 성공")
     void registration_success() throws Exception {
         // given
         given(storeService.registration(any()))
@@ -75,7 +75,6 @@ class StoreControllerTest {
                 ).andExpect(status().isOk())
                 .andExpect(jsonPath("$.storeKey").value(STORE_KEY))
                 .andExpect(jsonPath("$.storeName").value(STORE_NAME))
-                .andExpect(jsonPath("$.memberKey").value(MEMBER_KEY))
                 .andDo(print());
     }
 
@@ -108,7 +107,7 @@ class StoreControllerTest {
 
     @Test
     @DisplayName("키워드 검색")
-    void searchKeyword_success() throws Exception {
+    void searchKeyword() throws Exception {
         // given
         List<String> storeNames = List.of("맛있는 초밥", "더 맛있는 초밥집", "이것이 초밥이다");
 
@@ -130,7 +129,7 @@ class StoreControllerTest {
 
     @Test
     @DisplayName("매장 정보 조회")
-    void information_success() throws Exception {
+    void information() throws Exception {
         // given
         given(storeService.information(anyString()))
                 .willReturn(StoreDtoBuilder.storeDto());
@@ -139,7 +138,6 @@ class StoreControllerTest {
         // then
         mockMvc.perform(get("/api/v1/stores/" + STORE_KEY))
                 .andExpect(jsonPath("$.storeKey").value(STORE_KEY))
-                .andExpect(jsonPath("$.memberKey").value(MEMBER_KEY))
                 .andExpect(jsonPath("$.name").value(STORE_NAME))
                 .andExpect(jsonPath("$.description").value(DESCRIPTION))
                 .andExpect(jsonPath("$.phoneNumber").value(PHONE_NUMBER))
@@ -157,7 +155,7 @@ class StoreControllerTest {
 
     @Test
     @DisplayName("매장 수정")
-    void edit_success() throws Exception {
+    void edit_store() throws Exception {
         // given
         given(storeService.edit(any()))
                 .willReturn(StoreDtoBuilder.storeDto());
@@ -178,7 +176,6 @@ class StoreControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(jsonPath("$.storeKey").value(STORE_KEY))
-                .andExpect(jsonPath("$.memberKey").value(MEMBER_KEY))
                 .andExpect(jsonPath("$.name").value(STORE_NAME))
                 .andExpect(jsonPath("$.description").value(DESCRIPTION))
                 .andExpect(jsonPath("$.phoneNumber").value(PHONE_NUMBER))
@@ -196,7 +193,7 @@ class StoreControllerTest {
 
     @Test
     @DisplayName("매장 삭제")
-    void delete_success() throws Exception {
+    void delete_store() throws Exception {
         // given
         given(storeService.delete(any()))
                 .willReturn(STORE_KEY);

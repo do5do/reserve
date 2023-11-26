@@ -36,3 +36,4 @@ out/
 ### VS Code ###
 .vscode/
 /src/test/java/com/zerobase/reserve/http/http-client.private.env.json
+/src/main/generated/

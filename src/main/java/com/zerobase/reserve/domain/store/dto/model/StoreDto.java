@@ -17,7 +17,6 @@ public class StoreDto {
     private String phoneNumber;
     private AddressDto address;
     private SalesInfoDto salesInfo;
-    private String memberKey;
 
     public static StoreDto fromEntity(Store store) {
         return StoreDto.builder()
@@ -27,7 +26,6 @@ public class StoreDto {
                 .phoneNumber(store.getPhoneNumber())
                 .address(AddressDto.fromEntity(store.getAddress()))
                 .salesInfo(SalesInfoDto.fromEntity(store.getSalesInfo()))
-                .memberKey(store.getMember().getMemberKey())
                 .build();
     }
 }

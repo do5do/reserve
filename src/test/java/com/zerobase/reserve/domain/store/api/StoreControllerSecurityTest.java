@@ -78,7 +78,6 @@ public class StoreControllerSecurityTest {
                         .content(objectMapper.writeValueAsString(
                                 RegistRequestBuilder.registRequest()))
                 ).andExpect(status().isOk())
-                .andExpect(jsonPath("$.memberKey").value(MEMBER_KEY))
                 .andExpect(jsonPath("$.storeKey").value(STORE_KEY))
                 .andExpect(jsonPath("$.storeName").value(STORE_NAME))
                 .andDo(print());
@@ -107,7 +106,6 @@ public class StoreControllerSecurityTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(jsonPath("$.storeKey").value(STORE_KEY))
-                .andExpect(jsonPath("$.memberKey").value(MEMBER_KEY))
                 .andExpect(jsonPath("$.name").value(STORE_NAME))
                 .andExpect(jsonPath("$.description").value(DESCRIPTION))
                 .andExpect(jsonPath("$.phoneNumber").value(PHONE_NUMBER))

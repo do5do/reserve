@@ -1,9 +1,7 @@
-package com.zerobase.reserve.domain.reservation.dto.model;
+package com.zerobase.reserve.domain.reservation.dto;
 
-import com.zerobase.reserve.domain.member.entity.Member;
 import com.zerobase.reserve.domain.reservation.entity.Reservation;
 import com.zerobase.reserve.domain.reservation.type.ReservationType;
-import com.zerobase.reserve.domain.store.entity.Store;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,26 +14,24 @@ import java.time.LocalTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReservationDto {
+public class ReservationsResponse {
     private String reservationKey;
     private LocalDate reservationDate;
     private LocalTime reservationTime;
     private Integer persons;
     private ReservationType reservationType;
-    private boolean arrival;
-    private Store store;
-    private Member member;
+    private String memberName;
+    private String memberPhoneNumber;
 
-    public static ReservationDto fromEntity(Reservation reservation) {
-        return ReservationDto.builder()
+    public static ReservationsResponse fromEntity(Reservation reservation) {
+        return ReservationsResponse.builder()
                 .reservationKey(reservation.getReservationKey())
                 .reservationDate(reservation.getReservationDate())
                 .reservationTime(reservation.getReservationTime())
                 .persons(reservation.getPersons())
                 .reservationType(reservation.getReservationType())
-                .arrival(reservation.isArrival())
-                .store(reservation.getStore())
-                .member(reservation.getMember())
+                .memberName(reservation.getMember().getName())
+                .memberPhoneNumber(reservation.getMember().getPhoneNumber())
                 .build();
     }
 }

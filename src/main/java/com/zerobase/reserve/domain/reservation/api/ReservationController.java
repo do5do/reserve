@@ -1,7 +1,7 @@
 package com.zerobase.reserve.domain.reservation.api;
 
+import com.zerobase.reserve.domain.reservation.dto.ReservationsResponse;
 import com.zerobase.reserve.domain.reservation.dto.Reserve;
-import com.zerobase.reserve.domain.reservation.dto.model.ReservationDto;
 import com.zerobase.reserve.domain.reservation.service.ReservationService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -24,6 +24,9 @@ import static org.springframework.format.annotation.DateTimeFormat.*;
 public class ReservationController {
     private final ReservationService reservationService;
 
+    /**
+     * 예약
+     */
     @PostMapping
     public ResponseEntity<Reserve.Response> reserve(
             @RequestBody @Valid Reserve.Request request) {
@@ -33,13 +36,10 @@ public class ReservationController {
 
     /**
      * 점주용 날짜별 예약 조회
-     * @param storeKey = 매장 키
-     * @param pageable = 페이징 처리
-     * @return 예약 정보 페이징
      */
     @PreAuthorize("hasRole('MANAGER')")
     @GetMapping
-    public ResponseEntity<Page<ReservationDto>> reservations(
+    public ResponseEntity<Page<ReservationsResponse>> reservations(
             @RequestParam @NotBlank String storeKey,
             @RequestParam @NotNull @DateTimeFormat(iso = ISO.DATE)
             LocalDate reservationDate,

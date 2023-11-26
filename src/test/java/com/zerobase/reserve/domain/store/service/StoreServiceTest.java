@@ -4,7 +4,7 @@ import com.zerobase.reserve.domain.common.builder.MemberBuilder;
 import com.zerobase.reserve.domain.common.builder.StoreBuilder;
 import com.zerobase.reserve.domain.common.utils.KeyGenerator;
 import com.zerobase.reserve.domain.member.exception.MemberException;
-import com.zerobase.reserve.domain.member.repository.MemberRepository;
+import com.zerobase.reserve.domain.member.service.MemberService;
 import com.zerobase.reserve.domain.store.dto.EditRequest;
 import com.zerobase.reserve.domain.store.dto.Registration;
 import com.zerobase.reserve.domain.store.dto.model.AddressDto;
@@ -38,7 +38,6 @@ import static com.zerobase.reserve.global.exception.ErrorCode.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 
@@ -48,7 +47,7 @@ class StoreServiceTest {
     StoreRepository storeRepository;
 
     @Mock
-    MemberRepository memberRepository;
+    MemberService memberService;
 
     @Mock
     KeyGenerator keyGenerator;
@@ -63,8 +62,8 @@ class StoreServiceTest {
     @DisplayName("매장 등록 성공")
     void registration_success() {
         // given
-        given(memberRepository.findByMemberKey(anyString()))
-                .willReturn(Optional.of(MemberBuilder.member()));
+        given(memberService.getMemberOrThrow(any()))
+                .willReturn(MemberBuilder.member());
 
         given(storeRepository.save(any()))
                 .willReturn(StoreBuilder.store());
@@ -106,8 +105,8 @@ class StoreServiceTest {
     @DisplayName("매장 등록 실패 - 존재하지 않는 회원")
     void registration_member_not_found() {
         // given
-        given(memberRepository.findByMemberKey(any()))
-                .willReturn(Optional.empty());
+        given(memberService.getMemberOrThrow(any()))
+                .willThrow(new MemberException(MEMBER_NOT_FOUND));
 
         // when
         MemberException exception = assertThrows(MemberException.class, () ->
@@ -122,8 +121,8 @@ class StoreServiceTest {
     @DisplayName("매장 등록 실패 - 없는 주소")
     void registration_address_not_found() {
         // given
-        given(memberRepository.findByMemberKey(any()))
-                .willReturn(Optional.of(MemberBuilder.member()));
+        given(memberService.getMemberOrThrow(any()))
+                .willReturn(MemberBuilder.member());
 
         given(coordinateClient.getCoordinate(any()))
                 .willReturn(new KakaoResponseDto(Collections.emptyList()));
@@ -133,8 +132,10 @@ class StoreServiceTest {
                 assertThrows(ApiBadRequestException.class, () ->
                         storeService.registration(
                                 Registration.Request.builder()
-                                        .address(new AddressDto(ADDRESS,
-                                                DETAIL_ADDR, ZIPCODE))
+                                        .address(new AddressDto(
+                                                        ADDRESS,
+                                                        DETAIL_ADDR,
+                                                        ZIPCODE))
                                         .build()));
 
         // then

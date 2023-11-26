@@ -11,7 +11,7 @@ public class ReservationTypeConverter implements AttributeConverter<ReservationT
         if (attribute == null) {
             return null;
         }
-        return attribute.name();
+        return attribute.getDescription();
     }
 
     @Override
@@ -19,6 +19,6 @@ public class ReservationTypeConverter implements AttributeConverter<ReservationT
         if (dbData == null) {
             return null;
         }
-        return ReservationType.fromName(dbData);
+        return ReservationType.fromDescription(dbData);
     }
 }

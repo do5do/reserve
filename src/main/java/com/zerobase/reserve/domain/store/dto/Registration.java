@@ -58,13 +58,11 @@ public class Registration {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Response {
-        private String memberKey;
         private String storeKey;
         private String storeName;
 
         public static Response from(StoreDto storeDto) {
             return Response.builder()
-                    .memberKey(storeDto.getMemberKey())
                     .storeKey(storeDto.getStoreKey())
                     .storeName(storeDto.getName())
                     .build();

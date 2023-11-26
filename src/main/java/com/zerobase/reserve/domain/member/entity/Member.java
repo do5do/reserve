@@ -16,14 +16,14 @@ import java.util.Collections;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(indexes = {@Index(name = "idx_member_key", columnList = "member_key")})
+@Table(indexes = {@Index(columnList = "member_key")})
 @Entity
 public class Member extends BaseTimeEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, name = "member_key")
     private String memberKey;
 
     @Column(nullable = false)

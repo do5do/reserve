@@ -7,13 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface StoreRepository extends JpaRepository<Store, Long> {
+public interface StoreRepository extends JpaRepository<Store, Long>, CustomStoreRepository {
     Page<Store> findAllByNameContains(String name, Pageable pageable);
 
     Optional<Store> findByStoreKey(String storeKey);
 
-    // todo fetch join으로 변경
     boolean existsByStoreKey(String storeKey);
-
-    void deleteByStoreKey(String storeKey);
 }

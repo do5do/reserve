@@ -1,0 +1,16 @@
+### reserve
+POST {{host}}/api/v1/reservation
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "memberKey": "3df39fd83c044c3b983443795b3d7346",
+  "storeKey": "af50db853620451ab5d9e6b55f72e3e3",
+  "reservationDate": "2023-11-25",
+  "reservationTime": "11:00",
+  "persons": 2
+}
+
+### get reservations for menager
+GET {{host}}/api/v1/reservation?storeKey=af50db853620451ab5d9e6b55f72e3e3&reservationDate=2023-11-25
+Authorization: Bearer {{token-mng}}

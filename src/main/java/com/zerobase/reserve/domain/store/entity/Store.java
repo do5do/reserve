@@ -12,14 +12,14 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(indexes = {@Index(name = "idx_store_key", columnList = "store_key")})
+@Table(indexes = {@Index(columnList = "store_key")})
 @Entity
 public class Store extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, name = "store_key")
     private String storeKey;
 
     @Column(nullable = false)

@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.zerobase.reserve.global.exception.ErrorCode.STORE_ALREADY_EXISTS;
 import static com.zerobase.reserve.global.exception.ErrorCode.STORE_NOT_FOUND;
 
 @Transactional(readOnly = true)
@@ -35,14 +34,19 @@ public class StoreService {
     private final KeyGenerator keyGenerator;
     private final CoordinateClient coordinateClient;
 
-    public Store getStore(String storeKey) {
+    public Store getStoreOrThrow(String storeKey) {
         return storeRepository.findByStoreKey(storeKey)
+                .orElseThrow(() -> new StoreException(STORE_NOT_FOUND));
+    }
+
+    public Store getStoreFetchMemberOrThrow(String storeKey) {
+        return storeRepository.findByStoreKeyFetchJoin(storeKey)
                 .orElseThrow(() -> new StoreException(STORE_NOT_FOUND));
     }
 
     @Transactional
     public StoreDto registration(Registration.Request request) {
-        Member member = memberService.getMember(request.getMemberKey());
+        Member member = memberService.getMemberOrThrow(request.getMemberKey());
         CoordinateDto response = getCoordinate(request.getAddress().address());
 
         Store store = request.toEntity(
@@ -69,7 +73,7 @@ public class StoreService {
     }
 
     public StoreDto information(String storeKey) {
-        return StoreDto.fromEntity(getStore(storeKey));
+        return StoreDto.fromEntity(getStoreOrThrow(storeKey));
     }
 
     public Page<StoreDto> stores(Pageable pageable, SortCondition sortCondition) {
@@ -79,7 +83,7 @@ public class StoreService {
 
     @Transactional
     public StoreDto edit(EditRequest request) {
-        Store store = getStore(request.getStoreKey());
+        Store store = getStoreOrThrow(request.getStoreKey());
 
         Address savedAddress = store.getAddress();
         Double x = savedAddress.getX();
@@ -107,7 +111,7 @@ public class StoreService {
 
     private void validateStoreExists(String storeKey) {
         if (!storeRepository.existsByStoreKey(storeKey)) {
-            throw new StoreException(STORE_ALREADY_EXISTS);
+            throw new StoreException(STORE_NOT_FOUND);
         }
     }
 }

@@ -1,15 +1,15 @@
 ### registraton store
 POST {{host}}/api/v1/stores
 Content-Type: application/json
-Authorization: Bearer {{token}}
+Authorization: Bearer {{token-mng}}
 
 {
-  "memberKey": "896c71f2384a4c228993a0512a7eb4f4",
+  "memberKey": "3a8777f671374337ab8513e6796cd698",
   "storeName": "매장 1",
   "description": "매장 1 설명입니다.",
   "phoneNumber": "02-123-1234",
   "address": {
-    "address": "서울시 마포구 와우산로15길 24",
+    "address": "서울시 마포구 와우산로24길 13",
     "detailAddr": "AA빌딩",
     "zipcode": "123-1"
   },
@@ -21,25 +21,25 @@ Authorization: Bearer {{token}}
 }
 
 ### search store by keyword
-GET {{host}}/api/v1/stores/search?keyword=매
+GET {{host}}/api/v1/stores/search?keyword=장
 Authorization: Bearer {{token}}
 
 ### get store information
-GET {{host}}/api/v1/stores/08a524e36f0b451daac110df2f708404
+GET {{host}}/api/v1/stores/1f2bfd69ca2b4698835f14c4ab26383a
 Authorization: Bearer {{token}}
 
 ### edit store
 PATCH {{host}}/api/v1/stores
 Content-Type: application/json
-Authorization: Bearer {{token}}
+Authorization: Bearer {{token-mng}}
 
 {
-  "storeKey": "08a524e36f0b451daac110df2f708404",
+  "storeKey": "1f2bfd69ca2b4698835f14c4ab26383a",
   "storeName": "그동네 떡볶이",
   "description": "매장 설명입니다.",
   "phoneNumber": "02-123-1234",
   "address": {
-    "address": "서울시 마포구 월드컵로34길 14",
+    "address": "서울시 마포구 와우산로27길 14",
     "detailAddr": "강강 빌딩",
     "zipcode": "593-6"
   },
@@ -51,9 +51,9 @@ Authorization: Bearer {{token}}
 }
 
 ### delete store
-DELETE {{host}}/api/v1/stores/dbaf7b81a40f4fe1be40db9e43b530b9
+DELETE {{host}}/api/v1/stores/910449774c6c4292b208d65f6ba61bda
 Content-Type: application/json
-Authorization: Bearer {{token}}
+Authorization: Bearer {{token-mng}}
 
 ### get store list
 GET {{host}}/api/v1/stores?page=0&size=5&sort=name

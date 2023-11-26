@@ -17,7 +17,7 @@ import java.time.LocalTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"store_id", "rsv_date", "rsv_time", "rsv_type"})
+        @UniqueConstraint(columnNames = {"store_id", "reservation_date", "reservation_time", "reservation_type"})
 })
 @Entity
 public class Reservation extends BaseTimeEntity {
@@ -28,16 +28,16 @@ public class Reservation extends BaseTimeEntity {
     @Column(nullable = false, unique = true)
     private String reservationKey;
 
-    @Column(nullable = false, name = "rsv_date")
+    @Column(nullable = false, name = "reservation_date")
     private LocalDate reservationDate;
 
-    @Column(nullable = false, name = "rsv_time")
+    @Column(nullable = false, name = "reservation_time")
     private LocalTime reservationTime;
 
     @Column(nullable = false)
     private Integer persons;
 
-    @Column(nullable = false, name = "rsv_type")
+    @Column(nullable = false, name = "reservation_type")
     @Convert(converter = ReservationTypeConverter.class)
     private ReservationType reservationType;
 
