@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 public class StoreController {
     private final StoreService storeService;
 
+    /**
+     * 매장 등록
+     */
     @PreAuthorize("hasRole('MANAGER')")
     @PostMapping
     public ResponseEntity<Registration.Response> registration(
@@ -26,6 +29,9 @@ public class StoreController {
                 Registration.Response.from(storeDto));
     }
 
+    /**
+     * 매장 검색
+     */
     @GetMapping("/search")
     public ResponseEntity<SearchResponse> searchKeyword(
             @RequestParam String keyword) {
@@ -33,6 +39,9 @@ public class StoreController {
                 new SearchResponse(storeService.searchKeyword(keyword)));
     }
 
+    /**
+     * 매장 정보
+     */
     @GetMapping("/{storeKey}")
     public ResponseEntity<StoreDto> information(@PathVariable String storeKey) {
         return ResponseEntity.ok(storeService.information(storeKey));
@@ -45,12 +54,18 @@ public class StoreController {
         return ResponseEntity.ok(storeService.stores(pageable, sortCondition));
     }
 
+    /**
+     * 매장 수정
+     */
     @PreAuthorize("hasRole('MANAGER')")
     @PatchMapping
     public ResponseEntity<StoreDto> edit(@RequestBody @Valid EditRequest request) {
         return ResponseEntity.ok(storeService.edit(request));
     }
 
+    /**
+     * 매장 삭제
+     */
     @PreAuthorize("hasRole('MANAGER')")
     @DeleteMapping("/{storeKey}")
     public ResponseEntity<DeleteResponse> delete(@PathVariable String storeKey) {

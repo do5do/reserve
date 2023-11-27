@@ -21,11 +21,17 @@ public class AuthController {
     private final AuthService authService;
     private final TokenProvider tokenProvider;
 
+    /**
+     * 회원 가입
+     */
     @PostMapping("/signup")
     public ResponseEntity<MemberDto> signup(@RequestBody @Valid Signup request) {
         return ResponseEntity.ok(authService.signup(request));
     }
 
+    /**
+     * 로그인
+     */
     @PostMapping("/signin")
     public ResponseEntity<MemberDto> signin(@RequestBody @Valid Signin request) {
         MemberDto memberDto = authService.signin(request);

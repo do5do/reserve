@@ -11,6 +11,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,7 +39,7 @@ public class ReservationController {
     }
 
     /**
-     * 점주용 날짜별 예약 조회
+     * 날짜별 예약 조회
      */
     @PreAuthorize("hasRole('MANAGER')")
     @GetMapping
@@ -45,13 +47,15 @@ public class ReservationController {
             @RequestParam @NotBlank String storeKey,
             @RequestParam @NotNull @DateTimeFormat(iso = ISO.DATE)
             LocalDate reservationDate,
-            final Pageable pageable) {
+            @PageableDefault(sort = "reservationTime", direction = Direction.ASC)
+            final Pageable pageable
+    ) {
         return ResponseEntity.ok(reservationService.reservations(
                 storeKey, reservationDate, pageable));
     }
 
     /**
-     * 점주용 예약 확인 (승인/취소)
+     * 예약 확인 (승인/취소)
      */
     @PreAuthorize("hasRole('MANAGER')")
     @PatchMapping("/confirm")

@@ -12,7 +12,7 @@ Authorization: Bearer {{token}}
 }
 
 ### get reservations for menager
-GET {{host}}/api/v1/reservation?storeKey=af50db853620451ab5d9e6b55f72e3e3&reservationDate=2023-11-25
+GET {{host}}/api/v1/reservation?storeKey=4700c057dbab46aaad11b35cbf406fb6&reservationDate=2023-11-26&page=0
 Authorization: Bearer {{token-mng}}
 
 ### confirm reservation

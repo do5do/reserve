@@ -1,5 +1,8 @@
 package com.zerobase.reserve.domain.reservation.repository.impl;
 
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.zerobase.reserve.domain.member.entity.Member;
@@ -14,6 +17,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +49,8 @@ public class CustomReservationRepositoryImpl implements CustomReservationReposit
     @Override
     public Page<Reservation> findReservationsFetchJoin(
             Store store, LocalDate reservationDate, Pageable pageable) {
+        List<OrderSpecifier> allOrders = getAllOrderSpecifier(pageable);
+
         List<Reservation> contents = queryFactory
                 .selectFrom(reservation)
                 .join(reservation.member, member)
@@ -53,6 +59,7 @@ public class CustomReservationRepositoryImpl implements CustomReservationReposit
                         reservation.store.eq(store),
                         reservation.reservationDate.eq(reservationDate)
                 )
+                .orderBy(allOrders.toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -65,7 +72,27 @@ public class CustomReservationRepositoryImpl implements CustomReservationReposit
                         reservation.reservationDate.eq(reservationDate)
                 );
 
-        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
+        return PageableExecutionUtils.getPage(contents, pageable,
+                countQuery::fetchOne);
+    }
+
+    private List<OrderSpecifier> getAllOrderSpecifier(Pageable pageable) {
+        List<OrderSpecifier> orders = new ArrayList<>();
+
+        if (!pageable.getSort().isEmpty()) {
+            pageable.getSort().forEach(order -> {
+                Order direction = order.getDirection().isAscending()
+                        ? Order.ASC : Order.DESC;
+
+                PathBuilder orderExpression =
+                        new PathBuilder<>(Reservation.class, "reservation");
+
+                orders.add(new OrderSpecifier<>(direction,
+                        orderExpression.get(order.getProperty())));
+            });
+        }
+
+        return orders;
     }
 
     @Override
