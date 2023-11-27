@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -50,8 +51,8 @@ public class TokenProvider {
         Claims claims = parseClaims(token);
         List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
 
-        return new UsernamePasswordAuthenticationToken(claims.getSubject(),
-                token, authorities);
+        User user = new User(claims.getSubject(), "", authorities);
+        return new UsernamePasswordAuthenticationToken(user, token, authorities);
     }
 
     private List<SimpleGrantedAuthority> getAuthorities(Claims claims) {

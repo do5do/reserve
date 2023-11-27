@@ -18,8 +18,7 @@ public class CustomStoreRepositoryImpl implements CustomStoreRepository {
     public Optional<Store> findByStoreKeyFetchJoin(String storeKey) {
         return Optional.ofNullable(queryFactory
                 .selectFrom(store)
-                .join(store.member, member)
-                .fetchJoin()
+                .join(store.member, member).fetchJoin()
                 .where(store.storeKey.eq(storeKey))
                 .fetchOne());
     }

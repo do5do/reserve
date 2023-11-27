@@ -22,7 +22,7 @@ Authorization: Bearer {{token-mng}}
 
 {
   "reservationKey": "96382f913c184d5ebaa73595801a14ee",
-  "reservationType": "CONFIRM"
+  "reservationType": "QUIT"
 }
 
 ### check visit

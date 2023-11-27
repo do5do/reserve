@@ -62,7 +62,7 @@ public class ReservationService {
                                                    Pageable pageable) {
         Store store = storeService.getStoreOrThrow(storeKey);
 
-        return reservationRepository.findReservationsFetchJoin(
+        return reservationRepository.findAllFetchJoin(
                         store, reservationDate, pageable)
                 .map(ReservationsResponse::fromEntity);
     }
@@ -82,18 +82,14 @@ public class ReservationService {
     public Visit.Response visit(Visit.Request request) {
         Member member = memberService.getMemberByPhoneNumberOrThrow(
                 request.getPhoneNumber());
-
         Store store = storeService.getStoreOrThrow(request.getStoreKey());
 
-        Reservation reservation = reservationRepository.findReservation(
-                        member,
-                        store,
-                        request.getReservationDate(),
-                        request.getReservationTime(),
-                        ReservationType.CONFIRM
-                )
-                .orElseThrow(() ->
-                        new ReservationException(RESERVATION_NOT_FOUND));
+        Reservation reservation =
+                reservationRepository.findReservation(member, store,
+                                request.getReservationDate(),
+                                request.getReservationTime(),
+                                ReservationType.CONFIRM)
+                        .orElseThrow(() -> new ReservationException(RESERVATION_NOT_FOUND));
 
         validateArrivalTime(reservation);
 
@@ -106,5 +102,11 @@ public class ReservationService {
                 .minus(Duration.ofMinutes(10)))) {
             throw new ReservationException(ARRIVAL_TIME_EXCEED);
         }
+    }
+
+    public Reservation getReservationFetchJoinOrThrow(String reservationKey) {
+        return reservationRepository.findByKeyFetchJoin(reservationKey)
+                .orElseThrow(() ->
+                        new ReservationException(RESERVATION_NOT_FOUND));
     }
 }

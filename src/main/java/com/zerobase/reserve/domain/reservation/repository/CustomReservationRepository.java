@@ -17,7 +17,7 @@ public interface CustomReservationRepository {
                               LocalTime reservationTime,
                               ReservationType reservationType);
 
-    Page<Reservation> findReservationsFetchJoin(
+    Page<Reservation> findAllFetchJoin(
             Store store, LocalDate reservationDate, Pageable pageable);
 
     Optional<Reservation> findReservation(Member member,
@@ -25,4 +25,6 @@ public interface CustomReservationRepository {
                                           LocalDate reservationDate,
                                           LocalTime reservationTime,
                                           ReservationType reservationType);
+
+    Optional<Reservation> findByKeyFetchJoin(String reservationKey);
 }

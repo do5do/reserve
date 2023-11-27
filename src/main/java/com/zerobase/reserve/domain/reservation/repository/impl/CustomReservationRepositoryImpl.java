@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import static com.zerobase.reserve.domain.member.entity.QMember.member;
 import static com.zerobase.reserve.domain.reservation.entity.QReservation.reservation;
+import static com.zerobase.reserve.domain.store.entity.QStore.store;
 
 @RequiredArgsConstructor
 public class CustomReservationRepositoryImpl implements CustomReservationRepository {
@@ -47,14 +48,13 @@ public class CustomReservationRepositoryImpl implements CustomReservationReposit
     }
 
     @Override
-    public Page<Reservation> findReservationsFetchJoin(
+    public Page<Reservation> findAllFetchJoin(
             Store store, LocalDate reservationDate, Pageable pageable) {
         List<OrderSpecifier> allOrders = getAllOrderSpecifier(pageable);
 
         List<Reservation> contents = queryFactory
                 .selectFrom(reservation)
-                .join(reservation.member, member)
-                .fetchJoin()
+                .join(reservation.member, member).fetchJoin()
                 .where(
                         reservation.store.eq(store),
                         reservation.reservationDate.eq(reservationDate)
@@ -111,6 +111,16 @@ public class CustomReservationRepositoryImpl implements CustomReservationReposit
                         reservation.reservationType.eq(reservationType)
                 )
                 .orderBy(reservation.reservationTime.asc())
+                .fetchOne());
+    }
+
+    @Override
+    public Optional<Reservation> findByKeyFetchJoin(String reservationKey) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(reservation)
+                .join(reservation.member, member).fetchJoin()
+                .join(reservation.store, store).fetchJoin()
+                .where(reservation.reservationKey.eq(reservationKey))
                 .fetchOne());
     }
 }

@@ -41,7 +41,6 @@ public class ReservationController {
     /**
      * 날짜별 예약 조회
      */
-    @PreAuthorize("hasRole('MANAGER')")
     @GetMapping
     public ResponseEntity<Page<ReservationsResponse>> reservations(
             @RequestParam @NotBlank String storeKey,
@@ -55,7 +54,7 @@ public class ReservationController {
     }
 
     /**
-     * 예약 확인 (승인/취소)
+     * 예약 확인 (승인/취소/종료)
      */
     @PreAuthorize("hasRole('MANAGER')")
     @PatchMapping("/confirm")

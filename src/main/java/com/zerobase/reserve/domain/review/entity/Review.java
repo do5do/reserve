@@ -34,11 +34,8 @@ public class Review {
         this.score = score;
     }
 
-    public void setMember(Member member) {
+    public void addMemberAndStore(Member member, Store store) {
         this.member = member;
-    }
-
-    public void setStore(Store store) {
         this.store = store;
     }
 }

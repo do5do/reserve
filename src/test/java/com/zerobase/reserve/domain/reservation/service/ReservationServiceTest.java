@@ -166,7 +166,7 @@ class ReservationServiceTest {
         given(storeService.getStoreOrThrow(any()))
                 .willReturn(store);
 
-        given(reservationRepository.findReservationsFetchJoin(
+        given(reservationRepository.findAllFetchJoin(
                 any(), any(), any()
         )).willReturn(new PageImpl<>(List.of(reservation)));
 

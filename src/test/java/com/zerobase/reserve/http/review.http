@@ -1,0 +1,10 @@
+### write review
+POST {{host}}/api/v1/review
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "reservationKey": "96382f913c184d5ebaa73595801a14ee",
+  "contents": "맛있어요!",
+  "score": 5
+}
