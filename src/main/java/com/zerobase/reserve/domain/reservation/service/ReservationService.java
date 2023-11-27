@@ -39,7 +39,7 @@ public class ReservationService {
     public ReservationDto reserve(Reserve.Request request) {
         Store store = storeService.getStoreOrThrow(request.getStoreKey());
 
-        existsReservation(request.getReservationDate(),
+        validateReservationExists(request.getReservationDate(),
                 request.getReservationTime(), store);
 
         Member member = memberService.getMemberOrThrow(request.getMemberKey());
@@ -48,9 +48,9 @@ public class ReservationService {
                 request.toEntity(keyGenerator.generateKey(), member, store)));
     }
 
-    private void existsReservation(LocalDate reservationDate,
-                                   LocalTime reservationTime,
-                                   Store store) {
+    private void validateReservationExists(LocalDate reservationDate,
+                                           LocalTime reservationTime,
+                                           Store store) {
         if (reservationRepository.existsReservation(store, reservationDate,
                 reservationTime, ReservationType.WAIT)) {
             throw new ReservationException(ALREADY_RESERVED);
@@ -63,7 +63,7 @@ public class ReservationService {
         Store store = storeService.getStoreOrThrow(storeKey);
 
         return reservationRepository.findReservationsFetchJoin(
-                store, reservationDate, pageable)
+                        store, reservationDate, pageable)
                 .map(ReservationsResponse::fromEntity);
     }
 
@@ -85,12 +85,15 @@ public class ReservationService {
 
         Store store = storeService.getStoreOrThrow(request.getStoreKey());
 
-        Reservation reservation =
-                reservationRepository.findReservation(member, store,
-                                request.getReservationDate(),
-                                request.getReservationTime(),
-                                ReservationType.CONFIRM)
-                .orElseThrow(() -> new ReservationException(RESERVATION_NOT_FOUND));
+        Reservation reservation = reservationRepository.findReservation(
+                        member,
+                        store,
+                        request.getReservationDate(),
+                        request.getReservationTime(),
+                        ReservationType.CONFIRM
+                )
+                .orElseThrow(() ->
+                        new ReservationException(RESERVATION_NOT_FOUND));
 
         validateArrivalTime(reservation);
 

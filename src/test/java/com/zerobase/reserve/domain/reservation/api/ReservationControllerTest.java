@@ -2,9 +2,12 @@ package com.zerobase.reserve.domain.reservation.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zerobase.reserve.domain.common.builder.dto.ReservationDtoBuilder;
+import com.zerobase.reserve.domain.reservation.dto.Confirm;
 import com.zerobase.reserve.domain.reservation.dto.ReservationsResponse;
 import com.zerobase.reserve.domain.reservation.dto.Reserve;
+import com.zerobase.reserve.domain.reservation.dto.Visit;
 import com.zerobase.reserve.domain.reservation.service.ReservationService;
+import com.zerobase.reserve.domain.reservation.type.ReservationType;
 import com.zerobase.reserve.global.config.SecurityConfig;
 import com.zerobase.reserve.global.security.AuthenticationFilter;
 import org.junit.jupiter.api.DisplayName;
@@ -28,8 +31,7 @@ import static com.zerobase.reserve.domain.common.constants.StoreConstants.STORE_
 import static com.zerobase.reserve.domain.common.constants.StoreConstants.STORE_NAME;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -131,6 +133,50 @@ class ReservationControllerTest {
                         .value(MEMBER_NAME))
                 .andExpect(jsonPath("$.content[0].memberPhoneNumber")
                         .value(PHONE_NUMBER))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("예약 확인")
+    void confirm() throws Exception {
+        // given
+        given(reservationService.confirm(any()))
+                .willReturn(new Confirm.Response(RESERVATION_KEY));
+
+        // when
+        // then
+        mockMvc.perform(patch("/api/v1/reservation/confirm")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(
+                        new Confirm.Request(RESERVATION_KEY,
+                                ReservationType.CONFIRM)
+                )))
+                .andExpect(jsonPath("$.reservationKey")
+                        .value(RESERVATION_KEY))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("방문 확인")
+    void visit() throws Exception {
+        // given
+        given(reservationService.visit(any()))
+                .willReturn(new Visit.Response(RESERVATION_KEY));
+
+        // when
+        // then
+        mockMvc.perform(patch("/api/v1/reservation/visit")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                Visit.Request.builder()
+                                        .phoneNumber(PHONE_NUMBER)
+                                        .storeKey(STORE_KEY)
+                                        .reservationDate(RESERVATION_DATE)
+                                        .reservationTime(RESERVATION_TIME)
+                                        .build()
+                        )))
+                .andExpect(jsonPath("$.reservationKey")
+                        .value(RESERVATION_KEY))
                 .andDo(print());
     }
 }

@@ -64,7 +64,7 @@ public class ReservationController {
      * 방문 확인
      */
     @PatchMapping("/visit")
-    public ResponseEntity<?> visit(@RequestBody Visit.Request request) {
+    public ResponseEntity<?> visit(@RequestBody @Valid Visit.Request request) {
         return ResponseEntity.ok(reservationService.visit(request));
     }
 }
