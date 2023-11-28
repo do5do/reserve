@@ -8,3 +8,18 @@ Authorization: Bearer {{token}}
   "contents": "맛있어요!",
   "score": 5
 }
+
+### update review
+PATCH {{host}}/api/v1/review
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "reviewId": 1,
+  "contents": "맛있어요! 2222",
+  "score": 5
+}
+
+### delete review
+DELETE {{host}}/api/v1/review/1
+Authorization: Bearer {{token}}

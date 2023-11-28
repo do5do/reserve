@@ -20,8 +20,12 @@ public enum ErrorCode {
     ALREADY_RESERVED(NOT_FOUND, "이미 예약된 일시입니다."),
     RESERVATION_NOT_FOUND(NOT_FOUND, "예약을 찾을 수 없습니다."),
     ARRIVAL_TIME_EXCEED(NOT_FOUND, "도착 시간이 지났습니다."),
-    NOT_QUIT_RESERVATION(NOT_FOUND, "종료된 예약이 아닙니다."),
+    NOT_QUIT_RESERVATION(BAD_REQUEST, "종료된 예약이 아닙니다."),
     RESERVATION_ACCESS_DENY(FORBIDDEN, "해당 예약에 접근할 수 없습니다."),
+
+    // review
+    REVIEW_NOT_FOUND(NOT_FOUND, "리뷰를 찾을 수 없습니다."),
+    REVIEW_ACCESS_DENY(FORBIDDEN, "해당 리뷰에 접근할 수 없습니다."),
 
     // global
     INVALID_REQUEST(BAD_REQUEST, "올바르지 않은 요청입니다."),

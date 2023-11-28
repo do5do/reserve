@@ -1,5 +1,7 @@
 package com.zerobase.reserve.domain.review.api;
 
+import com.zerobase.reserve.domain.review.dto.DeleteResponse;
+import com.zerobase.reserve.domain.review.dto.Update;
 import com.zerobase.reserve.domain.review.dto.Write;
 import com.zerobase.reserve.domain.review.service.ReviewService;
 import jakarta.validation.Valid;
@@ -7,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/v1/review")
 @RestController
@@ -28,5 +27,22 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.write(request, userDetails));
     }
 
-    // 수정, 삭제
+    /**
+     * 리뷰 수정
+     */
+    @PatchMapping
+    public ResponseEntity<Update.Response> update(
+            @RequestBody @Valid Update.Request request) {
+        return ResponseEntity.ok(Update.Response.from(
+                reviewService.update(request)));
+    }
+
+    /**
+     * 리뷰 삭제
+     */
+    @DeleteMapping("/{reviewId}")
+    public ResponseEntity<?> delete(@PathVariable Long reviewId) {
+        return ResponseEntity.ok(DeleteResponse.from(
+                reviewService.delete(reviewId)));
+    }
 }

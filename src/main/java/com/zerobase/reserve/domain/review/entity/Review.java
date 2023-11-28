@@ -1,6 +1,7 @@
 package com.zerobase.reserve.domain.review.entity;
 
 import com.zerobase.reserve.domain.member.entity.Member;
+import com.zerobase.reserve.domain.review.dto.Update;
 import com.zerobase.reserve.domain.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,4 +39,9 @@ public class Review {
         this.member = member;
         this.store = store;
     }
-}
+
+    public void updateReview(Update.Request request) {
+        this.contents = request.getContents();
+        this.score = request.getScore();
+    }
+ }
