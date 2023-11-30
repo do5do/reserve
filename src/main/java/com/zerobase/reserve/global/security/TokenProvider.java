@@ -1,11 +1,13 @@
 package com.zerobase.reserve.global.security;
 
 import com.zerobase.reserve.domain.member.dto.model.MemberDto;
+import com.zerobase.reserve.domain.member.service.CustomUserDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,6 +21,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Component
 public class TokenProvider {
     @Value("${jwt.key}")
@@ -26,6 +29,7 @@ public class TokenProvider {
     private SecretKey secretKey;
     private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60L;
     private static final String KEY_ROLES = "roles";
+    private final CustomUserDetailsService userDetailsService;
 
     @PostConstruct
     private void setSecretKey() {
@@ -49,6 +53,7 @@ public class TokenProvider {
 
     public Authentication getAuthentication(String token) {
         Claims claims = parseClaims(token);
+
         List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
 
         User user = new User(claims.getSubject(), "", authorities);

@@ -25,20 +25,24 @@ public class ReviewService {
     private final ReservationService reservationService;
 
     @Transactional
-    public Write.Response write(Write.Request request, UserDetails userDetails) {
+    public ReviewDto write(Write.Request request, UserDetails userDetails) {
         Reservation reservation = reservationService
                 .getReservationFetchJoinOrThrow(request.getReservationKey());
 
         validateReservation(reservation, userDetails);
 
-        reviewRepository.save(request.toEntity(reservation));
-        return new Write.Response(reservation.getId());
+        return ReviewDto.fromEntity(
+                reviewRepository.save(request.toEntity(reservation)));
     }
 
     private static void validateReservation(Reservation reservation,
                                             UserDetails userDetails) {
-        if (reservation.getReservationType() != ReservationType.QUIT) {
-            throw new ReservationException(NOT_QUIT_RESERVATION);
+        if (reservation.getReservationType() != ReservationType.CONFIRM) {
+            throw new ReservationException(RESERVATION_NOT_VISITED);
+        }
+
+        if (!reservation.isArrival()) {
+            throw new ReservationException(RESERVATION_NOT_VISITED);
         }
 
         if (!reservation.getMember().getEmail().equals(userDetails.getUsername())) {
@@ -62,7 +66,7 @@ public class ReviewService {
     @Transactional
     public ReviewDto delete(Long reviewId) {
         Review review = getReviewOrThrow(reviewId);
-        reviewRepository.deleteById(reviewId);
+        reviewRepository.deleteByReviewId(reviewId);
         return ReviewDto.fromEntity(review);
     }
 

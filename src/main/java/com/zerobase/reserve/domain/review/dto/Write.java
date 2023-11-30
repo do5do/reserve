@@ -1,6 +1,7 @@
 package com.zerobase.reserve.domain.review.dto;
 
 import com.zerobase.reserve.domain.reservation.entity.Reservation;
+import com.zerobase.reserve.domain.review.dto.model.ReviewDto;
 import com.zerobase.reserve.domain.review.entity.Review;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -37,5 +38,8 @@ public class Write {
     }
 
     public record Response(Long reviewId) {
+        public static Response from(ReviewDto reviewDto) {
+            return new Response(reviewDto.getReviewId());
+        }
     }
 }

@@ -1,5 +1,5 @@
 ### write review
-POST {{host}}/api/v1/review
+POST {{host}}/api/v1/reviews
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -10,16 +10,16 @@ Authorization: Bearer {{token}}
 }
 
 ### update review
-PATCH {{host}}/api/v1/review
+PATCH {{host}}/api/v1/reviews
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "reviewId": 1,
+  "reviewId": 2,
   "contents": "맛있어요! 2222",
   "score": 5
 }
 
 ### delete review
-DELETE {{host}}/api/v1/review/1
+DELETE {{host}}/api/v1/reviews/1
 Authorization: Bearer {{token}}

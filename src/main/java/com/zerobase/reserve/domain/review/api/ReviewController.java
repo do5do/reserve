@@ -11,7 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api/v1/review")
+@RequestMapping("/api/v1/reviews")
 @RestController
 @RequiredArgsConstructor
 public class ReviewController {
@@ -24,7 +24,8 @@ public class ReviewController {
     public ResponseEntity<Write.Response> write(
             @RequestBody @Valid Write.Request request,
             @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(reviewService.write(request, userDetails));
+        return ResponseEntity.ok(Write.Response.from(
+                reviewService.write(request, userDetails)));
     }
 
     /**
@@ -41,7 +42,7 @@ public class ReviewController {
      * 리뷰 삭제
      */
     @DeleteMapping("/{reviewId}")
-    public ResponseEntity<?> delete(@PathVariable Long reviewId) {
+    public ResponseEntity<DeleteResponse> delete(@PathVariable Long reviewId) {
         return ResponseEntity.ok(DeleteResponse.from(
                 reviewService.delete(reviewId)));
     }

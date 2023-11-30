@@ -54,7 +54,7 @@ public class ReservationController {
     }
 
     /**
-     * 예약 확인 (승인/취소/종료)
+     * 예약 확인 (승인/취소)
      */
     @PreAuthorize("hasRole('MANAGER')")
     @PatchMapping("/confirm")

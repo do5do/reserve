@@ -12,8 +12,7 @@ import java.util.Arrays;
 public enum ReservationType {
     CONFIRM("예약확정"),
     CANCEL("예약취소"),
-    WAIT("예약대기"),
-    QUIT("예약종료");
+    WAIT("예약대기");
 
     private final String description;
 
