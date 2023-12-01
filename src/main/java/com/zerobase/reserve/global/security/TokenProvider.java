@@ -1,7 +1,6 @@
 package com.zerobase.reserve.global.security;
 
 import com.zerobase.reserve.domain.member.dto.model.MemberDto;
-import com.zerobase.reserve.domain.member.service.CustomUserDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -29,7 +28,6 @@ public class TokenProvider {
     private SecretKey secretKey;
     private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60L;
     private static final String KEY_ROLES = "roles";
-    private final CustomUserDetailsService userDetailsService;
 
     @PostConstruct
     private void setSecretKey() {

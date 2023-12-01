@@ -42,11 +42,6 @@ public class StoreService {
                 .orElseThrow(() -> new StoreException(STORE_NOT_FOUND));
     }
 
-    public Store getStoreFetchMemberOrThrow(String storeKey) {
-        return storeRepository.findByStoreKeyFetchJoin(storeKey)
-                .orElseThrow(() -> new StoreException(STORE_NOT_FOUND));
-    }
-
     @Transactional
     public StoreDto registration(Registration.Request request) {
         Member member = memberService.getMemberOrThrow(request.getMemberKey());
