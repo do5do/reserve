@@ -6,6 +6,7 @@ import com.zerobase.reserve.domain.store.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class StoreController {
     }
 
     /**
-     * 매장 검색
+     * 매장명 검색
      */
     @GetMapping("/search")
     public ResponseEntity<SearchResponse> searchKeyword(
@@ -47,11 +48,13 @@ public class StoreController {
         return ResponseEntity.ok(storeService.information(storeKey));
     }
 
-    // todo 상점 목록 (가나다순, 별점순, 거리순) 팩토리 패턴 사용
+    /**
+     * 매장 목록 - 반경 3km 이내
+     */
     @GetMapping
-    public ResponseEntity<?> stores(final Pageable pageable,
-                                    @Valid SortCondition sortCondition) {
-        return ResponseEntity.ok(storeService.stores(pageable, sortCondition));
+    public ResponseEntity<Slice<StoresResponse>> stores(
+            @Valid Location location, final Pageable pageable) {
+        return ResponseEntity.ok(storeService.stores(location, pageable));
     }
 
     /**

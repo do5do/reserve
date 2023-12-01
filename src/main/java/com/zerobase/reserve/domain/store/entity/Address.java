@@ -1,11 +1,16 @@
 package com.zerobase.reserve.domain.store.entity;
 
+import com.zerobase.reserve.domain.store.type.SRID;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.PrecisionModel;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,11 +25,8 @@ public class Address {
     @Column(nullable = false)
     private String zipcode;
 
-    @Column(nullable = false)
-    private Double x;
-
-    @Column(nullable = false)
-    private Double y;
+    @Column(columnDefinition = "POINT SRID 4326", nullable = false)
+    private Point coordinate;
 
     @Builder
     public Address(String address, String detailAddr, String zipcode) {
@@ -34,7 +36,8 @@ public class Address {
     }
 
     public void addCoordinate(Double x, Double y) {
-        this.x = x;
-        this.y = y;
+        GeometryFactory geometryFactory = new GeometryFactory(
+                new PrecisionModel(), SRID.POINT.getKey());
+        this.coordinate = geometryFactory.createPoint(new Coordinate(x, y));
     }
 }

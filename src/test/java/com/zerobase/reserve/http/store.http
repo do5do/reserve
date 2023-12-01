@@ -4,19 +4,19 @@ Content-Type: application/json
 Authorization: Bearer {{token-mng}}
 
 {
-  "memberKey": "91f59504a0d04b6d959a1e2473e0e50d",
+  "memberKey": "2c937a9e23a84fff99e2821570955382",
   "storeName": "매장 1",
   "description": "매장 1 설명입니다.",
   "phoneNumber": "02-123-1234",
   "address": {
-    "address": "서울시 마포구 와우산로24길 13",
-    "detailAddr": "AA빌딩",
-    "zipcode": "123-1"
+    "address": "서울시 강남구 선릉로120길 5",
+    "detailAddr": "1층",
+    "zipcode": "06092"
   },
   "salesInfo": {
     "operatingStart": "10:00",
-    "operatingEnd": "21:00",
-    "closedDays": ["수요일", "일요일"]
+    "operatingEnd": "19:00",
+    "closedDays": []
   }
 }
 
@@ -34,14 +34,14 @@ Content-Type: application/json
 Authorization: Bearer {{token-mng}}
 
 {
-  "storeKey": "1f2bfd69ca2b4698835f14c4ab26383a",
+  "storeKey": "c583184830c944eebe728991c9cd0b0b",
   "storeName": "그동네 떡볶이",
   "description": "매장 설명입니다.",
   "phoneNumber": "02-123-1234",
   "address": {
-    "address": "서울시 마포구 와우산로27길 14",
-    "detailAddr": "강강 빌딩",
-    "zipcode": "593-6"
+    "address": "부산 부산진구 성지로 58",
+    "detailAddr": "1층",
+    "zipcode": "59300"
   },
   "salesInfo": {
     "operatingStart": "10:00",
@@ -56,4 +56,5 @@ Content-Type: application/json
 Authorization: Bearer {{token-mng}}
 
 ### get store list
-GET {{host}}/api/v1/stores?page=0&size=5&sort=name
+GET {{host}}/api/v1/stores?page=0&size=5&sort=name&x=129.055511349615&y=35.1752550133221
+Authorization: Bearer {{token}}

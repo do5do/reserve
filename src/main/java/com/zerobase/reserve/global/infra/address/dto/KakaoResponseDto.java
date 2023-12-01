@@ -24,7 +24,7 @@ public record KakaoResponseDto(List<Document> documents) implements CoordinateDt
     }
 
     public record Document(
-            Double x,
-            Double y
+            Double x, // 경도
+            Double y // 위도
     ) {}
 }

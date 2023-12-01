@@ -8,7 +8,7 @@ public class StoreConstants {
     public static final String STORE_KEY = "34d95da5f3a6401bb070834306171e94";
     public static final String STORE_NAME = "매장 A";
     public static final String DESCRIPTION = "매장 설명입니다.";
-    public static final String PHONE_NUMBER = "010-1234-1234";
+    public static final String PHONE_NUMBER = "02-123-1234";
     public static final String ADDRESS = "서울시 자치구 도로명";
     public static final String DETAIL_ADDR = "상세 주소";
     public static final String ZIPCODE = "123-4";

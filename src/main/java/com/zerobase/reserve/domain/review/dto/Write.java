@@ -23,7 +23,7 @@ public class Write {
         private String contents;
 
         @NotNull
-        private Integer score;
+        private Double score;
 
         public Review toEntity(Reservation reservation) {
             Review review = Review.builder()

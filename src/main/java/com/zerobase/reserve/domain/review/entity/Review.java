@@ -18,8 +18,8 @@ public class Review {
     @Column(nullable = false, length = 1000)
     private String contents;
 
-    @ColumnDefault("0")
-    private Integer score;
+    @ColumnDefault("0.0")
+    private Double score;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -30,7 +30,7 @@ public class Review {
     private Store store;
 
     @Builder
-    public Review(String contents, Integer score) {
+    public Review(String contents, Double score) {
         this.contents = contents;
         this.score = score;
     }

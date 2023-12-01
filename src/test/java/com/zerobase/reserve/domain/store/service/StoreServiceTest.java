@@ -6,13 +6,16 @@ import com.zerobase.reserve.domain.common.utils.KeyGenerator;
 import com.zerobase.reserve.domain.member.exception.MemberException;
 import com.zerobase.reserve.domain.member.service.MemberService;
 import com.zerobase.reserve.domain.store.dto.EditRequest;
+import com.zerobase.reserve.domain.store.dto.Location;
 import com.zerobase.reserve.domain.store.dto.Registration;
+import com.zerobase.reserve.domain.store.dto.StoresResponse;
 import com.zerobase.reserve.domain.store.dto.model.AddressDto;
 import com.zerobase.reserve.domain.store.dto.model.SalesInfoDto;
 import com.zerobase.reserve.domain.store.dto.model.StoreDto;
 import com.zerobase.reserve.domain.store.entity.Store;
 import com.zerobase.reserve.domain.store.exception.StoreException;
 import com.zerobase.reserve.domain.store.repository.StoreRepository;
+import com.zerobase.reserve.domain.store.repository.projection.StoreProjection;
 import com.zerobase.reserve.global.exception.ApiBadRequestException;
 import com.zerobase.reserve.global.infra.address.CoordinateClient;
 import com.zerobase.reserve.global.infra.address.dto.CoordinateDto;
@@ -23,10 +26,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 
 import java.time.LocalTime;
 import java.util.Collections;
@@ -133,9 +133,9 @@ class StoreServiceTest {
                         storeService.registration(
                                 Registration.Request.builder()
                                         .address(new AddressDto(
-                                                        ADDRESS,
-                                                        DETAIL_ADDR,
-                                                        ZIPCODE))
+                                                ADDRESS,
+                                                DETAIL_ADDR,
+                                                ZIPCODE))
                                         .build()));
 
         // then
@@ -147,25 +147,21 @@ class StoreServiceTest {
     void searchKeyword_success() {
         // given
         String keyword = "초밥";
+        List<Store> contents = List.of(
+                Store.builder().name("맛있는 초밥").build(),
+                Store.builder().name("더 맛있는 초밥집").build(),
+                Store.builder().name("이것이 초밥이다").build()
+        );
         Pageable limit = PageRequest.of(0, 50);
-        Page<Store> stores = new PageImpl<>(stores(), limit, 1);
 
         given(storeRepository.findAllByNameContains(keyword, limit))
-                .willReturn(stores);
+                .willReturn(new PageImpl<>(contents, limit, 3));
 
         // when
         List<String> storeNames = storeService.searchKeyword(keyword);
 
         // then
         assertEquals(3, storeNames.size());
-    }
-
-    private static List<Store> stores() {
-        return List.of(
-                Store.builder().name("맛있는 초밥").build(),
-                Store.builder().name("더 맛있는 초밥집").build(),
-                Store.builder().name("이것이 초밥이다").build()
-        );
     }
 
     @Test
@@ -198,6 +194,42 @@ class StoreServiceTest {
 
         // then
         assertEquals(STORE_NOT_FOUND, exception.getErrorCode());
+    }
+
+    @Test
+    @DisplayName("매장 목록 조회")
+    void stores_success() {
+        // given
+        StoreProjection projection = new StoreProjection() {
+            @Override
+            public String getName() {
+                return STORE_NAME;
+            }
+
+            @Override
+            public String getAddress() {
+                return ADDRESS;
+            }
+
+            @Override
+            public Double getScore() {
+                return 2.3;
+            }
+        };
+
+        given(storeRepository.findByDistance(any(), any()))
+                .willReturn(new SliceImpl<>(List.of(projection)));
+
+        // when
+        Slice<StoresResponse> response =
+                storeService.stores(
+                        new Location(129.055511349615, 35.1752550133221),
+                        PageRequest.of(0, 5)
+                );
+
+        // then
+        assertEquals(1, response.getSize());
+        assertEquals(STORE_NAME, response.getContent().get(0).getStoreName());
     }
 
     @Test

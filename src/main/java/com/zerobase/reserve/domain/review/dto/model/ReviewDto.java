@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class ReviewDto {
     private Long reviewId;
     private String contents;
-    private Integer score;
+    private Double score;
     private Member member;
 
     public static ReviewDto fromEntity(Review review) {

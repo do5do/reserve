@@ -4,8 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zerobase.reserve.domain.common.builder.dto.RegistRequestBuilder;
 import com.zerobase.reserve.domain.common.builder.dto.StoreDtoBuilder;
 import com.zerobase.reserve.domain.store.dto.EditRequest;
-import com.zerobase.reserve.domain.store.dto.model.AddressDto;
 import com.zerobase.reserve.domain.store.dto.Registration;
+import com.zerobase.reserve.domain.store.dto.StoresResponse;
+import com.zerobase.reserve.domain.store.dto.model.AddressDto;
 import com.zerobase.reserve.domain.store.dto.model.SalesInfoDto;
 import com.zerobase.reserve.domain.store.service.StoreService;
 import com.zerobase.reserve.global.config.SecurityConfig;
@@ -20,6 +21,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -150,6 +152,33 @@ class StoreControllerTest {
                         .value("22:00:00"))
                 .andExpect(jsonPath("$.salesInfo.closedDays",
                         Matchers.containsInAnyOrder("일요일")))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("매장 목록")
+    void stores() throws Exception {
+        // given
+        StoresResponse response = StoresResponse.builder()
+                .storeName(STORE_NAME)
+                .address(ADDRESS)
+                .score(2.3)
+                .build();
+
+        List<StoresResponse> contents = List.of(response);
+
+        given(storeService.stores(any(), any()))
+                .willReturn(new SliceImpl<>(contents));
+
+        // when
+        // then
+        mockMvc.perform(get("/api/v1/stores")
+                .param("x", "129.055511349615")
+                .param("y", "35.1752550133221"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].storeName").value(STORE_NAME))
+                .andExpect(jsonPath("$.content[0].address").value(ADDRESS))
+                .andExpect(jsonPath("$.content[0].score").value(2.3))
                 .andDo(print());
     }
 

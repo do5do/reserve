@@ -21,7 +21,7 @@ public class Update {
         private String contents;
 
         @NotNull
-        private Integer score;
+        private Double score;
     }
 
     public record Response(Long reviewId) {

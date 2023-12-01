@@ -5,7 +5,8 @@ import com.zerobase.reserve.domain.member.entity.Member;
 import com.zerobase.reserve.domain.member.service.MemberService;
 import com.zerobase.reserve.domain.store.dto.EditRequest;
 import com.zerobase.reserve.domain.store.dto.Registration;
-import com.zerobase.reserve.domain.store.dto.SortCondition;
+import com.zerobase.reserve.domain.store.dto.Location;
+import com.zerobase.reserve.domain.store.dto.StoresResponse;
 import com.zerobase.reserve.domain.store.dto.model.AddressDto;
 import com.zerobase.reserve.domain.store.dto.model.StoreDto;
 import com.zerobase.reserve.domain.store.entity.Address;
@@ -15,9 +16,10 @@ import com.zerobase.reserve.domain.store.repository.StoreRepository;
 import com.zerobase.reserve.global.infra.address.CoordinateClient;
 import com.zerobase.reserve.global.infra.address.dto.CoordinateDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.locationtech.jts.geom.Point;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +35,7 @@ public class StoreService {
     private final MemberService memberService;
     private final KeyGenerator keyGenerator;
     private final CoordinateClient coordinateClient;
+    private static final String POINT = "POINT(%f %f)";
 
     public Store getStoreOrThrow(String storeKey) {
         return storeRepository.findByStoreKey(storeKey)
@@ -76,9 +79,10 @@ public class StoreService {
         return StoreDto.fromEntity(getStoreOrThrow(storeKey));
     }
 
-    public Page<StoreDto> stores(Pageable pageable, SortCondition sortCondition) {
-        return storeRepository.findAll(pageable)
-                .map(StoreDto::fromEntity);
+    public Slice<StoresResponse> stores(Location location, Pageable pageable) {
+        return storeRepository.findByDistance(
+                String.format(POINT, location.y(), location.x()), pageable)
+                .map(StoresResponse::from);
     }
 
     @Transactional
@@ -86,15 +90,16 @@ public class StoreService {
         Store store = getStoreOrThrow(request.getStoreKey());
 
         Address savedAddress = store.getAddress();
-        Double x = savedAddress.getX();
-        Double y = savedAddress.getY();
+        Point coordinate = savedAddress.getCoordinate();
+        Double x = coordinate.getX();
+        Double y = coordinate.getY();
 
         String requestAddr = request.getAddress().address();
 
         if (!requestAddr.equals(savedAddress.getAddress())) {
-            CoordinateDto coordinate = getCoordinate(requestAddr);
-            x = coordinate.getX();
-            y = coordinate.getY();
+            CoordinateDto newCoordinate = getCoordinate(requestAddr);
+            x = newCoordinate.getX();
+            y = newCoordinate.getY();
         }
 
         store.updateStore(request,

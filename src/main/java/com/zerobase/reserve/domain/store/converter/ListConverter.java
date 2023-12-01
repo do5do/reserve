@@ -3,6 +3,7 @@ package com.zerobase.reserve.domain.store.converter;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class ListConverter implements AttributeConverter<List<String>, String> {
     @Override
     public String convertToDatabaseColumn(List<String> attribute) {
         if (attribute.isEmpty()) {
-            return null;
+            return "";
         }
         return String.join(DELIMITER, attribute);
     }
@@ -21,7 +22,7 @@ public class ListConverter implements AttributeConverter<List<String>, String> {
     @Override
     public List<String> convertToEntityAttribute(String dbData) {
         if (dbData.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
         return Arrays.stream(dbData.split(","))
                 .toList();

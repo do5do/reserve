@@ -9,16 +9,19 @@ import static com.zerobase.reserve.domain.common.constants.StoreConstants.CLOSE_
 
 public class StoreBuilder {
     public static Store store() {
+        Address address = Address.builder()
+                .address(ADDRESS)
+                .detailAddr(DETAIL_ADDR)
+                .zipcode(ZIPCODE)
+                .build();
+        address.addCoordinate(129.055511349615, 35.1752550133221);
+
         return Store.builder()
                 .storeKey(STORE_KEY)
                 .name(STORE_NAME)
                 .description(DESCRIPTION)
                 .phoneNumber(PHONE_NUMBER)
-                .address(Address.builder()
-                        .address(ADDRESS)
-                        .detailAddr(DETAIL_ADDR)
-                        .zipcode(ZIPCODE)
-                        .build())
+                .address(address)
                 .salesInfo(SalesInfo.builder()
                         .operatingStart(OPER_START)
                         .operatingEnd(OPER_END)

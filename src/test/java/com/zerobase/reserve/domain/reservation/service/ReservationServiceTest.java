@@ -19,6 +19,8 @@ import com.zerobase.reserve.domain.reservation.type.ReservationType;
 import com.zerobase.reserve.domain.store.entity.Store;
 import com.zerobase.reserve.domain.store.exception.StoreException;
 import com.zerobase.reserve.domain.store.service.StoreService;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -60,6 +62,18 @@ class ReservationServiceTest {
 
     @InjectMocks
     ReservationService reservationService;
+
+    static MockedStatic<LocalTime> localTimeMock;
+
+    @BeforeEach
+    void setLocalTimeMock() {
+        localTimeMock = mockStatic(LocalTime.class, Mockito.CALLS_REAL_METHODS);
+    }
+
+    @AfterEach
+    void closeLocalTimeMock() {
+        localTimeMock.close();
+    }
 
     @Test
     @DisplayName("예약 성공")
@@ -252,12 +266,9 @@ class ReservationServiceTest {
         given(reservationRepository.findReservation(any(), any(), any(), any(), any()))
                 .willReturn(Optional.of(reservation));
 
-        MockedStatic<LocalTime> localTimeMockedStatic =
-                mockStatic(LocalTime.class, Mockito.CALLS_REAL_METHODS);
-
         LocalTime localTime = LocalTime.of(10, 49);
 
-        localTimeMockedStatic.when(LocalTime::now)
+        localTimeMock.when(LocalTime::now)
                 .thenReturn(localTime);
 
         // when
@@ -289,12 +300,9 @@ class ReservationServiceTest {
         given(reservationRepository.findReservation(any(), any(), any(), any(), any()))
                 .willReturn(Optional.of(reservation));
 
-        MockedStatic<LocalTime> localTimeMockedStatic =
-                mockStatic(LocalTime.class, Mockito.CALLS_REAL_METHODS);
-
         LocalTime localTime = LocalTime.of(10, 51);
 
-        localTimeMockedStatic.when(LocalTime::now)
+        localTimeMock.when(LocalTime::now)
                 .thenReturn(localTime);
 
         // when
