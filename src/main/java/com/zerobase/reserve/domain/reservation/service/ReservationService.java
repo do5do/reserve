@@ -37,12 +37,12 @@ public class ReservationService {
 
     @Transactional
     public ReservationDto reserve(Reserve.Request request) {
-        Store store = storeService.getStoreOrThrow(request.getStoreKey());
+        Store store = storeService.findByStoreKeyOrThrow(request.getStoreKey());
 
         validateReservationExists(request.getReservationDate(),
                 request.getReservationTime(), store);
 
-        Member member = memberService.getMemberOrThrow(request.getMemberKey());
+        Member member = memberService.findByMemberKeyOrThrow(request.getMemberKey());
 
         return ReservationDto.fromEntity(reservationRepository.save(
                 request.toEntity(keyGenerator.generateKey(), member, store)));
@@ -60,7 +60,7 @@ public class ReservationService {
     public Page<ReservationsResponse> reservations(String storeKey,
                                                    LocalDate reservationDate,
                                                    Pageable pageable) {
-        Store store = storeService.getStoreOrThrow(storeKey);
+        Store store = storeService.findByStoreKeyOrThrow(storeKey);
 
         return reservationRepository.findAllFetchJoin(
                         store, reservationDate, pageable)
@@ -80,9 +80,9 @@ public class ReservationService {
 
     @Transactional
     public Visit.Response visit(Visit.Request request) {
-        Member member = memberService.getMemberByPhoneNumberOrThrow(
+        Member member = memberService.findByPhoneNumberOrThrow(
                 request.getPhoneNumber());
-        Store store = storeService.getStoreOrThrow(request.getStoreKey());
+        Store store = storeService.findByStoreKeyOrThrow(request.getStoreKey());
 
         Reservation reservation =
                 reservationRepository.findReservation(member, store,

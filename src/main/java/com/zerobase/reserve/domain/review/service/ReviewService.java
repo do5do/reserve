@@ -1,5 +1,8 @@
 package com.zerobase.reserve.domain.review.service;
 
+import com.zerobase.reserve.domain.member.entity.Member;
+import com.zerobase.reserve.domain.member.entity.Role;
+import com.zerobase.reserve.domain.member.service.MemberService;
 import com.zerobase.reserve.domain.reservation.entity.Reservation;
 import com.zerobase.reserve.domain.reservation.exception.ReservationException;
 import com.zerobase.reserve.domain.reservation.service.ReservationService;
@@ -23,6 +26,7 @@ import static com.zerobase.reserve.global.exception.ErrorCode.*;
 public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReservationService reservationService;
+    private final MemberService memberService;
 
     @Transactional
     public ReviewDto write(Write.Request request, UserDetails userDetails) {
@@ -51,26 +55,41 @@ public class ReviewService {
     }
 
     @PostAuthorize("isAuthenticated() " +
-            "and returnObject.member.email == principal.username " +
-            "or hasRole('MANAGER')")
+            "and returnObject.member.email == principal.username")
     @Transactional
     public ReviewDto update(Update.Request request) {
-        Review review = getReviewOrThrow(request.getReviewId());
+        Review review = findByIdOrThrow(request.getReviewId());
         review.updateReview(request);
         return ReviewDto.fromEntity(review);
     }
 
-    @PostAuthorize("isAuthenticated() " +
-            "and returnObject.member.email == principal.username " +
-            "or hasRole('MANAGER')")
     @Transactional
-    public ReviewDto delete(Long reviewId) {
-        Review review = getReviewOrThrow(reviewId);
+    public ReviewDto delete(Long reviewId, UserDetails userDetails) {
+        Review review = findByIdOrThrow(reviewId);
+
+        validateMember(userDetails, review);
+
         reviewRepository.deleteByReviewId(reviewId);
         return ReviewDto.fromEntity(review);
     }
 
-    private Review getReviewOrThrow(Long reviewId) {
+    private void validateMember(UserDetails userDetails, Review review) {
+        Member principal =
+                memberService.findByEmailOrThrow(userDetails.getUsername());
+
+        if (principal.getRole() == Role.MANAGER) {
+            if (!review.getStore().getMember().getEmail()
+                    .equals(principal.getEmail())) {
+                throw new ReviewException(REVIEW_ACCESS_DENY);
+            }
+        } else {
+            if (!review.getMember().getEmail().equals(principal.getEmail())) {
+                throw new ReviewException(REVIEW_ACCESS_DENY);
+            }
+        }
+    }
+
+    private Review findByIdOrThrow(Long reviewId) {
         return reviewRepository.findByIdFetchJoin(reviewId)
                 .orElseThrow(() -> new ReviewException(REVIEW_NOT_FOUND));
     }

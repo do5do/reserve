@@ -84,13 +84,13 @@ class ReservationServiceTest {
         Reservation reservation = ReservationBuilder.reservation();
         reservation.addMemberAndStore(member, store);
 
-        given(storeService.getStoreOrThrow(any()))
+        given(storeService.findByStoreKeyOrThrow(any()))
                 .willReturn(store);
 
         given(reservationRepository.existsReservation(any(), any(), any(), any()))
                 .willReturn(false);
 
-        given(memberService.getMemberOrThrow(any()))
+        given(memberService.findByMemberKeyOrThrow(any()))
                 .willReturn(member);
 
         given(keyGenerator.generateKey())
@@ -115,7 +115,7 @@ class ReservationServiceTest {
     @DisplayName("예약 실패 - 존재하지 않는 매장")
     void reserve_not_found_store() {
         // given
-        given(storeService.getStoreOrThrow(any()))
+        given(storeService.findByStoreKeyOrThrow(any()))
                 .willThrow(new StoreException(STORE_NOT_FOUND));
 
         // when
@@ -131,7 +131,7 @@ class ReservationServiceTest {
     @DisplayName("예약 실패 - 이미 있는 예약")
     void reserve_already_reserved() {
         // given
-        given(storeService.getStoreOrThrow(any()))
+        given(storeService.findByStoreKeyOrThrow(any()))
                 .willReturn(StoreBuilder.store());
 
         given(reservationRepository.existsReservation(any(), any(), any(), any()))
@@ -150,13 +150,13 @@ class ReservationServiceTest {
     @DisplayName("예약 실패 - 존재하지 않는 회원")
     void reserve_not_found_member() {
         // given
-        given(storeService.getStoreOrThrow(any()))
+        given(storeService.findByStoreKeyOrThrow(any()))
                 .willReturn(StoreBuilder.store());
 
         given(reservationRepository.existsReservation(any(), any(), any(), any()))
                 .willReturn(false);
 
-        given(memberService.getMemberOrThrow(any()))
+        given(memberService.findByMemberKeyOrThrow(any()))
                 .willThrow(new MemberException(MEMBER_NOT_FOUND));
 
         // when
@@ -177,7 +177,7 @@ class ReservationServiceTest {
         Reservation reservation = ReservationBuilder.reservation();
         reservation.addMemberAndStore(member, store);
 
-        given(storeService.getStoreOrThrow(any()))
+        given(storeService.findByStoreKeyOrThrow(any()))
                 .willReturn(store);
 
         given(reservationRepository.findAllFetchJoin(
@@ -199,7 +199,7 @@ class ReservationServiceTest {
     @DisplayName("예약 조회 실패 - 존재하지 않는 매장")
     void reservations_not_found_store() {
         // given
-        given(storeService.getStoreOrThrow(any()))
+        given(storeService.findByStoreKeyOrThrow(any()))
                 .willThrow(new StoreException(STORE_NOT_FOUND));
 
         // when
@@ -249,10 +249,10 @@ class ReservationServiceTest {
     @DisplayName("방문 확인 성공")
     void visit_success() {
         // given
-        given(memberService.getMemberByPhoneNumberOrThrow(any()))
+        given(memberService.findByPhoneNumberOrThrow(any()))
                 .willReturn(MemberBuilder.member());
 
-        given(storeService.getStoreOrThrow(any()))
+        given(storeService.findByStoreKeyOrThrow(any()))
                 .willReturn(StoreBuilder.store());
 
         Reservation reservation = Reservation.builder()
@@ -283,10 +283,10 @@ class ReservationServiceTest {
     @DisplayName("방문 확인 실패 - 도착 시간 경과")
     void visit_arrival_time_exceed() {
         // given
-        given(memberService.getMemberByPhoneNumberOrThrow(any()))
+        given(memberService.findByPhoneNumberOrThrow(any()))
                 .willReturn(MemberBuilder.member());
 
-        given(storeService.getStoreOrThrow(any()))
+        given(storeService.findByStoreKeyOrThrow(any()))
                 .willReturn(StoreBuilder.store());
 
         Reservation reservation = Reservation.builder()
@@ -318,7 +318,7 @@ class ReservationServiceTest {
     @DisplayName("방문 확인 실패 - 존재하지 않는 회원")
     void visit_member_not_found() {
         // given
-        given(memberService.getMemberByPhoneNumberOrThrow(any()))
+        given(memberService.findByPhoneNumberOrThrow(any()))
                 .willThrow(new MemberException(MEMBER_NOT_FOUND));
 
         // when
@@ -334,10 +334,10 @@ class ReservationServiceTest {
     @DisplayName("방문 확인 실패 - 존재하지 않는 매장")
     void visit_store_not_found() {
         // given
-        given(memberService.getMemberByPhoneNumberOrThrow(any()))
+        given(memberService.findByPhoneNumberOrThrow(any()))
                 .willReturn(MemberBuilder.member());
 
-        given(storeService.getStoreOrThrow(any()))
+        given(storeService.findByStoreKeyOrThrow(any()))
                 .willThrow(new StoreException(STORE_NOT_FOUND));
 
         // when
@@ -353,10 +353,10 @@ class ReservationServiceTest {
     @DisplayName("방문 확인 실패 - 존재하지 않는 예약")
     void visit_reservation_not_found() {
         // given
-        given(memberService.getMemberByPhoneNumberOrThrow(any()))
+        given(memberService.findByPhoneNumberOrThrow(any()))
                 .willReturn(MemberBuilder.member());
 
-        given(storeService.getStoreOrThrow(any()))
+        given(storeService.findByStoreKeyOrThrow(any()))
                 .willReturn(StoreBuilder.store());
 
         given(reservationRepository.findReservation(any(), any(), any(), any(), any()))

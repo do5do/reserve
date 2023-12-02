@@ -4,7 +4,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "reservationKey": "96382f913c184d5ebaa73595801a14ee",
+  "reservationKey": "243fcd5b0503457e9d70d36d04b92cb2",
   "contents": "맛있어요!",
   "score": 5
 }
@@ -21,5 +21,5 @@ Authorization: Bearer {{token}}
 }
 
 ### delete review
-DELETE {{host}}/api/v1/reviews/1
-Authorization: Bearer {{token}}
+DELETE {{host}}/api/v1/reviews/3
+Authorization: Bearer {{token-mng}}

@@ -61,7 +61,7 @@ class ReviewControllerTest {
     @Test
     @DisplayName("리뷰 작성")
     @WithMockUser(username = "do@gmail.com", roles = "USER")
-    void write() throws Exception { // security를 사용하는 테스트로 진행하자
+    void write() throws Exception {
         // given
         given(reviewService.write(any(), any()))
                 .willReturn(ReviewDtoBuilder.reviewDto());
@@ -107,9 +107,10 @@ class ReviewControllerTest {
 
     @Test
     @DisplayName("리뷰 삭제")
+    @WithMockUser(username = "do@gmail.com", roles = "USER")
     void deleteReview() throws Exception {
         // given
-        given(reviewService.delete(any()))
+        given(reviewService.delete(any(), any()))
                 .willReturn(ReviewDtoBuilder.reviewDto());
 
         // when

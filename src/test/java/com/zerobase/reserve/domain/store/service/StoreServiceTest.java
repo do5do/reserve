@@ -62,7 +62,7 @@ class StoreServiceTest {
     @DisplayName("매장 등록 성공")
     void registration_success() {
         // given
-        given(memberService.getMemberOrThrow(any()))
+        given(memberService.findByMemberKeyOrThrow(any()))
                 .willReturn(MemberBuilder.member());
 
         given(storeRepository.save(any()))
@@ -105,7 +105,7 @@ class StoreServiceTest {
     @DisplayName("매장 등록 실패 - 존재하지 않는 회원")
     void registration_member_not_found() {
         // given
-        given(memberService.getMemberOrThrow(any()))
+        given(memberService.findByMemberKeyOrThrow(any()))
                 .willThrow(new MemberException(MEMBER_NOT_FOUND));
 
         // when
@@ -121,7 +121,7 @@ class StoreServiceTest {
     @DisplayName("매장 등록 실패 - 없는 주소")
     void registration_address_not_found() {
         // given
-        given(memberService.getMemberOrThrow(any()))
+        given(memberService.findByMemberKeyOrThrow(any()))
                 .willReturn(MemberBuilder.member());
 
         given(coordinateClient.getCoordinate(any()))

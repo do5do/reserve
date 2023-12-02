@@ -4,8 +4,8 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "memberKey": "1e2a0015d9e04087957dcf9df24e95a5",
-  "storeKey": "4700c057dbab46aaad11b35cbf406fb6",
+  "memberKey": "8e716239b57545f98e444d9be92e3825",
+  "storeKey": "b8bea04d945d4f9e8e9a4a46da21501b",
   "reservationDate": "2023-11-26",
   "reservationTime": "00:30",
   "persons": 2
@@ -21,8 +21,8 @@ Content-Type: application/json
 Authorization: Bearer {{token-mng}}
 
 {
-  "reservationKey": "96382f913c184d5ebaa73595801a14ee",
-  "reservationType": "QUIT"
+  "reservationKey": "243fcd5b0503457e9d70d36d04b92cb2",
+  "reservationType": "CONFIRM"
 }
 
 ### check visit
@@ -32,7 +32,7 @@ Authorization: Bearer {{token}}
 
 {
   "phoneNumber": "010-1234-1234",
-  "storeKey": "4700c057dbab46aaad11b35cbf406fb6",
+  "storeKey": "b8bea04d945d4f9e8e9a4a46da21501b",
   "reservationDate": "2023-11-26",
   "reservationTime": "00:30"
 }

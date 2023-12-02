@@ -1,6 +1,7 @@
 package com.zerobase.reserve.domain.review.repository.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.zerobase.reserve.domain.member.entity.QMember;
 import com.zerobase.reserve.domain.review.entity.Review;
 import com.zerobase.reserve.domain.review.repository.CustomReviewRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import java.util.Optional;
 
 import static com.zerobase.reserve.domain.member.entity.QMember.member;
 import static com.zerobase.reserve.domain.review.entity.QReview.review;
+import static com.zerobase.reserve.domain.store.entity.QStore.store;
 
 @RequiredArgsConstructor
 public class CustomReviewRepositoryImpl implements CustomReviewRepository {
@@ -16,9 +18,13 @@ public class CustomReviewRepositoryImpl implements CustomReviewRepository {
 
     @Override
     public Optional<Review> findByIdFetchJoin(Long id) {
+
         return Optional.ofNullable(queryFactory
                 .selectFrom(review)
                 .join(review.member, member).fetchJoin()
+                .join(review.store, store).fetchJoin()
+                .join(review.store.member, new QMember("manager"))
+                .fetchJoin()
                 .where(review.id.eq(id))
                 .fetchOne());
     }

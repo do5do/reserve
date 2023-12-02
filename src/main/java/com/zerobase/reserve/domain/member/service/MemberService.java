@@ -13,13 +13,18 @@ import static com.zerobase.reserve.global.exception.ErrorCode.MEMBER_NOT_FOUND;
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    public Member getMemberOrThrow(String memberKey) {
+    public Member findByMemberKeyOrThrow(String memberKey) {
         return memberRepository.findByMemberKey(memberKey)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
 
-    public Member getMemberByPhoneNumberOrThrow(String phoneNumber) {
+    public Member findByPhoneNumberOrThrow(String phoneNumber) {
         return memberRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
+    }
+
+    public Member findByEmailOrThrow(String email) {
+        return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
 }

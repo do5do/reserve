@@ -37,14 +37,14 @@ public class StoreService {
     private final CoordinateClient coordinateClient;
     private static final String POINT = "POINT(%f %f)";
 
-    public Store getStoreOrThrow(String storeKey) {
+    public Store findByStoreKeyOrThrow(String storeKey) {
         return storeRepository.findByStoreKey(storeKey)
                 .orElseThrow(() -> new StoreException(STORE_NOT_FOUND));
     }
 
     @Transactional
     public StoreDto registration(Registration.Request request) {
-        Member member = memberService.getMemberOrThrow(request.getMemberKey());
+        Member member = memberService.findByMemberKeyOrThrow(request.getMemberKey());
         CoordinateDto response = getCoordinate(request.getAddress().address());
 
         Store store = request.toEntity(
@@ -71,7 +71,7 @@ public class StoreService {
     }
 
     public StoreDto information(String storeKey) {
-        return StoreDto.fromEntity(getStoreOrThrow(storeKey));
+        return StoreDto.fromEntity(findByStoreKeyOrThrow(storeKey));
     }
 
     public Slice<StoresResponse> stores(Location location, Pageable pageable) {
@@ -82,7 +82,7 @@ public class StoreService {
 
     @Transactional
     public StoreDto edit(EditRequest request) {
-        Store store = getStoreOrThrow(request.getStoreKey());
+        Store store = findByStoreKeyOrThrow(request.getStoreKey());
 
         Address savedAddress = store.getAddress();
         Point coordinate = savedAddress.getCoordinate();

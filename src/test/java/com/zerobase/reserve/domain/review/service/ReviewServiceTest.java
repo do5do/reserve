@@ -5,6 +5,8 @@ import com.zerobase.reserve.domain.common.builder.ReservationBuilder;
 import com.zerobase.reserve.domain.common.builder.ReviewBuilder;
 import com.zerobase.reserve.domain.common.builder.StoreBuilder;
 import com.zerobase.reserve.domain.member.entity.Member;
+import com.zerobase.reserve.domain.member.entity.Role;
+import com.zerobase.reserve.domain.member.service.MemberService;
 import com.zerobase.reserve.domain.reservation.entity.Reservation;
 import com.zerobase.reserve.domain.reservation.exception.ReservationException;
 import com.zerobase.reserve.domain.reservation.service.ReservationService;
@@ -40,6 +42,9 @@ class ReviewServiceTest {
 
     @Mock
     ReservationService reservationService;
+
+    @Mock
+    MemberService memberService;
 
     @InjectMocks
     ReviewService reviewService;
@@ -206,21 +211,56 @@ class ReviewServiceTest {
     }
 
     @Test
-    @DisplayName("리뷰 삭제 성공")
+    @DisplayName("리뷰 삭제 성공 - 동일한 유저")
     void delete_success() {
         // given
         Member member = MemberBuilder.member();
         Store store = StoreBuilder.store();
+
         Review review = ReviewBuilder.review();
         review.addMemberAndStore(member, store);
 
         given(reviewRepository.findByIdFetchJoin(any()))
                 .willReturn(Optional.of(review));
 
+        given(memberService.findByEmailOrThrow(any()))
+                .willReturn(member);
+
         doNothing().when(reviewRepository).deleteByReviewId(any());
 
         // when
-        ReviewDto reviewDto = reviewService.delete(ID);
+        ReviewDto reviewDto = reviewService.delete(ID, member);
+
+        // then
+        assertEquals(CONTENTS, reviewDto.getContents());
+    }
+
+    @Test
+    @DisplayName("리뷰 삭제 성공 - 매니저 권한")
+    void delete_success_manager() {
+        // given
+        String email = "manager@gamil.com";
+        Member member = Member.builder()
+                .email(email)
+                .role(Role.MANAGER)
+                .build();
+
+        Store store = StoreBuilder.store();
+        store.addMember(member);
+
+        Review review = ReviewBuilder.review();
+        review.addMemberAndStore(MemberBuilder.member(), store);
+
+        given(reviewRepository.findByIdFetchJoin(any()))
+                .willReturn(Optional.of(review));
+
+        given(memberService.findByEmailOrThrow(any()))
+                .willReturn(member);
+
+        doNothing().when(reviewRepository).deleteByReviewId(any());
+
+        // when
+        ReviewDto reviewDto = reviewService.delete(ID, member);
 
         // then
         assertEquals(CONTENTS, reviewDto.getContents());
@@ -235,9 +275,69 @@ class ReviewServiceTest {
 
         // when
         ReviewException exception = assertThrows(ReviewException.class, () ->
-                reviewService.delete(ID));
+                reviewService.delete(ID, MemberBuilder.member()));
 
         // then
         assertEquals(REVIEW_NOT_FOUND, exception.getErrorCode());
+    }
+
+    @Test
+    @DisplayName("리뷰 삭제 실패 - 해당 매장의 매니저가 아님")
+    void delete_manager_not_match() {
+        // given
+        String email = "manager@gamil.com";
+        Member manager = Member.builder()
+                .email(email)
+                .role(Role.MANAGER)
+                .build();
+
+        Member member = MemberBuilder.member();
+        Store store = StoreBuilder.store();
+        store.addMember(member);
+
+        Review review = ReviewBuilder.review();
+        review.addMemberAndStore(member, store);
+
+        given(reviewRepository.findByIdFetchJoin(any()))
+                .willReturn(Optional.of(review));
+
+        given(memberService.findByEmailOrThrow(any()))
+                .willReturn(manager);
+
+        // when
+        ReviewException exception = assertThrows(ReviewException.class, () ->
+                reviewService.delete(ID, MemberBuilder.member()));
+
+        // then
+        assertEquals(REVIEW_ACCESS_DENY, exception.getErrorCode());
+    }
+
+    @Test
+    @DisplayName("리뷰 삭제 실패 - 동일한 유저가 아님")
+    void delete_user_not_match() {
+        // given
+        String email = "other@gamil.com";
+        Member other = Member.builder()
+                .email(email)
+                .build();
+
+        Member member = MemberBuilder.member();
+        Store store = StoreBuilder.store();
+
+        Review review = ReviewBuilder.review();
+        review.addMemberAndStore(member, store);
+
+        given(reviewRepository.findByIdFetchJoin(any()))
+                .willReturn(Optional.of(review));
+
+        given(memberService.findByEmailOrThrow(any()))
+                .willReturn(other);
+
+        // when
+        ReviewException exception = assertThrows(ReviewException.class, () ->
+                reviewService.delete(ID, MemberBuilder.member()));
+
+        // then
+        assertEquals(REVIEW_ACCESS_DENY, exception.getErrorCode());
     }
 }

@@ -31,7 +31,7 @@ public class StoreController {
     }
 
     /**
-     * 매장명 검색
+     * 매장명 자동완성
      */
     @GetMapping("/search")
     public ResponseEntity<SearchResponse> searchKeyword(

@@ -1,5 +1,6 @@
 package com.zerobase.reserve.domain.review.entity;
 
+import com.zerobase.reserve.domain.common.model.BaseTimeEntity;
 import com.zerobase.reserve.domain.member.entity.Member;
 import com.zerobase.reserve.domain.review.dto.Update;
 import com.zerobase.reserve.domain.store.entity.Store;
@@ -10,7 +11,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Review {
+public class Review extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
