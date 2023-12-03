@@ -143,6 +143,7 @@ public class StoreService {
 
     /**
      * 매장 삭제
+     * 매장 검증 후 삭제를 진행합니다.
      *
      * @param storeKey 매장 식별키
      * @return 삭제된 매장 식별키
