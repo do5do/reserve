@@ -38,3 +38,4 @@ out/
 /src/test/java/com/zerobase/reserve/http/http-client.private.env.json
 /src/main/generated/
 /src/main/resources/application-key.yml
+/.idea/httpRequests/
