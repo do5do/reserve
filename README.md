@@ -26,7 +26,7 @@
 ## 외부 라이브러리 목록
 | Dependency           | Version | Purpose                              |
 |----------------------|---------|--------------------------------------|
-| io.jsonwebtoken:jjwt | 0.12.3  | JWT를 발행을 위한 기능을 제공하는 라이브러리           |
+| io.jsonwebtoken:jjwt | 0.12.3  | JWT 발행을 위한 기능을 제공하는 라이브러리           |
 |org.apache.httpcomponents.client5| 5.2.1   | HTTP 클라이언트 기능을 제공하는 라이브러리            |
 |com.querydsl:querydsl| 5.0.0   | SQL 등의 쿼리를 타입에 안전하게 생성 및 관리해주는 프레임워크 |
 |org.hibernate:hibernate-spatial| 6.2.13  | 지리 데이터에 대한 표준 인터페이스를 제공하는 라이브러리      |
