@@ -217,7 +217,7 @@ class StoreServiceTest {
             }
         };
 
-        given(storeRepository.findByDistance(any(), any()))
+        given(storeRepository.findByDistance(any(), any(), any(), any()))
                 .willReturn(new SliceImpl<>(List.of(projection)));
 
         // when

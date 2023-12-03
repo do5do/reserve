@@ -20,6 +20,7 @@ public class StoreController {
 
     /**
      * 매장 등록
+     * 매니저 권한이 있는 유저만 접근할 수 있습니다.
      */
     @PreAuthorize("hasRole('MANAGER')")
     @PostMapping
@@ -41,7 +42,7 @@ public class StoreController {
     }
 
     /**
-     * 매장 정보
+     * 매장 정보 조회
      */
     @GetMapping("/{storeKey}")
     public ResponseEntity<StoreDto> information(@PathVariable String storeKey) {
@@ -49,7 +50,7 @@ public class StoreController {
     }
 
     /**
-     * 매장 목록 - 반경 3km 이내
+     * 매장 목록 조회 - 반경 3km 이내
      */
     @GetMapping
     public ResponseEntity<Slice<StoresResponse>> stores(
@@ -59,6 +60,7 @@ public class StoreController {
 
     /**
      * 매장 수정
+     * 매니저 권한이 있는 유저만 접근할 수 있습니다.
      */
     @PreAuthorize("hasRole('MANAGER')")
     @PatchMapping
@@ -68,6 +70,7 @@ public class StoreController {
 
     /**
      * 매장 삭제
+     * 매니저 권한이 있는 유저만 접근할 수 있습니다.
      */
     @PreAuthorize("hasRole('MANAGER')")
     @DeleteMapping("/{storeKey}")

@@ -13,6 +13,11 @@ public record KakaoResponseDto(List<Document> documents) implements CoordinateDt
         return documents.get(0);
     }
 
+    public record Document(
+            Double x, // 경도
+            Double y // 위도
+    ) {}
+
     @Override
     public Double getX() {
         return document().x;
@@ -22,9 +27,4 @@ public record KakaoResponseDto(List<Document> documents) implements CoordinateDt
     public Double getY() {
         return document().y;
     }
-
-    public record Document(
-            Double x, // 경도
-            Double y // 위도
-    ) {}
 }

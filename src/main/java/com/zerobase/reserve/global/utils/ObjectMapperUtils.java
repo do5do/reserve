@@ -10,6 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
+/**
+ * 외부 api와 통신한 결과값을 매핑하는 범용 유틸 클래스입니다.
+ * 외부와 통신하는 과정이 많을 것을 대비해 자주 사용하는 메소드를 미리 구현하여
+ * 일관된 처리를 할 수 있도록 합니다.
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Component

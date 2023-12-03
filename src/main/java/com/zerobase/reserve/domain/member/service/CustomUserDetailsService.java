@@ -1,22 +1,35 @@
 package com.zerobase.reserve.domain.member.service;
 
 import com.zerobase.reserve.domain.member.repository.MemberRepository;
-import com.zerobase.reserve.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import static com.zerobase.reserve.global.exception.ErrorCode.MEMBER_NOT_FOUND;
+
+/**
+ * Spring security의 UserDetailsService를 구현한 구현체입니다.
+ * MemberService와 달리 인증에 관한 역할이기에 클래스를 분리하였습니다.
+ */
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
 
+    /**
+     * authenticate 메소드가 실행되면, 해당 메소드를 호출하여
+     * 유저 검증 후 인증된 유저 객체를 리턴합니다.
+     *
+     * @param username the username identifying the user whose data is required.
+     * @return 유저 인증 객체
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return memberRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(
-                        ErrorCode.MEMBER_NOT_FOUND.getMessage()));
+                        MEMBER_NOT_FOUND.getMessage()));
     }
 }

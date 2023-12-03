@@ -4,6 +4,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+/**
+ * 인조 식별자 생성을 위한 UUID 생성 객체 입니다.
+ */
 @Component
 public class KeyGenerator {
     public String generateKey() {

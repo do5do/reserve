@@ -29,7 +29,7 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     /**
-     * 예약
+     * 매장 예약
      */
     @PostMapping
     public ResponseEntity<Reserve.Response> reserve(
@@ -55,6 +55,7 @@ public class ReservationController {
 
     /**
      * 예약 확인 (승인/취소)
+     * 매니저 권한이 있는 유저만 접근할 수 있습니다.
      */
     @PreAuthorize("hasRole('MANAGER')")
     @PatchMapping("/confirm")
@@ -65,6 +66,7 @@ public class ReservationController {
 
     /**
      * 방문 확인
+     * 매장의 키오스크를 통하기 때문에 인증 없이 접근할 수 있습니다.
      */
     @PatchMapping("/visit")
     public ResponseEntity<?> visit(@RequestBody @Valid Visit.Request request) {

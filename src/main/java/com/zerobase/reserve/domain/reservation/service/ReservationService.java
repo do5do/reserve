@@ -35,6 +35,13 @@ public class ReservationService {
     private final StoreService storeService;
     private final KeyGenerator keyGenerator;
 
+    /**
+     * 매장 예약
+     * 매장 조회 후 해당 매장에 요청한 예약이 가능한지 확인하고, 예약을 진행합니다.
+     *
+     * @param request 예약 요청 정보
+     * @return 예약 정보
+     */
     @Transactional
     public ReservationDto reserve(Reserve.Request request) {
         Store store = storeService.findByStoreKeyOrThrow(request.getStoreKey());
@@ -57,6 +64,15 @@ public class ReservationService {
         }
     }
 
+    /**
+     * 날짜별 예약 조회
+     * 연관관계(member, store)를 함께 조회하기 위해 fetch join을 사용합니다.
+     *
+     * @param storeKey        매장 식별키
+     * @param reservationDate 예약 날짜
+     * @param pageable        페이징
+     * @return 해당 날짜의 예약 정보 리스트
+     */
     public Page<ReservationsResponse> reservations(String storeKey,
                                                    LocalDate reservationDate,
                                                    Pageable pageable) {
@@ -67,6 +83,13 @@ public class ReservationService {
                 .map(ReservationsResponse::fromEntity);
     }
 
+    /**
+     * 예약 확인 (승인/취소)
+     * 점주가 요청한 예약 타입으로 변경합니다.
+     *
+     * @param request 승인/취소 정보
+     * @return 예약 정보
+     */
     @Transactional
     public Confirm.Response confirm(Confirm.Request request) {
         Reservation reservation =
@@ -78,6 +101,14 @@ public class ReservationService {
         return new Confirm.Response(reservation.getReservationKey());
     }
 
+    /**
+     * 방문 확인
+     * 요청 정보를 통해 찾은 회원, 매장 정보를 포함하여 승인된 예약이 있는지 조회합니다.
+     * 예약이 존재한다면 도착 시간이 지났는지 확인합니다. 에약 시간 10분 전이라면 방문 확인에 성공합니다.
+     *
+     * @param request 회원 및 예약 정보
+     * @return 예약 정보
+     */
     @Transactional
     public Visit.Response visit(Visit.Request request) {
         Member member = memberService.findByPhoneNumberOrThrow(
@@ -105,7 +136,7 @@ public class ReservationService {
     }
 
     public Reservation getReservationFetchJoinOrThrow(String reservationKey) {
-        return reservationRepository.findByKeyFetchJoin(reservationKey)
+        return reservationRepository.findByReservationKeyFetchJoin(reservationKey)
                 .orElseThrow(() ->
                         new ReservationException(RESERVATION_NOT_FOUND));
     }

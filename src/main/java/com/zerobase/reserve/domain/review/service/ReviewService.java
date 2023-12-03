@@ -28,6 +28,15 @@ public class ReviewService {
     private final ReservationService reservationService;
     private final MemberService memberService;
 
+    /**
+     * 리뷰 작성
+     * 리뷰 작성을 요청한 예약에 대해 방문 완료한 예약인지 확인하고,
+     * 예약자와 리뷰 요청 자가 같은지 검증 후 리뷰를 작성합니다.
+     *
+     * @param request     리뷰 작성 요청 정보
+     * @param userDetails 인증된 유저 정보 (이메일, 권한)
+     * @return 작성된 리뷰 정보
+     */
     @Transactional
     public ReviewDto write(Write.Request request, UserDetails userDetails) {
         Reservation reservation = reservationService
@@ -54,6 +63,14 @@ public class ReviewService {
         }
     }
 
+    /**
+     * 리뷰 수정
+     * 수정을 요청한 유저와 리뷰를 작성한 유저가 다를 경우 리뷰 수정에 실패합니다.
+     * 회원을 조회하는 쿼리를 대신하여 인증된 사용자의 정보로 검증합니다.
+     *
+     * @param request 리뷰 수정 요청 정보
+     * @return 수정된 리뷰 정보
+     */
     @PostAuthorize("isAuthenticated() " +
             "and returnObject.member.email == principal.username")
     @Transactional
@@ -63,14 +80,23 @@ public class ReviewService {
         return ReviewDto.fromEntity(review);
     }
 
+    /**
+     * 리뷰 삭제
+     * 로그인한 사용자가 일반 사용자(USER)일 경우 리뷰 작성자와 같은지 확인합니다.
+     * 로그인한 사용자가 매니저일 경우 리뷰가 등록된 매장의 점주와 같은지 확인합니다.
+     *
+     * @param reviewId    리뷰 식별 id
+     * @param userDetails 인증된 유저 정보
+     * @return 삭제된 리뷰 id
+     */
     @Transactional
-    public ReviewDto delete(Long reviewId, UserDetails userDetails) {
+    public Long delete(Long reviewId, UserDetails userDetails) {
         Review review = findByIdOrThrow(reviewId);
 
         validateMember(userDetails, review);
 
         reviewRepository.deleteByReviewId(reviewId);
-        return ReviewDto.fromEntity(review);
+        return reviewId;
     }
 
     private void validateMember(UserDetails userDetails, Review review) {

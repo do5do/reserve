@@ -2,9 +2,9 @@ package com.zerobase.reserve.domain.member.service;
 
 import com.zerobase.reserve.domain.common.builder.MemberBuilder;
 import com.zerobase.reserve.domain.common.utils.KeyGenerator;
-import com.zerobase.reserve.domain.member.dto.model.MemberDto;
 import com.zerobase.reserve.domain.member.dto.Signin;
 import com.zerobase.reserve.domain.member.dto.Signup;
+import com.zerobase.reserve.domain.member.dto.model.MemberDto;
 import com.zerobase.reserve.domain.member.entity.Role;
 import com.zerobase.reserve.domain.member.exception.MemberException;
 import com.zerobase.reserve.domain.member.repository.MemberRepository;
@@ -18,8 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static com.zerobase.reserve.domain.common.constants.MemberConstants.*;
@@ -92,9 +90,6 @@ class AuthServiceTest {
         // given
         Authentication authentication = mock(Authentication.class);
         when(authentication.getPrincipal()).thenReturn(MemberBuilder.member());
-
-        SecurityContext securityContext = mock(SecurityContext.class);
-        SecurityContextHolder.setContext(securityContext);
 
         given(authenticationManagerBuilder.getObject())
                 .willReturn(mock(AuthenticationManager.class));

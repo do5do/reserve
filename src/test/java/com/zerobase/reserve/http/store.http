@@ -16,7 +16,7 @@ Authorization: Bearer {{token-mng}}
   "salesInfo": {
     "operatingStart": "10:00",
     "operatingEnd": "19:00",
-    "closedDays": []
+    "closedDays": ["일요일", "수요일"]
   }
 }
 

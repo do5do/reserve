@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import static com.zerobase.reserve.global.exception.ErrorCode.MEMBER_NOT_FOUND;
 
+/**
+ * 타 도메인의 서비스 객체에서 공통적으로 사용하기 위한 회원 서비스입니다.
+ */
 @RequiredArgsConstructor
 @Service
 public class MemberService {

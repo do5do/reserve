@@ -9,9 +9,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.PrecisionModel;
 
+/**
+ * 주소 값타입 엔티티입니다.
+ */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
@@ -26,7 +28,7 @@ public class Address {
     private String zipcode;
 
     @Column(columnDefinition = "POINT SRID 4326", nullable = false)
-    private Point coordinate;
+    private org.locationtech.jts.geom.Point coordinate;
 
     @Builder
     public Address(String address, String detailAddr, String zipcode) {

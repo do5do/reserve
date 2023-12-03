@@ -1,7 +1,7 @@
 package com.zerobase.reserve.domain.member.entity;
 
 import com.zerobase.reserve.domain.common.model.BaseTimeEntity;
-import com.zerobase.reserve.domain.member.converter.RoleConverter;
+import com.zerobase.reserve.domain.member.converter.RoleTypeConverter;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -38,7 +38,7 @@ public class Member extends BaseTimeEntity implements UserDetails {
     @Column(unique = true, nullable = false)
     private String phoneNumber;
 
-    @Convert(converter = RoleConverter.class)
+    @Convert(converter = RoleTypeConverter.class)
     @Column(nullable = false)
     private Role role;
 

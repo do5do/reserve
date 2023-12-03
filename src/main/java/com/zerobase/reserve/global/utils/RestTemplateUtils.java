@@ -16,6 +16,13 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 
+/**
+ * 외부 api와 통신하기 위한 범용 유틸 클래스입니다.
+ * RestTemplate의 경우 지역적으로 계속해서 생성하여 사용하게 되면 상당한 리소스 낭비입니다.
+ * 때문에 singleton으로 생성하여 사용하도록 합니다.
+ * 또한 외부와 통신하는 과정이 많을 것을 대비해 자주 사용하는 메소드를 미리 구현하여
+ * 일관된 처리를 할 수 있도록 합니다.
+ */
 @Slf4j
 @Component
 public class RestTemplateUtils {

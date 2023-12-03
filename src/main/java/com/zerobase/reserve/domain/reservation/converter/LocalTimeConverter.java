@@ -6,6 +6,9 @@ import jakarta.persistence.Converter;
 import java.time.LocalTime;
 import java.util.Arrays;
 
+/**
+ * 예약 시간 컬럼에서 초 단위를 제외하기 위한 컨버터입니다.
+ */
 @Converter
 public class LocalTimeConverter implements AttributeConverter<LocalTime, String> {
     @Override

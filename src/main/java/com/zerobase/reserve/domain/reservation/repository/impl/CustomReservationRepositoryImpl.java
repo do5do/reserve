@@ -115,7 +115,7 @@ public class CustomReservationRepositoryImpl implements CustomReservationReposit
     }
 
     @Override
-    public Optional<Reservation> findByKeyFetchJoin(String reservationKey) {
+    public Optional<Reservation> findByReservationKeyFetchJoin(String reservationKey) {
         return Optional.ofNullable(queryFactory
                 .selectFrom(reservation)
                 .join(reservation.member, member).fetchJoin()

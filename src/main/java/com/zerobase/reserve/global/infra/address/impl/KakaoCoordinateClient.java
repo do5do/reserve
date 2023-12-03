@@ -15,6 +15,9 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 
+/**
+ * kakao api를 통해 좌표를 가져오는 구현체입니다.
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Service

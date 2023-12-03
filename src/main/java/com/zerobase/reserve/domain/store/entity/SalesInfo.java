@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 import java.time.LocalTime;
 import java.util.List;
 
+/**
+ * 영업 정보 값타입 엔티티입니다.
+ */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable

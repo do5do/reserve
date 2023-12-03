@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 회원가입, 로그인 컨트롤러
+ * 인증 없이 접근할 수 있습니다.
+ */
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @RestController
@@ -22,7 +26,7 @@ public class AuthController {
     private final TokenProvider tokenProvider;
 
     /**
-     * 회원 가입
+     * 회원가입
      */
     @PostMapping("/signup")
     public ResponseEntity<MemberDto> signup(@RequestBody @Valid Signup request) {
@@ -31,6 +35,7 @@ public class AuthController {
 
     /**
      * 로그인
+     * 로그인 완료 후 해당 정보로 토큰을 발급합니다.
      */
     @PostMapping("/signin")
     public ResponseEntity<MemberDto> signin(@RequestBody @Valid Signin request) {

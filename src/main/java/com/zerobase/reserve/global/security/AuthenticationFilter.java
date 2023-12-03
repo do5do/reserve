@@ -16,6 +16,9 @@ import java.io.IOException;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
+/**
+ * JWT 인증 필터
+ */
 @RequiredArgsConstructor
 @Component
 public class AuthenticationFilter extends OncePerRequestFilter {

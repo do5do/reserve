@@ -2,6 +2,10 @@ package com.zerobase.reserve.global.exception;
 
 import lombok.Getter;
 
+/**
+ * 커스텀 예외를 처리하기 위한 추상 클래스입니다.
+ * 예외처리를 위해 필요한 생성자를 정의합니다.
+ */
 @Getter
 public abstract class CustomException extends RuntimeException {
     private final ErrorCode errorCode;

@@ -13,6 +13,7 @@ import com.zerobase.reserve.domain.store.entity.Address;
 import com.zerobase.reserve.domain.store.entity.Store;
 import com.zerobase.reserve.domain.store.exception.StoreException;
 import com.zerobase.reserve.domain.store.repository.StoreRepository;
+import com.zerobase.reserve.domain.store.type.SRID;
 import com.zerobase.reserve.global.infra.address.CoordinateClient;
 import com.zerobase.reserve.global.infra.address.dto.CoordinateDto;
 import lombok.RequiredArgsConstructor;
@@ -35,22 +36,29 @@ public class StoreService {
     private final MemberService memberService;
     private final KeyGenerator keyGenerator;
     private final CoordinateClient coordinateClient;
-    private static final String POINT = "POINT(%f %f)";
+    private static final String POINT_FORMAT = "POINT(%f %f)";
+    private static final Integer RADIUS = 3000;
 
     public Store findByStoreKeyOrThrow(String storeKey) {
         return storeRepository.findByStoreKey(storeKey)
                 .orElseThrow(() -> new StoreException(STORE_NOT_FOUND));
     }
 
+    /**
+     * 매장 등록
+     * 회원 정보를 찾은 후 회원 및 매장 주소에 대한 좌표 데이터를 포함하여 매장 등록을 진행합니다.
+     *
+     * @param request 매장 등록 요청 정보
+     * @return
+     */
     @Transactional
     public StoreDto registration(Registration.Request request) {
         Member member = memberService.findByMemberKeyOrThrow(request.getMemberKey());
-        CoordinateDto response = getCoordinate(request.getAddress().address());
+        CoordinateDto coordinate = getCoordinate(request.getAddress().address());
 
         Store store = request.toEntity(
                 keyGenerator.generateKey(),
-                response.getX(),
-                response.getY()
+                coordinate.getX(), coordinate.getY()
         );
 
         store.addMember(member);
@@ -62,6 +70,13 @@ public class StoreService {
         return coordinateClient.getCoordinate(address);
     }
 
+    /**
+     * 매장명 자동완성
+     * 키워드 검색 시 정렬은 꼭 필요하지 않기 때문에 성능 이슈를 대비하여 제외하였습니다.
+     *
+     * @param keyword 매장명 키워드
+     * @return 키워드가 포함된 매장명 리스트
+     */
     public List<String> searchKeyword(String keyword) {
         Pageable limit = PageRequest.of(0, 50);
         return storeRepository.findAllByNameContains(keyword, limit)
@@ -70,16 +85,40 @@ public class StoreService {
                 .toList();
     }
 
+    /**
+     * 매장 정보 조회
+     *
+     * @param storeKey 매장 식별키
+     * @return 조회한 매장 정보
+     */
     public StoreDto information(String storeKey) {
         return StoreDto.fromEntity(findByStoreKeyOrThrow(storeKey));
     }
 
+    /**
+     * 매장 목록 조회
+     * 클라이언트 위치 기반 반경 3km 이내에 있는 매장을 조회합니다.
+     *
+     * @param location 클라이언트 위치 좌표
+     * @param pageable 페이징
+     * @return 매장 리스트
+     */
     public Slice<StoresResponse> stores(Location location, Pageable pageable) {
         return storeRepository.findByDistance(
-                String.format(POINT, location.y(), location.x()), pageable)
+                        String.format(POINT_FORMAT, location.y(), location.x()),
+                        SRID.POINT.getKey(),
+                        RADIUS,
+                        pageable)
                 .map(StoresResponse::from);
     }
 
+    /**
+     * 매장 수정
+     * 매장 주소 변경 시 위치 정보를 포함하여 매장 수정을 진행합니다.
+     *
+     * @param request 수정 요청 정보
+     * @return 수정된 매장 정보
+     */
     @Transactional
     public StoreDto edit(EditRequest request) {
         Store store = findByStoreKeyOrThrow(request.getStoreKey());
@@ -102,6 +141,12 @@ public class StoreService {
         return StoreDto.fromEntity(store);
     }
 
+    /**
+     * 매장 삭제
+     *
+     * @param storeKey 매장 식별키
+     * @return 삭제된 매장 식별키
+     */
     @Transactional
     public String delete(String storeKey) {
         validateStoreExists(storeKey);
