@@ -120,18 +120,23 @@ public class ReservationService {
                                 request.getReservationDate(),
                                 request.getReservationTime(),
                                 ReservationType.CONFIRM)
-                        .orElseThrow(() -> new ReservationException(RESERVATION_NOT_FOUND));
+                        .orElseThrow(() ->
+                                new ReservationException(RESERVATION_NOT_FOUND));
 
-        validateArrivalTime(reservation);
+        validateVisit(reservation);
 
         reservation.updateArrival();
         return new Visit.Response(reservation.getReservationKey());
     }
 
-    private static void validateArrivalTime(Reservation reservation) {
+    private static void validateVisit(Reservation reservation) {
         if (LocalTime.now().isAfter(reservation.getReservationTime()
                 .minus(Duration.ofMinutes(10)))) {
             throw new ReservationException(ARRIVAL_TIME_EXCEED);
+        }
+
+        if (reservation.isArrival()) {
+            throw new ReservationException(ALREADY_ARRIVAL);
         }
     }
 

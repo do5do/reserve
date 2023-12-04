@@ -14,5 +14,5 @@ public class StoreConstants {
     public static final String ZIPCODE = "123-4";
     public static final LocalTime OPER_START = LocalTime.of(10, 0);
     public static final LocalTime OPER_END = LocalTime.of(22, 0);
-    public static final List<String> CLOSE_DAYS = List.of("일요일");
+    public static final List<String> CLOSED_DAYS = List.of("일요일");
 }

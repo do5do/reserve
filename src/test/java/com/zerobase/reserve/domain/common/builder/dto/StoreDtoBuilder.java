@@ -14,7 +14,7 @@ public class StoreDtoBuilder {
                 .description(DESCRIPTION)
                 .phoneNumber(PHONE_NUMBER)
                 .address(new AddressDto(ADDRESS, DETAIL_ADDR, ZIPCODE))
-                .salesInfo(new SalesInfoDto(OPER_START, OPER_END, CLOSE_DAYS))
+                .salesInfo(new SalesInfoDto(OPER_START, OPER_END, CLOSED_DAYS))
                 .build();
     }
 }

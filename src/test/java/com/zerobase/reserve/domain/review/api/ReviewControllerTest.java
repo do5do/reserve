@@ -111,7 +111,7 @@ class ReviewControllerTest {
     void deleteReview() throws Exception {
         // given
         given(reviewService.delete(any(), any()))
-                .willReturn(ReviewDtoBuilder.reviewDto());
+                .willReturn(ID);
 
         // when
         // then

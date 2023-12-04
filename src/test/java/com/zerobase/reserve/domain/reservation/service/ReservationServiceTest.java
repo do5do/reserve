@@ -249,11 +249,13 @@ class ReservationServiceTest {
     @DisplayName("방문 확인 성공")
     void visit_success() {
         // given
+        Store store = StoreBuilder.store();
+
         given(memberService.findByPhoneNumberOrThrow(any()))
                 .willReturn(MemberBuilder.member());
 
         given(storeService.findByStoreKeyOrThrow(any()))
-                .willReturn(StoreBuilder.store());
+                .willReturn(store);
 
         Reservation reservation = Reservation.builder()
                 .reservationKey(RESERVATION_KEY)
@@ -283,11 +285,13 @@ class ReservationServiceTest {
     @DisplayName("방문 확인 실패 - 도착 시간 경과")
     void visit_arrival_time_exceed() {
         // given
+        Store store = StoreBuilder.store();
+
         given(memberService.findByPhoneNumberOrThrow(any()))
                 .willReturn(MemberBuilder.member());
 
         given(storeService.findByStoreKeyOrThrow(any()))
-                .willReturn(StoreBuilder.store());
+                .willReturn(store);
 
         Reservation reservation = Reservation.builder()
                 .reservationKey(RESERVATION_KEY)
@@ -312,6 +316,44 @@ class ReservationServiceTest {
 
         // then
         assertEquals(ARRIVAL_TIME_EXCEED, exception.getErrorCode());
+    }
+
+    @Test
+    @DisplayName("방문 확인 실패 - 이미 도착한 예약")
+    void visit_already_arrival() {
+        // given
+        Store store = StoreBuilder.store();
+
+        given(memberService.findByPhoneNumberOrThrow(any()))
+                .willReturn(MemberBuilder.member());
+
+        given(storeService.findByStoreKeyOrThrow(any()))
+                .willReturn(store);
+
+        Reservation reservation = Reservation.builder()
+                .reservationKey(RESERVATION_KEY)
+                .reservationDate(RESERVATION_DATE)
+                .reservationTime(RESERVATION_TIME)
+                .reservationType(ReservationType.CONFIRM)
+                .persons(PERSONS)
+                .build();
+        reservation.updateArrival();
+
+        given(reservationRepository.findReservation(any(), any(), any(), any(), any()))
+                .willReturn(Optional.of(reservation));
+
+        LocalTime localTime = LocalTime.of(10, 50);
+
+        localTimeMock.when(LocalTime::now)
+                .thenReturn(localTime);
+
+        // when
+        ReservationException exception = assertThrows(
+                ReservationException.class, () ->
+                        reservationService.visit(Visit.Request.builder().build()));
+
+        // then
+        assertEquals(ALREADY_ARRIVAL, exception.getErrorCode());
     }
 
     @Test

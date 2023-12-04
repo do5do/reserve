@@ -5,7 +5,7 @@ import com.zerobase.reserve.domain.store.dto.Registration;
 import com.zerobase.reserve.domain.store.dto.model.SalesInfoDto;
 
 import static com.zerobase.reserve.domain.common.constants.StoreConstants.*;
-import static com.zerobase.reserve.domain.common.constants.StoreConstants.CLOSE_DAYS;
+import static com.zerobase.reserve.domain.common.constants.StoreConstants.CLOSED_DAYS;
 
 public class RegistRequestBuilder {
     public static Registration.Request registRequest() {
@@ -16,7 +16,7 @@ public class RegistRequestBuilder {
                         .phoneNumber(PHONE_NUMBER)
                         .address(new AddressDto(ADDRESS, DETAIL_ADDR, ZIPCODE))
                         .salesInfo(new SalesInfoDto(OPER_START, OPER_END,
-                                CLOSE_DAYS))
+                                CLOSED_DAYS))
                         .build();
     }
 }

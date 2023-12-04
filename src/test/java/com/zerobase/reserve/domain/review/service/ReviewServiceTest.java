@@ -229,10 +229,10 @@ class ReviewServiceTest {
         doNothing().when(reviewRepository).deleteByReviewId(any());
 
         // when
-        ReviewDto reviewDto = reviewService.delete(ID, member);
+        Long reviewId = reviewService.delete(ID, member);
 
         // then
-        assertEquals(CONTENTS, reviewDto.getContents());
+        assertEquals(ID, reviewId);
     }
 
     @Test
@@ -260,10 +260,10 @@ class ReviewServiceTest {
         doNothing().when(reviewRepository).deleteByReviewId(any());
 
         // when
-        ReviewDto reviewDto = reviewService.delete(ID, member);
+        Long reviewId = reviewService.delete(ID, member);
 
         // then
-        assertEquals(CONTENTS, reviewDto.getContents());
+        assertEquals(ID, reviewId);
     }
 
     @Test

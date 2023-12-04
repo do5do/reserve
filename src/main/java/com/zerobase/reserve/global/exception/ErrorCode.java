@@ -20,6 +20,7 @@ public enum ErrorCode {
     ALREADY_RESERVED(NOT_FOUND, "이미 예약된 일시입니다."),
     RESERVATION_NOT_FOUND(NOT_FOUND, "예약을 찾을 수 없습니다."),
     ARRIVAL_TIME_EXCEED(BAD_REQUEST, "도착 시간이 지났습니다."),
+    ALREADY_ARRIVAL(BAD_REQUEST, "이미 도착 확인 되었습니다."),
     RESERVATION_NOT_VISITED(BAD_REQUEST, "방문한 예약이 아닙니다."),
     RESERVATION_ACCESS_DENY(FORBIDDEN, "해당 예약에 접근할 수 없습니다."),
 
