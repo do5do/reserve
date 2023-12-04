@@ -49,7 +49,7 @@ public class StoreService {
      * 회원 정보를 찾은 후 회원 및 매장 주소에 대한 좌표 데이터를 포함하여 매장 등록을 진행합니다.
      *
      * @param request 매장 등록 요청 정보
-     * @return
+     * @return 등록된 매장 정보
      */
     @Transactional
     public StoreDto registration(Registration.Request request) {
