@@ -18,8 +18,9 @@
 ## 개발 환경
 - Java 17
 - Spring boot 3.1.5
+- Spring security 3.1.5
 - Gradle 8.4
-- JPA
+- Spring data JPA
 - Querydsl
 - MySQL
 
