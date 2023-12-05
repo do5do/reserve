@@ -1,6 +1,6 @@
 package com.zerobase.reserve.global.utils;
 
-import com.zerobase.reserve.global.exception.ApiBadRequestException;
+import com.zerobase.reserve.global.exception.ApiExternalException;
 import com.zerobase.reserve.global.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -18,7 +18,7 @@ import org.springframework.web.util.UriComponents;
 
 /**
  * 외부 api와 통신하기 위한 범용 유틸 클래스입니다.
- * RestTemplate의 경우 지역적으로 계속해서 생성하여 사용하게 되면 상당한 리소스 낭비입니다.
+ * RestTemplate의 경우 지역적으로 생성하여 사용하게 되면 리소스가 낭비될 수 있습니다.
  * 때문에 singleton으로 생성하여 사용하도록 합니다.
  * 또한 외부와 통신하는 과정이 많을 것을 대비해 자주 사용하는 메소드를 미리 구현하여
  * 일관된 처리를 할 수 있도록 합니다.
@@ -54,7 +54,7 @@ public class RestTemplateUtils {
             return response.getBody();
         } catch (RestClientException e) {
             log.error("RestClientException is occurred. ", e);
-            throw new ApiBadRequestException(ErrorCode.INTERNAL_ERROR,
+            throw new ApiExternalException(ErrorCode.INTERNAL_ERROR,
                     "restTemplate api server error");
         }
     }

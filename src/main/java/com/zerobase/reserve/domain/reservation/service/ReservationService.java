@@ -36,7 +36,7 @@ public class ReservationService {
     private final KeyGenerator keyGenerator;
 
     /**
-     * 매장 예약
+     * 매장 예약<br>
      * 매장 조회 후 해당 매장에 요청한 예약이 가능한지 확인하고, 예약을 진행합니다.
      *
      * @param request 예약 요청 정보
@@ -65,7 +65,7 @@ public class ReservationService {
     }
 
     /**
-     * 날짜별 예약 조회
+     * 날짜별 예약 조회<br>
      * 연관관계(member, store)를 함께 조회하기 위해 fetch join을 사용합니다.
      *
      * @param storeKey        매장 식별키
@@ -84,7 +84,7 @@ public class ReservationService {
     }
 
     /**
-     * 예약 확인 (승인/취소)
+     * 예약 확인 (승인/취소)<br>
      * 점주가 요청한 예약 타입으로 변경합니다.
      *
      * @param request 승인/취소 정보
@@ -102,7 +102,7 @@ public class ReservationService {
     }
 
     /**
-     * 방문 확인
+     * 방문 확인<br>
      * 요청 정보를 통해 찾은 회원, 매장 정보를 포함하여 승인된 예약이 있는지 조회합니다.
      * 예약이 존재한다면 도착 시간이 지났는지 확인합니다. 에약 시간 10분 전이라면 방문 확인에 성공합니다.
      *

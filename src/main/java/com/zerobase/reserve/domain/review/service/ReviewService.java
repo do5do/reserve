@@ -29,7 +29,7 @@ public class ReviewService {
     private final MemberService memberService;
 
     /**
-     * 리뷰 작성
+     * 리뷰 작성<br>
      * 리뷰 작성을 요청한 예약에 대해 방문 완료한 예약인지 확인하고,
      * 예약자와 리뷰 요청 자가 같은지 검증 후 리뷰를 작성합니다.
      *
@@ -51,7 +51,7 @@ public class ReviewService {
     private static void validateReservation(Reservation reservation,
                                             UserDetails userDetails) {
         if (reservation.getReservationType() != ReservationType.CONFIRM) {
-            throw new ReservationException(RESERVATION_NOT_VISITED);
+            throw new ReservationException(RESERVATION_NOT_CONFIRM);
         }
 
         if (!reservation.isArrival()) {
@@ -64,7 +64,7 @@ public class ReviewService {
     }
 
     /**
-     * 리뷰 수정
+     * 리뷰 수정<br>
      * 수정을 요청한 유저와 리뷰를 작성한 유저가 다를 경우 리뷰 수정에 실패합니다.
      * 회원을 조회하는 쿼리를 대신하여 인증된 사용자의 정보로 검증합니다.
      *
@@ -81,7 +81,7 @@ public class ReviewService {
     }
 
     /**
-     * 리뷰 삭제
+     * 리뷰 삭제<br>
      * 로그인한 사용자가 일반 사용자(USER)일 경우 리뷰 작성자와 같은지 확인합니다.
      * 로그인한 사용자가 매니저일 경우 리뷰가 등록된 매장의 점주와 같은지 확인합니다.
      *

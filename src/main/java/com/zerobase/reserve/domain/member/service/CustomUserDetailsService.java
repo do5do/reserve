@@ -24,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
      *
      * @param username the username identifying the user whose data is required.
      * @return 유저 인증 객체
-     * @throws UsernameNotFoundException
+     * @throws UsernameNotFoundException 유저 찾지 못함 예외 발생
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

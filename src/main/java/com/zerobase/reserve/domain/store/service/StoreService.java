@@ -45,7 +45,7 @@ public class StoreService {
     }
 
     /**
-     * 매장 등록
+     * 매장 등록<br>
      * 회원 정보를 찾은 후 회원 및 매장 주소에 대한 좌표 데이터를 포함하여 매장 등록을 진행합니다.
      *
      * @param request 매장 등록 요청 정보
@@ -71,7 +71,7 @@ public class StoreService {
     }
 
     /**
-     * 매장명 자동완성
+     * 매장명 자동완성<br>
      * 키워드 검색 시 정렬은 꼭 필요하지 않기 때문에 성능 이슈를 대비하여 제외하였습니다.
      *
      * @param keyword 매장명 키워드
@@ -86,7 +86,7 @@ public class StoreService {
     }
 
     /**
-     * 매장 정보 조회
+     * 매장 정보 조회<br>
      *
      * @param storeKey 매장 식별키
      * @return 조회한 매장 정보
@@ -96,7 +96,7 @@ public class StoreService {
     }
 
     /**
-     * 매장 목록 조회
+     * 매장 목록 조회<br>
      * 클라이언트 위치 기반 반경 3km 이내에 있는 매장을 조회합니다.
      *
      * @param location 클라이언트 위치 좌표
@@ -113,7 +113,7 @@ public class StoreService {
     }
 
     /**
-     * 매장 수정
+     * 매장 수정<br>
      * 매장 주소 변경 시 위치 정보를 포함하여 매장 수정을 진행합니다.
      *
      * @param request 수정 요청 정보
@@ -142,7 +142,7 @@ public class StoreService {
     }
 
     /**
-     * 매장 삭제
+     * 매장 삭제<br>
      * 매장 검증 후 삭제를 진행합니다.
      *
      * @param storeKey 매장 식별키

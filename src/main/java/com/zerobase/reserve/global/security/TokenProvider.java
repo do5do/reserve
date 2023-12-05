@@ -38,7 +38,7 @@ public class TokenProvider {
     }
 
     /**
-     * 토큰 생성
+     * 토큰 생성<br>
      *
      * @param memberDto 유저 정보
      * @return 토큰
@@ -59,9 +59,9 @@ public class TokenProvider {
     }
 
     /**
-     * 토큰을 통한 유저 인증 정보 생성
+     * 토큰을 통한 유저 인증 정보 생성<br>
      * 해당 메서드는 필터에서 호출되는데 필터에서 매번 요청마다 쿼리를 발생시키지 않기 위해
-     * 유저 정보를 조회하지 않고 토큰을 통해 얻을 수 있는 정보만 수집하여
+     * 유저 정보를 조회하지 않고, 토큰을 통해 얻을 수 있는 정보만 수집하여
      * security user를 생성하여 리턴합니다.
      *
      * @param token 요청 토큰
@@ -77,7 +77,7 @@ public class TokenProvider {
     }
 
     /**
-     * 토큰 유효성 검증
+     * 토큰 유효성 검증<br>
      *
      * @param token 토큰
      * @return 유효성 명제
@@ -92,7 +92,7 @@ public class TokenProvider {
     }
 
     /**
-     * 토큰에서 권한 정보 파싱
+     * 토큰에서 권한 정보 파싱<br>
      *
      * @param claims jwt 클레임
      * @return 권한 정보
@@ -103,7 +103,7 @@ public class TokenProvider {
     }
 
     /**
-     * 토큰 복호화
+     * 토큰 복호화<br>
      *
      * @param token 토큰
      * @return jwt 클레임

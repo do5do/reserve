@@ -96,7 +96,7 @@ class ReviewServiceTest {
     }
 
     @Test
-    @DisplayName("리뷰 작성 실패 - 확정된 예약이 아님")
+    @DisplayName("리뷰 작성 실패 - 승인된 예약이 아님")
     void write_not_confirm() {
         // given
         Member member = MemberBuilder.member();
@@ -114,7 +114,7 @@ class ReviewServiceTest {
                         MemberBuilder.member()));
 
         // then
-        assertEquals(RESERVATION_NOT_VISITED, exception.getErrorCode());
+        assertEquals(RESERVATION_NOT_CONFIRM, exception.getErrorCode());
     }
 
     @Test

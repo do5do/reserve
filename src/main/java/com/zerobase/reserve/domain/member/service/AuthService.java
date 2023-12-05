@@ -26,7 +26,7 @@ public class AuthService {
     private final KeyGenerator keyGenerator;
 
     /**
-     * 회원가입
+     * 회원가입<br>
      * 이미 등록된 회원인지 확인 후 회원가입을 진행합니다.
      *
      * @param request 가입 요청 정보

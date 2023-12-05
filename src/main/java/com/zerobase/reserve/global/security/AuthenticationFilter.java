@@ -17,7 +17,7 @@ import java.io.IOException;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 /**
- * JWT 인증 필터
+ * JWT 인증 필터입니다.
  */
 @RequiredArgsConstructor
 @Component
