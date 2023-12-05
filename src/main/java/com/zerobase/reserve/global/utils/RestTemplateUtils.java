@@ -1,6 +1,6 @@
 package com.zerobase.reserve.global.utils;
 
-import com.zerobase.reserve.global.exception.ApiExternalException;
+import com.zerobase.reserve.global.exception.ApiBadRequestException;
 import com.zerobase.reserve.global.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -54,7 +54,7 @@ public class RestTemplateUtils {
             return response.getBody();
         } catch (RestClientException e) {
             log.error("RestClientException is occurred. ", e);
-            throw new ApiExternalException(ErrorCode.INTERNAL_ERROR,
+            throw new ApiBadRequestException(ErrorCode.INTERNAL_ERROR,
                     "restTemplate api server error");
         }
     }

@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.PrecisionModel;
 
 /**
@@ -28,7 +29,7 @@ public class Address {
     private String zipcode;
 
     @Column(columnDefinition = "POINT SRID 4326", nullable = false)
-    private org.locationtech.jts.geom.Point coordinate;
+    private Point coordinate;
 
     @Builder
     public Address(String address, String detailAddr, String zipcode) {

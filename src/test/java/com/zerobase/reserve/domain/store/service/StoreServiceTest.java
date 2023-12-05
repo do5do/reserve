@@ -16,7 +16,7 @@ import com.zerobase.reserve.domain.store.entity.Store;
 import com.zerobase.reserve.domain.store.exception.StoreException;
 import com.zerobase.reserve.domain.store.repository.StoreRepository;
 import com.zerobase.reserve.domain.store.repository.projection.StoreProjection;
-import com.zerobase.reserve.global.exception.ApiExternalException;
+import com.zerobase.reserve.global.exception.ApiBadRequestException;
 import com.zerobase.reserve.global.infra.address.CoordinateClient;
 import com.zerobase.reserve.global.infra.address.dto.CoordinateDto;
 import com.zerobase.reserve.global.infra.address.dto.KakaoResponseDto;
@@ -128,8 +128,8 @@ class StoreServiceTest {
                 .willReturn(new KakaoResponseDto(Collections.emptyList()));
 
         // when
-        ApiExternalException exception =
-                assertThrows(ApiExternalException.class, () ->
+        ApiBadRequestException exception =
+                assertThrows(ApiBadRequestException.class, () ->
                         storeService.registration(
                                 Registration.Request.builder()
                                         .address(new AddressDto(
@@ -301,8 +301,8 @@ class StoreServiceTest {
                 .willReturn(new KakaoResponseDto(Collections.emptyList()));
 
         // when
-        ApiExternalException exception =
-                assertThrows(ApiExternalException.class, () ->
+        ApiBadRequestException exception =
+                assertThrows(ApiBadRequestException.class, () ->
                         storeService.edit(EditRequest.builder()
                                 .address(new AddressDto("주소 수정",
                                         DETAIL_ADDR, ZIPCODE))

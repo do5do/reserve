@@ -1,6 +1,6 @@
 package com.zerobase.reserve.global.infra.address.dto;
 
-import com.zerobase.reserve.global.exception.ApiExternalException;
+import com.zerobase.reserve.global.exception.ApiBadRequestException;
 import com.zerobase.reserve.global.exception.ErrorCode;
 
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 public record KakaoResponseDto(List<Document> documents) implements CoordinateDto {
     public Document document() {
         if (documents.isEmpty()) {
-            throw new ApiExternalException(ErrorCode.RESOURCE_NOT_FOUND);
+            throw new ApiBadRequestException(ErrorCode.RESOURCE_NOT_FOUND);
         }
         return documents.get(0);
     }

@@ -15,8 +15,7 @@ public class RegistRequestBuilder {
                         .description(DESCRIPTION)
                         .phoneNumber(PHONE_NUMBER)
                         .address(new AddressDto(ADDRESS, DETAIL_ADDR, ZIPCODE))
-                        .salesInfo(new SalesInfoDto(OPER_START, OPER_END,
-                                CLOSED_DAYS))
+                        .salesInfo(new SalesInfoDto(OPER_START, OPER_END, CLOSED_DAYS))
                         .build();
     }
 }

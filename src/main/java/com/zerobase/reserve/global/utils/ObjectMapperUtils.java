@@ -3,7 +3,7 @@ package com.zerobase.reserve.global.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zerobase.reserve.global.exception.ApiExternalException;
+import com.zerobase.reserve.global.exception.ApiBadRequestException;
 import com.zerobase.reserve.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class ObjectMapperUtils {
             return objectMapper.readValue(json, tClass);
         } catch (JsonProcessingException e) {
             log.error("JsonProcessingException is occurred. ", e);
-            throw new ApiExternalException(ErrorCode.INTERNAL_ERROR,
+            throw new ApiBadRequestException(ErrorCode.INTERNAL_ERROR,
                     "객체 매핑에 문제가 발생했습니다.");
         }
     }
