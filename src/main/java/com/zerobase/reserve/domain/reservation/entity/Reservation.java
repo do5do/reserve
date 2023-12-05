@@ -1,6 +1,6 @@
 package com.zerobase.reserve.domain.reservation.entity;
 
-import com.zerobase.reserve.domain.common.model.BaseTimeEntity;
+import com.zerobase.reserve.domain.common.entity.BaseTimeEntity;
 import com.zerobase.reserve.domain.member.entity.Member;
 import com.zerobase.reserve.domain.reservation.converter.ReservationTypeConverter;
 import com.zerobase.reserve.domain.reservation.converter.LocalTimeConverter;

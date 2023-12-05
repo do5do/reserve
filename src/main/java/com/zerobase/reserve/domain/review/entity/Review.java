@@ -1,6 +1,6 @@
 package com.zerobase.reserve.domain.review.entity;
 
-import com.zerobase.reserve.domain.common.model.BaseTimeEntity;
+import com.zerobase.reserve.domain.common.entity.BaseTimeEntity;
 import com.zerobase.reserve.domain.member.entity.Member;
 import com.zerobase.reserve.domain.review.dto.Update;
 import com.zerobase.reserve.domain.store.entity.Store;

@@ -1,6 +1,6 @@
 package com.zerobase.reserve.domain.member.entity;
 
-import com.zerobase.reserve.domain.common.model.BaseTimeEntity;
+import com.zerobase.reserve.domain.common.entity.BaseTimeEntity;
 import com.zerobase.reserve.domain.member.converter.RoleTypeConverter;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

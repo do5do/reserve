@@ -1,4 +1,4 @@
-package com.zerobase.reserve.domain.common.model;
+package com.zerobase.reserve.domain.common.entity;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

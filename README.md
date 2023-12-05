@@ -43,7 +43,7 @@ src
 │   │               ├── ReserveApplication.java
 │   │               ├── domain
 │   │               │   ├── common
-│   │               │   │   ├── model
+│   │               │   │   ├── entity
 │   │               │   │   │   └── BaseTimeEntity.java
 │   │               │   │   ├── utils
 │   │               │   │   │   └── KeyGenerator.java
@@ -156,7 +156,7 @@ src
 │   │                   │   ├── QuerydslConfig.java
 │   │                   │   └── SecurityConfig.java
 │   │                   ├── exception
-│   │                   │   ├── ApiBadRequestException.java
+│   │                   │   ├── ApiExternalException.java
 │   │                   │   ├── CustomException.java
 │   │                   │   ├── ErrorCode.java
 │   │                   │   ├── ErrorResponse.java
