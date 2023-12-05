@@ -4,11 +4,15 @@ import com.zerobase.reserve.domain.common.builder.MemberBuilder;
 import com.zerobase.reserve.domain.common.builder.StoreBuilder;
 import com.zerobase.reserve.domain.member.entity.Member;
 import com.zerobase.reserve.domain.member.service.MemberService;
+import com.zerobase.reserve.domain.reservation.service.ReservationService;
 import com.zerobase.reserve.domain.review.dto.Update;
 import com.zerobase.reserve.domain.review.dto.model.ReviewDto;
 import com.zerobase.reserve.domain.review.entity.Review;
 import com.zerobase.reserve.domain.review.repository.ReviewRepository;
 import com.zerobase.reserve.domain.store.entity.Store;
+import com.zerobase.reserve.global.config.SecurityConfig;
+import com.zerobase.reserve.global.security.AuthenticationFilter;
+import com.zerobase.reserve.global.security.TokenProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +35,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-@SpringBootTest
+@SpringBootTest(classes = {
+        SecurityConfig.class, AuthenticationFilter.class, TokenProvider.class,
+        ReviewService.class
+})
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
 @EnableMethodSecurity
@@ -39,11 +46,14 @@ public class ReviewServiceSecurityTest {
     @MockBean
     ReviewRepository reviewRepository;
 
-    @Autowired
-    ReviewService reviewService;
+    @MockBean
+    ReservationService reservationService;
+
+    @MockBean
+    MemberService memberService;
 
     @Autowired
-    MemberService memberService;
+    ReviewService reviewService;
 
     @Test
     @DisplayName("리뷰 수정 성공 - 동일한 유저")
